@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cube3d.h                                           :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/05/25 19:01:45 by sdemiroz         ###   ########.fr       */
+/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/05/25 19:02:11 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUBE3D_H
-# define CUBE3D_H
+#include "cube3d.h"
 
-# include "libft.h"
-
-
-#endif
-
+int		main(int argc, char **argv)
+{
+		gc_init_garbage_collector();
+}
