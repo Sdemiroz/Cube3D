@@ -25,6 +25,9 @@ MLX 	:= $(MLX_DIR)/build/libmlx42.a
 # For macOS
 MLX42FLAGS := -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
+# For Linux
+# MLX42FLAGS := -lglfw -ldl -pthread -lm
+
 # Tell the Makefile where headers and source files are
 vpath %.hpp $(INC_DIRS)
 vpath %.cpp $(SRC_DIRS)
@@ -33,7 +36,7 @@ vpath %.cpp $(SRC_DIRS)
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-MAIN_FILE := main.c
+MAIN_FILE := src/main.c
 
 SRC_FILES := # init_mini.c tests.c signals.c
 
@@ -66,7 +69,7 @@ NC := \033[0m # Reset
 
 NAME_TEST=tests.out
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME) banner
 
 $(MLX):
 	@if [ ! -d "$(MLX_DIR)" ]; then \
@@ -88,9 +91,25 @@ $(OBJ_DIR):
 $(LIBFT):
 	@make -C ./libft
 
+# ║
+# ╗
+# ╔
+
+# ╝
+# ╚
+banner:
+	@echo "\n"
+	@echo "\033[38;2;255;105;180m██████╗ ██╗   ██╗ ██████╗   ███████╗ ██████╗     						\033[0m"
+	@echo "\033[38;2;204;123;195m██╔═══╝ ██║   ██║ ██╔══██╗  ╚════██║ ██╔══██╗     								\033[0m"
+	@echo "\033[38;2;153;141;210m██║     ██║   ██║ ██████╔╝    █████║ ██║  ██║     								\033[0m"
+	@echo "\033[38;2;102;159;225m██║     ██║   ██║ ██║══██╗    ╚══██║ ██║  ██║   								\033[0m"
+	@echo "\033[38;2;51;175;240m██████╗ ████████║ ██████╔╝  ███████║ ██████╔╝    								\033[0m"
+	@echo "\033[38;2;0;191;255m╚═════╝ ╚═══════╝ ╚═════╝   ╚═════╝  ╚════╝     								\033[0m"
+	@echo "\n"
+
+
 clean:
 	$(RM) $(OBJ_DIR)
-	$(RM) -rf $(MLX_DIR)  # Remove the MLX directory
 	@make clean -C ./libft
 
 fclean: clean

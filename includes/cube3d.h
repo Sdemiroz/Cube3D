@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/05/25 19:01:45 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:46:50 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUBE3D_H
 
 # include "libft.h"
-
+# include "../lib/MLX42/include/MLX42/MLX42.h"
 
 #endif
 
