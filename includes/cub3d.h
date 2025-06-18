@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/18 05:20:11 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/06/18 06:14:12 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,14 @@ typedef struct s_game
 	mlx_image_t		*main_img;
 	t_map			*map;
 	t_player		*player;
-	mlx_texture_t	walls[4];
+	mlx_texture_t	*walls[4];
 } t_game;
 
 // error.c
 void			ft_error(t_game *game, char *msg, int ret);
 
+// init_game.c
+t_game			*init_game(t_game *game, char *input);
+t_game			*set_game(t_game *game);
 
 #endif

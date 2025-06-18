@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/18 05:31:11 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/06/18 06:13:55 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	if (argc != 2)
 		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game);
+    game = init_game(game, argv[1]);
 	gc_free_all();
     return(0);
 }
