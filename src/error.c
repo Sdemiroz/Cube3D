@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/18 05:31:11 by sdemiroz         ###   ########.fr       */
+/*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/06/18 05:24:47 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int argc, char **argv)
+void	ft_error(t_game *game, char *msg, int ret)
 {
-	t_game	*game;
+	int	x;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game);
-	gc_free_all();
-    return(0);
+	x = 0;
+	if (msg)
+		printf("%s", msg);
+	if (!game)
+		exit(ret);
+	while (x != 5)
+	{
+		if (game->walls[x])
+			mlx_delete_texture(game->walls[x]);
+		x++;
+	}
+	if (game->mlx)
+		mlx_terminate(game->mlx);
+	main_cleanup(ret);
 }

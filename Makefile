@@ -38,13 +38,13 @@ vpath %.cpp $(SRC_DIRS)
 
 MAIN_FILE := src/main.c
 
-SRC_FILES := # init_mini.c tests.c signals.c
+SRC_FILES :=  error.c init_game.c
 
 MELTING_POT :=	$(SRC_REPO) \
 				$(SRC_FILES)
 
 SRC_IN_SRC := $(SRC_FILES)
-SRCS := $(MAIN_FILE) $(addprefix src/, $(SRC_IN_SRC)) $(LEXER_EXPANDER_REPO) $(PARSING_REPO) $(EXECUTION_REPO) $(BUILT_INS_REPO)
+SRCS := $(MAIN_FILE) $(addprefix src/, $(SRC_IN_SRC)) #$(LEXER_EXPANDER_REPO) $(PARSING_REPO) $(EXECUTION_REPO) $(BUILT_INS_REPO)
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 

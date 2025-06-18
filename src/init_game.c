@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/18 05:31:11 by sdemiroz         ###   ########.fr       */
+/*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/06/18 05:32:47 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int argc, char **argv)
+t_game	*init_game(t_game *game)
 {
-	t_game	*game;
+	t_map		*map;
+	t_player	*player;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game);
-	gc_free_all();
-    return(0);
+	game = ft_malloc(sizeof(t_game));
+	if(!game)
+		ft_error(game, "Malloc error\n", 1);
+
 }

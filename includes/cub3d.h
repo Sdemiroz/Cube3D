@@ -1,20 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cube3d.h                                           :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/05/26 16:46:50 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/06/18 05:20:11 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUBE3D_H
-# define CUBE3D_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
-# include "libft.h"
 # include "../lib/MLX42/include/MLX42/MLX42.h"
+# include "libft.h"
+# include <stdio.h>
+
+# define PI 3.141592654
+typedef struct s_map
+{
+	int				height;
+	int				width;
+} t_map;
+
+typedef struct s_player
+{
+	int				start_x;
+	int				start_y;
+} t_player;
+
+typedef struct s_game
+{
+	mlx_t			*mlx;
+	mlx_image_t		*map_img;
+	mlx_image_t		*main_img;
+	t_map			*map;
+	t_player		*player;
+	mlx_texture_t	walls[4];
+} t_game;
+
+// error.c
+void			ft_error(t_game *game, char *msg, int ret);
+
 
 #endif
-
