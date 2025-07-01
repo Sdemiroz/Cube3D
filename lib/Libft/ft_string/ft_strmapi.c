@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/18 15:57:53 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:46:35 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	t_game	*game;
+	char			*trnsfrmd;
+	unsigned int	i;
+	unsigned int	len;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	if (!s || !f)
+		return (NULL);
+	len = ft_strlen(s);
+	i = 0;
+	trnsfrmd = (char *)malloc((len + 1) * sizeof(char));
+	if (!trnsfrmd)
+		return (NULL);
+	while (s[i])
+	{
+		trnsfrmd[i] = f(i, s[i]);
+		i++;
+	}
+	trnsfrmd[i] = '\0';
+	return (trnsfrmd);
 }

@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/24 20:31:07 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/28 02:26:34 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	t_game	*game;
-
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	if (lst && new)
+	{
+		new->next = *lst;
+		*lst = new;
+	}
+	else
+		return ;
 }

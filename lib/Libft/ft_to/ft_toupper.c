@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/11 20:41:06 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:47:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+int	ft_toupper(int c)
 {
-	t_game	*game;
+	unsigned char	letter;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	letter = (unsigned char)c;
+	if (letter >= 'a' && letter <= 'z')
+		c -= 32;
+	return (c);
 }

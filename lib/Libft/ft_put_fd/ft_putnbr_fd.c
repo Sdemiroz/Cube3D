@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/18 19:21:35 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:45:17 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+void	ft_putnbr_fd(int n, int fd)
 {
-	t_game	*game;
+	char	rem;
+	long	ln;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	if (!fd)
+		return ;
+	ln = (long)n;
+	if (ln < 0)
+	{
+		write(fd, "-", 1);
+		ln = -ln;
+	}
+	rem = ln % 10 + '0';
+	if (ln >= 10)
+	{
+		ft_putnbr_fd(ln / 10, fd);
+	}
+	write(fd, &rem, 1);
 }

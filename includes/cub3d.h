@@ -6,15 +6,18 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/20 16:05:58 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/01 15:11:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include "../lib/includes/libft.h"
+# include "ft_printf.h"
+# include "get_next_line.h"
 # include "../lib/MLX42/include/MLX42/MLX42.h"
-# include "../lib/libft/libft.h"
+
 # include <stdio.h>
 
 # define PI 3.141592654

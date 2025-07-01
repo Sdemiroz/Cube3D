@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/07 13:27:51 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:44:35 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+void	*ft_memset(void *str, int c, size_t n)
 {
-	t_game	*game;
+	unsigned char	*new;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	new = str;
+	while (n--)
+		*new++ = (unsigned char)c;
+	return (str);
 }

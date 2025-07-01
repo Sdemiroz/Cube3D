@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putdec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/31 16:20:52 by pamatya           #+#    #+#             */
+/*   Updated: 2024/07/04 04:00:42 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/ft_printf.h"
 
-int	main(int argc, char **argv)
+int	ft_putdec(int fd, long num)
 {
-	t_game	*game;
+	char	*str;
+	int		n_len;
+	int		printed;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	printed = 0;
+	n_len = ft_intlen(num, 10);
+	str = (char *)malloc((n_len + 1) * sizeof(char));
+	if (!str)
+		return (-1);
+	ft_basetostr(num, str, 10);
+	printed = ft_putstr(fd, str);
+	free(str);
+	return (printed);
 }

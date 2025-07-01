@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/12 18:20:59 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:44:16 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+int	ft_memcmp(const char *str1, const char *str2, size_t n)
 {
-	t_game	*game;
+	const char		*s1;
+	const char		*s2;
+	unsigned char	c1;
+	unsigned char	c2;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	s1 = str1;
+	s2 = str2;
+	while (n)
+	{
+		c1 = (unsigned char)*s1;
+		c2 = (unsigned char)*s2;
+		if (c1 != c2)
+			return (c1 - c2);
+		s1++;
+		s2++;
+		n--;
+	}
+	return (0);
 }

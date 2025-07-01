@@ -1,27 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lengths.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/31 20:27:23 by pamatya           #+#    #+#             */
+/*   Updated: 2024/07/04 04:00:32 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/ft_printf.h"
 
-int	main(int argc, char **argv)
+int	ft_intlen(long num, int base)
 {
-	t_game	*game;
+	int	len;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	len = 0;
+	if (num <= 0)
+		len = 1;
+	while (num)
+	{
+		len++;
+		num /= base;
+	}
+	return (len);
+}
+
+int	ft_lulen(unsigned long num, int base)
+{
+	int	len;
+
+	len = 0;
+	if (num == 0)
+		return (1);
+	while (num)
+	{
+		len++;
+		num /= base;
+	}
+	return (len);
 }

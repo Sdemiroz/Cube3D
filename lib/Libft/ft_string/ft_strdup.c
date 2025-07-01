@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/15 13:38:19 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:45:59 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+// static size_t ft_strlen1(const char *str);
+
+char	*ft_strdup(const char *s1)
 {
-	t_game	*game;
+	char	*str;
+	char	*ptr;
+	char	*p;
+	size_t	byts;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	str = (char *)s1;
+	byts = ft_strlen(str);
+	ptr = (char *)malloc((byts + 1) * sizeof(char));
+	if (!ptr)
+		return (NULL);
+	p = ptr;
+	while (byts--)
+		*ptr++ = *str++;
+	*ptr++ = '\0';
+	return (p);
 }

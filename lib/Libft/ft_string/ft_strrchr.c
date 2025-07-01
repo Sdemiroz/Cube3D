@@ -1,27 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:37 by pamatya          ###   ########.fr       */
+/*   Created: 2024/03/12 15:15:49 by pamatya           #+#    #+#             */
+/*   Updated: 2024/06/12 23:46:51 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strrchr(const char *str, int c)
 {
-	t_game	*game;
+	char			*s;
+	unsigned char	letter;
+	int				len;
+	int				counter;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	(void)argv;
-	if (argc != 2)
-		ft_error(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	gc_free_all();
-    return(0);
+	s = (char *)str;
+	letter = (unsigned char)c;
+	len = 0;
+	while (*s)
+	{
+		len++;
+		s++;
+	}
+	counter = 0;
+	while (counter <= len)
+	{
+		if (*s == letter)
+			return (s);
+		s--;
+		counter++;
+	}
+	return (NULL);
 }
