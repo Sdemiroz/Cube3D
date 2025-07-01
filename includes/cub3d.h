@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 15:11:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/01 20:48:59 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define CUB3D_H
 
 # include "../lib/includes/libft.h"
-# include "ft_printf.h"
-# include "get_next_line.h"
+# include "../lib/includes/ft_printf.h"
+# include "../lib/includes/get_next_line.h"
+# include "../lib/includes/garbage_collector.h"
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 
 # include <stdio.h>
