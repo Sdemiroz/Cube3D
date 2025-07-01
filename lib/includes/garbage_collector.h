@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 01:07:52 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/04/21 04:47:09 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:26:14 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <stdlib.h>
 # include <strings.h>
 # include <sys/types.h>
+
+# include "libft.h"
+# include "ft_printf.h"
 
 typedef struct s_gc_node
 {

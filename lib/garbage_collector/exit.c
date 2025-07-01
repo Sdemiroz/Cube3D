@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 01:09:32 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 16:02:53 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/01 20:24:43 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	main_cleanup(uint8_t exit_stat)
 {
 	gc_free_all();
-	bzero(get_gc(), sizeof(t_double_gc));
+	ft_bzero(get_gc(), sizeof(t_double_gc));
 	exit(exit_stat);
 }
 
 void	ft_error(char *msg, char *file, int line, uint8_t exit_stat)
 {
-	fprintf(stderr, "Error: File %s line %d: %s\n", file, line, msg);
+	ft_fprintf(stderr, "Error: File %s line %d: %s\n", file, line, msg);
 	main_cleanup(exit_stat);
 }
 
