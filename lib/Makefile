@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 14:30:19 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/01 20:22:42 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/01 20:34:16 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ A6		=	$(FT_PATH)/ft_to
 B		=	./ft_printf
 B1		=	./ft_printf/Utils
 C		=	./GNL
+D		=	./garbage_collector
 
 SRCS	=	$(A1)/ft_isalnum.c $(A1)/ft_isalpha.c $(A1)/ft_isascii.c $(A1)/ft_isdigit.c $(A1)/ft_isprint.c \
 			$(A2)/ft_lstadd_back.c $(A2)/ft_lstadd_front.c $(A2)/ft_lstclear.c $(A2)/ft_lstdelone.c $(A2)/ft_lstiter.c $(A2)/ft_lstlast.c $(A2)/ft_lstmap.c $(A2)/ft_lstnew.c $(A2)/ft_lstsize.c \
@@ -36,7 +37,8 @@ SRCS	=	$(A1)/ft_isalnum.c $(A1)/ft_isalpha.c $(A1)/ft_isascii.c $(A1)/ft_isdigit
 			$(A5)/ft_split.c $(A5)/ft_strchr.c $(A5)/ft_strdup.c $(A5)/ft_striteri.c $(A5)/ft_strjoin.c $(A5)/ft_strlcat.c $(A5)/ft_strlcpy.c $(A5)/ft_strlen.c $(A5)/ft_strmapi.c $(A5)/ft_strncmp.c $(A5)/ft_strnstr.c $(A5)/ft_strrchr.c $(A5)/ft_strtrim.c $(A5)/ft_substr.c \
 			$(A6)/ft_atoi.c $(A6)/ft_itoa.c $(A6)/ft_tolower.c $(A6)/ft_toupper.c \
 			$(B)/ft_printf.c $(B1)/ft_form.c $(B1)/ft_putdec.c $(B1)/ft_puthex.c $(B1)/ft_putptr.c $(B1)/ft_putstr.c $(B1)/ft_utils.c $(B1)/ft_lengths.c \
-			$(C)/get_next_line.c
+			$(C)/get_next_line.c \
+			$(D)/collector.c $(D)/exit.c $(D)/utils.c
 
 OBJS 	= $(SRCS:%.c=$(OBJ_D)/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 01:09:32 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 20:24:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/01 20:35:43 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	main_cleanup(uint8_t exit_stat)
 
 void	ft_error(char *msg, char *file, int line, uint8_t exit_stat)
 {
-	ft_fprintf(stderr, "Error: File %s line %d: %s\n", file, line, msg);
+	ft_fprintf(STDERR_FILENO, "Error: File %s line %d: %s\n", file, line, msg);
 	main_cleanup(exit_stat);
 }
 
