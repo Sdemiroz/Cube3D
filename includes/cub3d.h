@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/06/18 16:33:18 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/06/20 16:05:58 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # include "../lib/MLX42/include/MLX42/MLX42.h"
-# include "libft.h"
+# include "../lib/libft/libft.h"
 # include <stdio.h>
 
 # define PI 3.141592654
