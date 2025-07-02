@@ -6,80 +6,99 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/01 21:01:57 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/02 20:12:33 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := cube3d
-.DEFAULT_GOAL := all
-CC := cc
-RM := rm -rf
+NAME			:=	cube3d
+NAME_TEST		:=	tests.out
+.DEFAULT_GOAL	:=	all
+CC				:=	cc
+RM				:=	rm -f
+RMR				:=	rm -rf
 
 ################################################################################
 ###############                  DIRECTORIES                      ##############
 ################################################################################
 
-LIBFT	:= ./lib/libft.a
+LIB_DIR			:=	lib
+OBJ_DIR			:=	obj
+LIBFT			:=	$(LIB_DIR)/libft.a
 
-OBJ_DIR := _obj
+INC_DIRS		:=	includes lib/includes lib/MLX42/include/MLX42
+SRC_DIRS		:=	src
 
-INC_DIRS := Includes \
-			libft \
-			libft/garbage_collector
+MLX_DIR			:=	$(LIB_DIR)/MLX42
+MLX				:=	$(MLX_DIR)/build/libmlx42.a
 
-SRC_DIRS := src \
-			lexer \
+################################################################################
+###############                     FLAGS                         ##############
+################################################################################
 
-MLX_DIR := lib/MLX42
-MLX 	:= $(MLX_DIR)/build/libmlx42.a
+# Compiler flags
+CFLAGS			:=	-Wall -Werror -Wextra
 
-# For macOS
-MLX42FLAGS := -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+# Linker flags (for libft.a, libmlx42.a and the math library)
+LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR) -lmlx42 -lm
 
+# For graphics in macOS
+MINILIBX		:=	-lglfw -framework Cocoa -framework OpenGL -framework IOKit
 # For Linux
-# MLX42FLAGS := -lglfw -ldl -pthread -lm
+# MINILIBX		:=	-lglfw -ldl -pthread -lm
+
+ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS) $(MINILIBX)
+
+# For debugging
+DEBUG_FLAGS		:=	-fsanitize=address -g
+
+################################################################################
+###############            SOURCES and DEPENDENCIES               ##############
+################################################################################
 
 # Tell the Makefile where headers and source files are
-vpath %.hpp $(INC_DIRS)
-vpath %.cpp $(SRC_DIRS)
+vpath %.h $(INC_DIRS)
+vpath %.c $(SRC_DIRS)
+
+SRCS :=  main.c error.c init_game.c
+OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 ################################################################################
-###############                  SOURCE FILES                     ##############
+##########                          COLORS                           ###########
 ################################################################################
-
-MAIN_FILE := src/main.c
-
-SRC_FILES :=  error.c init_game.c
-
-MELTING_POT := $(SRC_FILES)
-
-SRC_IN_SRC := $(SRC_FILES)
-SRCS := $(MAIN_FILE) $(addprefix src/, $(SRC_IN_SRC))
-
-OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
-
-################################################################################
-########                         COMPILING                      ################
-################################################################################
-
-CFLAGS :=	-Wall -Werror -Wextra -Wpedantic -Wshadow -Wno-shadow \
-			-Wconversion -Wsign-conversion -g -MMD -MP \
-			$(addprefix -I, $(INC_DIRS))
-
-CFLAGS_SAN := $(CFLAGS) -fsanitize=address
-LDFLAGS := -lncurses -lreadline
-LDFLAGS_SAN := -lncurses -fsanitize=address -lreadline
-ARFLAGS := -rcs
 
 # ANSI color codes
-GREEN := \033[0;32m
-MAGENTA := \033[0;35m
-BOLD := \033[1m
-NC := \033[0m # Reset
+RED				:=	\033[0;31m
+GREEN			:=	\033[0;32m
+YELLOW			:=	\033[0;33m
+MAGENTA			:=	\033[0;35m
+BOLD			:=	\033[1m
+C1				:=	\033[38;2;255;105;180m
+C2				:=	\033[38;2;204;123;195m
+C3				:=	\033[38;2;153;141;210m
+C4				:=	\033[38;2;102;159;225m
+C5				:=	\033[38;2;51;175;240m
+C6				:=	\033[38;2;0;191;255m
+NC				:=	\033[0m # Reset
 
-NAME_TEST=tests.out
+# ║
+# ╔
+# ╗
+# ╚
+# ╝
+
+################################################################################
+##########                         COMPILING                         ###########
+################################################################################
 
 all: $(LIBFT) $(NAME) banner
+
+$(LIBFT):
+	@make -C $(LIB_DIR)
+
+$(NAME): $(MLX) $(OBJS)
+	@echo "$(YELLOW)$(BOLD)Compiling...$(NC)"
+	@$(CC) $(ALL_FLAGS) $(LIBFT) $(MLX) $(OBJS) -o $(NAME)
+	@echo "$(GREEN)$(BOLD)Compilation successful$(NC)"
 
 $(MLX):
 	@if [ ! -d "$(MLX_DIR)" ]; then \
@@ -87,55 +106,51 @@ $(MLX):
 	fi
 	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
 
-$(NAME): $(MLX) $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX42FLAGS) $(LDFLAGS) -o $(NAME) -lm -g
-	@echo "$(GREEN)$(BOLD)Successful Compilation$(NC)"
-
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(ALL_FLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(LIBFT):
-	@make -C ./libft
-
-# ║
-# ╗
-# ╔
-
-# ╝
-# ╚
 banner:
 	@echo "\n"
-	@echo "\033[38;2;255;105;180m██████╗ ██╗   ██╗ ██████╗   ███████╗ ██████╗     						\033[0m"
-	@echo "\033[38;2;204;123;195m██╔═══╝ ██║   ██║ ██╔══██╗  ╚════██║ ██╔══██╗     								\033[0m"
-	@echo "\033[38;2;153;141;210m██║     ██║   ██║ ██████╔╝    █████║ ██║  ██║     								\033[0m"
-	@echo "\033[38;2;102;159;225m██║     ██║   ██║ ██║══██╗    ╚══██║ ██║  ██║   								\033[0m"
-	@echo "\033[38;2;51;175;240m██████╗ ████████║ ██████╔╝  ███████║ ██████╔╝    								\033[0m"
-	@echo "\033[38;2;0;191;255m╚═════╝ ╚═══════╝ ╚═════╝   ╚═════╝  ╚════╝     								\033[0m"
+	@echo "$(C1)██████╗ ██╗   ██╗ ██████╗   ███████╗ ██████╗	$(NC)"
+	@echo "$(C2)██╔═══╝ ██║   ██║ ██╔══██╗  ╚════██║ ██╔══██╗	$(NC)"
+	@echo "$(C3)██║     ██║   ██║ ██████╔╝    █████║ ██║  ██║	$(NC)"
+	@echo "$(C4)██║     ██║   ██║ ██║══██╗    ╚══██║ ██║  ██║	$(NC)"
+	@echo "$(C5)██████╗ ████████║ ██████╔╝  ███████║ ██████╔╝	$(NC)"
+	@echo "$(C6)╚═════╝ ╚═══════╝ ╚═════╝   ╚═════╝  ╚════╝		$(NC)"
 	@echo "\n"
 
 clean:
-	$(RM) $(OBJ_DIR)
-	@make clean -C ./libft
+	@echo "$(YELLOW)$(BOLD)Cleaning...$(NC)"
+	@$(RMR) $(OBJ_DIR)
+	@make clean -C $(LIB_DIR)
+	@echo "$(RED)$(BOLD)Cleaned object files$(NC)"
 
 fclean: clean
-	$(RM) $(NAME) $(NAME_TEST)
-	@make fclean -C ./libft
-	@echo "$(MAGENTA)$(BOLD)Executable + Object Files cleaned$(NC)"
+	@$(RM) $(NAME) $(NAME_TEST)
+	@make fclean -C $(LIB_DIR)
+	@echo "$(RED)$(BOLD)Cleaned executable and object files$(NC)"
 
-re: fclean submodule_update all
+re: fclean all
+
+resub: fclean submodule_update all
 
 submodule_update:
 	git submodule update --remote --merge
 
 bonus: all
 
+
+################################################################################
+##########                         DEBUGGING                         ###########
+################################################################################
+
 san:
-	make CFLAGS="$(CFLAGS_SAN)" LDFLAGS="$(LDFLAGS_SAN)"
-	@echo "$(GREEN)$(BOLD)Successful Compilation with fsan$(NC)"
+	make CFLAGS="$(DEBUG_FLAGS)" LDFLAGS="$(LDFLAGS_SAN)"
+	@echo "$(GREEN)$(BOLD)Compilation successful with fsan$(NC)"
 
 re_sub: submodule_rebuild
 

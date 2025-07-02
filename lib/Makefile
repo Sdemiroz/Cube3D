@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 14:30:19 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/01 20:34:16 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/02 19:10:26 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJS 	= $(SRCS:%.c=$(OBJ_D)/%.o)
 all: $(OBJ_D) $(NAME)
 
 $(OBJ_D):
-	@mkdir $(OBJ_D)
+	@mkdir -p $(OBJ_D)
 
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
