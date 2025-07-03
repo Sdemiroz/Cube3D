@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/02 20:12:33 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/03 02:03:28 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ LIB_DIR			:=	lib
 OBJ_DIR			:=	obj
 LIBFT			:=	$(LIB_DIR)/libft.a
 
-INC_DIRS		:=	includes lib/includes lib/MLX42/include/MLX42
-SRC_DIRS		:=	src
+INC_DIRS		:=	inc includes lib/includes lib/MLX42/include/MLX42
+SRC_DIRS		:=	src_fractals
 
 MLX_DIR			:=	$(LIB_DIR)/MLX42
 MLX				:=	$(MLX_DIR)/build/libmlx42.a
@@ -38,15 +38,15 @@ MLX				:=	$(MLX_DIR)/build/libmlx42.a
 # Compiler flags
 CFLAGS			:=	-Wall -Werror -Wextra
 
-# Linker flags (for libft.a, libmlx42.a and the math library)
-LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR) -lmlx42 -lm
-
 # For graphics in macOS
-MINILIBX		:=	-lglfw -framework Cocoa -framework OpenGL -framework IOKit
+MINILIBX		:=	-L/opt/homebrew/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 # For Linux
 # MINILIBX		:=	-lglfw -ldl -pthread -lm
 
-ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS) $(MINILIBX)
+# Linker flags (for libft.a, libmlx42.a and the math library)
+LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR)/build -lmlx42 -lm $(MINILIBX)
+
+ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 
 # For debugging
 DEBUG_FLAGS		:=	-fsanitize=address -g
@@ -59,7 +59,11 @@ DEBUG_FLAGS		:=	-fsanitize=address -g
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
-SRCS :=  main.c error.c init_game.c
+# SRCS :=  main.c error.c init_game.c
+SRCS	:=	./src/main.c ./src/initiations.c ./src/renditions.c \
+			./src/boundaries.c ./src/manage_events.c \
+			./src/complex_arithmetic.c ./src/iterations.c ./src/utils.c
+
 OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 ################################################################################
@@ -108,7 +112,7 @@ $(MLX):
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@mkdir -p $(@D)
-	$(CC) $(ALL_FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
