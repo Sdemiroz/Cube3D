@@ -1,6 +1,6 @@
 # Ignore MLX42 folder and its build output
-/lib/MLX42/
-/lib/MLX42/build/
+# /lib/MLX42/
+# /lib/MLX42/build/
 
 # Ignore other generated files and folders
 /obj/

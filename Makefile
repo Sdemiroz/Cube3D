@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/03 02:03:28 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/03 19:49:59 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,9 @@ NAME_TEST		:=	tests.out
 CC				:=	cc
 RM				:=	rm -f
 RMR				:=	rm -rf
+
+# For verbose output
+VERB			:=	no
 
 ################################################################################
 ###############                  DIRECTORIES                      ##############
@@ -38,18 +41,29 @@ MLX				:=	$(MLX_DIR)/build/libmlx42.a
 # Compiler flags
 CFLAGS			:=	-Wall -Werror -Wextra
 
-# For graphics in macOS
-MINILIBX		:=	-L/opt/homebrew/lib -lglfw -framework Cocoa -framework OpenGL -framework IOKit
-# For Linux
-# MINILIBX		:=	-lglfw -ldl -pthread -lm
+# Compiler flags for debugging
+DEBUG_FLAGS		:=	-fsanitize=address -g
+DEBUG			:=	no
+
+ifeq ($(DEBUG), yes)
+	CFLAGS		+=	$(DEBUG_FLAGS)
+endif
+
+# For graphics and window management libraries (for both macOS and Linux)
+UNAME_S			:=	$(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+	MINILIBX	:=	-lglfw -framework Cocoa -framework OpenGL -framework IOKit
+	ifeq ($(USER), pranujamatya)
+		MINILIBX	+=	-L/opt/homebrew/lib
+	endif
+else ifeq ($(UNAME_S), Linux) # Need to confirm these Linux flags for Cub3D
+	MINILIBX	:=	-lglfw -ldl
+endif
 
 # Linker flags (for libft.a, libmlx42.a and the math library)
-LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR)/build -lmlx42 -lm $(MINILIBX)
+LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR)/build -lmlx42 $(MINILIBX) -lm
 
 ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
-
-# For debugging
-DEBUG_FLAGS		:=	-fsanitize=address -g
 
 ################################################################################
 ###############            SOURCES and DEPENDENCIES               ##############
@@ -82,7 +96,7 @@ C3				:=	\033[38;2;153;141;210m
 C4				:=	\033[38;2;102;159;225m
 C5				:=	\033[38;2;51;175;240m
 C6				:=	\033[38;2;0;191;255m
-NC				:=	\033[0m # Reset
+NC				:=	\033[0m
 
 # ║
 # ╔
@@ -91,28 +105,43 @@ NC				:=	\033[0m # Reset
 # ╝
 
 ################################################################################
-##########                         COMPILING                         ###########
+##########                        COMPILATION                        ###########
 ################################################################################
 
-all: $(LIBFT) $(NAME) banner
+all: verbos $(LIBFT) $(NAME) banner
+
+verbos:
+	@if [ "$(VERB)" = "yes" ]; then \
+		echo "Debug = $(DEBUG)"; \
+		echo "Cflags flags = $(CFLAGS)"; \
+		echo "User = $(USER)"; \
+		echo "Ldflags = $(LDFLAGS)"; \
+		echo "All flags = $(ALL_FLAGS)"; \
+		echo "echo = $(ECHO)"; \
+	fi
 
 $(LIBFT):
+	@echo "$(YELLOW)$(BOLD)Compiling...$(NC)"
 	@make -C $(LIB_DIR)
 
 $(NAME): $(MLX) $(OBJS)
-	@echo "$(YELLOW)$(BOLD)Compiling...$(NC)"
 	@$(CC) $(ALL_FLAGS) $(LIBFT) $(MLX) $(OBJS) -o $(NAME)
-	@echo "$(GREEN)$(BOLD)Compilation successful$(NC)"
+	@if [ "$(DEBUG)" = "yes" ]; then \
+		echo "$(GREEN)$(BOLD)Compilation successful for debugging$(NC)"; \
+	else \
+		echo "$(GREEN)$(BOLD)Compilation successful$(NC)"; \
+	fi
 
 $(MLX):
 	@if [ ! -d "$(MLX_DIR)" ]; then \
-		git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
+		git submodule add https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
 	fi
-	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
+	@cd $(MLX_DIR) && cmake -B build > /dev/null 2>&1 \
+	&& cmake --build build -j4 > /dev/null 2>&1
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
@@ -128,7 +157,6 @@ banner:
 	@echo "\n"
 
 clean:
-	@echo "$(YELLOW)$(BOLD)Cleaning...$(NC)"
 	@$(RMR) $(OBJ_DIR)
 	@make clean -C $(LIB_DIR)
 	@echo "$(RED)$(BOLD)Cleaned object files$(NC)"
@@ -136,37 +164,44 @@ clean:
 fclean: clean
 	@$(RM) $(NAME) $(NAME_TEST)
 	@make fclean -C $(LIB_DIR)
-	@echo "$(RED)$(BOLD)Cleaned executable and object files$(NC)"
+	@echo "$(RED)$(BOLD)Cleaned executable$(NC)"
 
 re: fclean all
+
+bonus: all
+
+######## -------------------------------------------------------------- ########
+##########                         DEBUGGING                         ###########
+######## -------------------------------------------------------------- ########
+	
+debug:
+	@$(MAKE) DEBUG=yes all
+
+rebug: fclean debug
+
+######## -------------------------------------------------------------- ########
+##########                         SUBMODULE                         ###########
+######## -------------------------------------------------------------- ########
 
 resub: fclean submodule_update all
 
 submodule_update:
-	git submodule update --remote --merge
+	@git submodule update --remote --merge
+	@echo "$(GREEN)$(BOLD)Sub-module MLX42 updated$(NC)"
 
-bonus: all
+rebuild: sub_deinit sub_init
+	@echo "$(GREEN)$(BOLD)Sub-module MLX42 rebuilt$(NC)"
 
+sub_deinit:
+	@printf "$(RED)" && git submodule deinit -f .
 
-################################################################################
-##########                         DEBUGGING                         ###########
-################################################################################
+sub_init:
+	@printf "$(YELLOW)" && git submodule update --init --recursive
+	
 
-san:
-	make CFLAGS="$(DEBUG_FLAGS)" LDFLAGS="$(LDFLAGS_SAN)"
-	@echo "$(GREEN)$(BOLD)Compilation successful with fsan$(NC)"
-
-re_sub: submodule_rebuild
-
-submodule_rebuild:
-	git submodule deinit -f .
-	git submodule update --init --recursive
-
-debug: clean
-debug: CFLAGS += -DDEBUG
-debug: $(NAME)
-
-redebug: fclean debug
+######## -------------------------------------------------------------- ########
+##########                          TESTING                          ###########
+######## -------------------------------------------------------------- ########
 
 test:
 	make $(NAME_TEST) MAIN_FILE="$(SRC_TEST_MAIN)" NAME=$(NAME_TEST)
@@ -174,5 +209,6 @@ test:
 retest: fclean test
 
 -include $(OBJS:%.o=%.d)
+
 
 .PHONY: all clean fclean re bonus re_sub submodule_rebuild san debug test
