@@ -6,11 +6,11 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/04 16:32:53 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/04 18:50:20 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			:=	cube3d
+NAME			:=	cub3d
 NAME_TEST		:=	tests.out
 .DEFAULT_GOAL	:=	all
 CC				:=	cc
@@ -38,8 +38,12 @@ MLX				:=	$(MLX_DIR)/build/libmlx42.a
 ###############                     FLAGS                         ##############
 ################################################################################
 
-# Compiler flags
+# Compiler flags for warnings
 CFLAGS			:=	-Wall -Werror -Wextra
+# Compiler dependency flags for generating dependency (.d) files
+DEPFLAGS		:=	-MMD -MP
+
+CFLAGS			+=	$(DEPFLAGS)
 
 # Compiler flags for debugging
 DEBUG_FLAGS		:=	-fsanitize=address -g
@@ -73,9 +77,13 @@ ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
-SRCS :=  main.c error.c init_game.c string_utils.c
+SRCS	:=	main.c error.c init_game.c string_utils.c
 
-OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
+OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
+DEPS	:=	$(OBJS:%.o=%.d)
+
+# For header changes tracking through dependency files
+-include $(DEPS)
 
 ################################################################################
 ##########                          COLORS                           ###########
@@ -115,9 +123,12 @@ verbos:
 		echo "Ldflags = $(LDFLAGS)"; \
 		echo "All flags = $(ALL_FLAGS)"; \
 	fi
+	@if [ ! -f "$(NAME)" ]; then \
+		echo "$(YELLOW)$(BOLD)Compiling...$(NC)"; \
+	fi
 
 $(LIBFT):
-	@echo "$(YELLOW)$(BOLD)Compiling...$(NC)"
+	@echo "$(YELLOW)$(BOLD)Building libft library...$(NC)"
 	@make -C $(LIB_DIR)
 
 $(NAME): $(MLX) $(OBJS)
@@ -131,6 +142,9 @@ $(NAME): $(MLX) $(OBJS)
 $(MLX):
 	@if [ ! -d "$(MLX_DIR)" ]; then \
 		git submodule add https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
+	fi
+	@if [ ! -d "$(MLX_DIR)/build" ]; then \
+		echo "$(YELLOW)$(BOLD)Building MLX42 library...$(NC)"; \
 	fi
 	@cd $(MLX_DIR) && cmake -B build > /dev/null 2>&1 \
 	&& cmake --build build -j4 > /dev/null 2>&1
@@ -155,7 +169,7 @@ banner:
 clean:
 	@$(RMR) $(OBJ_DIR)
 	@make clean -C $(LIB_DIR)
-	@echo "$(RED)$(BOLD)Cleaned object files$(NC)"
+	@echo "$(RED)$(BOLD)Cleaned objects and dependencies$(NC)"
 
 fclean: clean
 	@$(RM) $(NAME) $(NAME_TEST)
@@ -196,7 +210,7 @@ sub_init:
 	
 
 ######## -------------------------------------------------------------- ########
-##########                          TESTING                          ###########
+##########                    TESTING (UNCHANGED)                    ###########
 ######## -------------------------------------------------------------- ########
 
 test:
@@ -204,7 +218,6 @@ test:
 
 retest: fclean test
 
--include $(OBJS:%.o=%.d)
 
-
-.PHONY: all clean fclean re bonus re_sub submodule_rebuild san debug test
+# ---------------------------------  PHONY  ---------------------------------- #
+.PHONY: all clean fclean re bonus debug rebug resub rebuild test retest

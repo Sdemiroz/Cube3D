@@ -5,28 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/04 18:41:23 by pamatya          ###   ########.fr       */
+/*   Created: 2024/07/25 04:19:51 by pamatya           #+#    #+#             */
+/*   Updated: 2025/07/04 18:18:57 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "fractol.h"
 
 int	main(int argc, char **argv)
 {
-	t_game	*game;
+	t_fractal	fr;
+	int			mode;
 
-	game = NULL;
-	gc_init_garbage_collector();
-	
-	
-	(void)argv;
-	if (argc != 2)
-		ft_error2(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-	
-	(void)argc;
-	
-	gc_free_all();
-    return(0);
+	mode = 0;
+	if (argc == 2 && ft_strncmp(argv[1], "Mandelbrot", 10) == 0)
+		mode = 1;
+	else if (argc == 4 && ft_strncmp(argv[1], "Julia", 5) == 0)
+		mode = 2;
+	else if (argc == 2 && ft_strncmp(argv[1], "Burning ship", 12) == 0)
+		mode = 3;
+	else
+		arg_error(EXIT_FAILURE);
+	initialize_fields(&fr, argc, argv, mode);
+	init_fractal(&fr);
+	init_events(&fr);
+	mlx_loop(fr.mlx);
+	mlx_terminate(fr.mlx);
+	return (0);
 }

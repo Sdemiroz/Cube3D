@@ -8,3 +8,4 @@ lib/obj/
 *.o
 *.a
 *.out
+cub3d
