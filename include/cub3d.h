@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 20:48:59 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/04 16:02:25 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_game
 } t_game;
 
 // error.c
-void			ft_error(t_game *game, char *msg, int ret);
+void			ft_error2(t_game *game, char *msg, int ret);
 
 // init_game.c
 t_game			*init_game(t_game *game, char *input);

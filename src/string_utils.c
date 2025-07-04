@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:15:45 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/01 15:07:54 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/04 15:52:59 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../include/cub3d.h"
 
 int		ft_fprintf_str(const int fd, const char *str[]);
 char	*concat_strings(const char *str[]);
