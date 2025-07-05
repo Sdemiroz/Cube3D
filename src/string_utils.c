@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:15:45 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/04 15:52:59 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/05 21:24:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int		ft_fprintf_str(const int fd, const char *str[]);
 char	*concat_strings(const char *str[]);
-
 
 /*
 Function to print multiple strings

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/04 16:02:25 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/05 22:21:36 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 
 # define PI 3.141592654
+
 typedef struct s_map
 {
 	int				height;
@@ -44,11 +45,19 @@ typedef struct s_game
 	mlx_texture_t	*walls[4];
 } t_game;
 
-// error.c
-void			ft_error2(t_game *game, char *msg, int ret);
+
+/* ------------------------------- Functions ------------------------------- */
+
+// spawn.c
+t_game		*get_game(void);
+t_map		*get_map(void);
+t_player	*get_player(void);
 
 // init_game.c
-t_game			*init_game(t_game *game, char *input);
-t_game			*set_game(t_game *game);
+t_game		*init_game(t_game *game, char *input);
+
+
+// error.c
+void		ft_error2(t_game *game, char *msg, int ret);
 
 #endif

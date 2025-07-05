@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/04 18:50:20 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/05 21:23:10 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,9 @@ ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
-SRCS	:=	main.c error.c init_game.c string_utils.c
+SRCS	:=	main.c \
+			spawn.c string_utils.c\
+			error.c init_game.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)
