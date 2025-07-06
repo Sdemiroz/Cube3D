@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/06 22:42:27 by pamatya          ###   ########.fr       */
+/*   Created: 2025/07/06 18:22:03 by pamatya           #+#    #+#             */
+/*   Updated: 2025/07/06 22:57:05 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	main(int argc, char **argv)
+void	game_start(t_game *game, char *path_to_map)
 {
-	t_game	*game = NULL;
-
-	gc_init_garbage_collector();
-	
-	
-	if (argc != 2)
-		exit_early(game, "Error, Invalid Argument\n", 1);
-    game = init_game(game, argv[1]);
-
-	printf("Let the games begin!!!\n");
-	game_start(game, argv[1]);
-
-	
-	mlx_loop((*game).mlx);
-	mlx_terminate((*game).mlx);
-	gc_free_all();
-    return(0);
+	printf("Game started\n");
+	render_overview(game, path_to_map);
+	if (mlx_image_to_window(game->mlx, game->map->overview, 0, 0) < 0)
+		exit_early(game, "Image to window failed", EXIT_FAILURE);
 }

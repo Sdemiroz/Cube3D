@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/06 03:11:21 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/06 22:44:06 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 SRCS	:=	main.c \
-			spawn.c string_utils.c \
+			spawn.c start.c renders.c string_utils.c \
 			error.c init_game.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)

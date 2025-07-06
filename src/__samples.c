@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 03:21:46 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/06 03:46:47 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/06 22:05:26 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,58 @@ mlx_get_mouse_pos-	Gets the current position of the mouse cursor.
 mlx_put_pixel	-	Draws a pixel at the specified coordinates in the image.
 		Syntax	:	mlx_put_pixel(img, x, y, color);
 		Note	:	img is the image where the pixel will be drawn, x and y are the coordinates, and color is the color of the pixel.
-		
+
+mlx_delete_texture	-	Deletes a texture and frees its resources.
+		Syntax	:	mlx_delete_texture(mlx_texture_t *texture);
+		Note	:	This function should be called to free the memory allocated for the texture when it is no longer needed.
+		*** It is important to call this function to avoid memory leaks.
+
 mlx_terminate	-	Cleans up and terminates the MLX library.
 		Syntax	:	mlx_terminate(mlx);
 		Note	:	This function should be called before exiting the program to free resources.
 		It is important to call it at the end of the program to clean up resources.
+
+mlx_close_window	-	Closes the MLX window.
+		Syntax	:	mlx_close_window(mlx);
+		Note	:	This function closes the MLX window and frees associated resources.
+		It is important to call this function before exiting the program to clean up resources.
+
+
+
+
+(verify) mlx_put_texture	-	Draws a texture at the specified coordinates in the image.
+		Syntax	:	mlx_put_texture(img, x, y, texture);
+		Note	:	img is the image where the texture will be drawn, x and y are the coordinates, and texture is the texture to be drawn.
+		*** This function is not used in the provided code, but it is available in MLX.
+			This function can be used to draw textures onto images, similar to how pixels are drawn.
+			A texture is a preloaded image that can be drawn onto another image at specified coordinates.
+
+(verify) mlx_load_texture	-	Loads a texture from a file.
+		Syntax	:	mlx_texture_t *texture = mlx_load_texture("path/to/texture.png");
+		Note	:	This function loads a texture from the specified file path and returns a pointer to the texture.
+		It is important to check if the texture was loaded successfully before using it.
+
+(verify) mlx_put_texture_to_window	-	Draws a texture in the specified window.
+		Syntax	:	mlx_put_texture_to_window(mlx, mlx_window_t *window, mlx_texture_t *texture, int x, int y);
+		Note	:	This function draws the specified texture in the given window at the specified coordinates (x, y).
+		It is important to ensure that the texture is valid before calling this function.
+		
+(verify) mlx_load_image	-	Loads an image from a file.
+		Syntax	:	mlx_image_t *img = mlx_load_image(mlx, "path/to/image.png");
+		Note	:	This function loads an image from the specified file path and returns a pointer to the image.
+		It is important to check if the image was loaded successfully before using it.
+
+(verify) mlx_load_png	-	Loads a PNG image from a file.
+		Syntax	:	mlx_image_t *img = mlx_load_png(mlx, "path/to/image.png");
+		Note	:	This function loads a PNG image from the specified file path and returns a pointer to the image.
+		It is important to check if the image was loaded successfully before using it.
+		
+			
+(verify) mlx_delete_image	-	Deletes an image and frees its resources.
+		Syntax	:	mlx_delete_image(mlx, img);
+		Note	:	This function should be called to free the memory allocated for the image when it is no longer needed.
+		*** It is important to call this function to avoid memory leaks.
+
 */
 
 /*
@@ -82,13 +129,13 @@ void	init_fractal(t_fractal *fr)
 {
 	fr->mlx = mlx_init(WIDTH, HEIGHT, fr->name, 0);
 	if (!fr->mlx)
-		frexit("Failed to initialize MLX", fr, EXIT_FAILURE);
+		exit_early("Failed to initialize MLX", fr, EXIT_FAILURE);
 	fr->img = mlx_new_image(fr->mlx, WIDTH, HEIGHT);
 	if (!fr->img)
-		frexit("New image failed", fr, EXIT_FAILURE);
+		exit_early("New image failed", fr, EXIT_FAILURE);
 	render_fractals(fr);
 	if (mlx_image_to_window(fr->mlx, fr->img, 0, 0) < 0)
-		frexit("Image to window failed", fr, EXIT_FAILURE);
+		exit_early("Image to window failed", fr, EXIT_FAILURE);
 }
 
 // Sample for mlx event fns
@@ -176,7 +223,7 @@ void	upon_close(void *param)
 	t_fractal	*fr;
 
 	fr = (t_fractal *)param;
-	frexit(NULL, fr, EXIT_SUCCESS);
+	exit_early(NULL, fr, EXIT_SUCCESS);
 }
 
 void	change_details(t_fractal *fr, mlx_key_data_t keydata)
@@ -220,8 +267,8 @@ void	render_mandelbrot(t_fractal *fr)
 		dim[0]++;
 	}
 }
-// Sample for mlx termination and frexit function
-void	frexit(char *str, t_fractal *fr, int status)
+// Sample for mlx termination and exit_early function
+void	exit_early(char *str, t_fractal *fr, int status)
 {
 	if (str)
 		perror(str);

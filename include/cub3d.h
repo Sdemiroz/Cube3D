@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/06 03:14:11 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/06 22:50:43 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,70 @@
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 
 # include <stdio.h>
+# include <stdbool.h>
+# include <unistd.h>
 
 # define PI 3.141592654
+# define HEIGHT 1080
+# define WIDTH 1920
+# define FOV 60.0f	// Field of View in degrees, f for float
+# define MAP_H 300
+# define MAP_W 700
+# define START_PX 50
+# define START_PY 50
 
-typedef struct s_map
-{
-	int				height;
-	int				width;
-} t_map;
+
+# define READ_BUFFER 42
+# define BLOCK_SIZE 20
+
+/******************************************************************************/
+/********     COLORS     ******************************************************/
+/******************************************************************************/
+
+// Colors
+# define BLACK       0x000000FF
+# define WHITE       0xFFFFFFFF
+# define RED         0xFF0000FF
+# define GREEN       0x00FF00FF
+# define BLUE        0x0000FFFF
+# define YELLOW      0xFFFF00FF
+# define CYAN        0x00FFFFFF
+# define MAGENTA     0xFF00FFFF
+
+// Gray Scale
+# define GRAY        0x808080FF
+# define LIGHT_GRAY  0xC0C0C0FF
+# define DARK_GRAY   0x404040FF
+
+// Common Game Colors
+# define ORANGE      0xFF8000FF
+# define PURPLE      0x8000FFFF
+# define BROWN       0x8B4513FF
+# define PINK        0xFF69B4FF
+
+// Environment Colors
+# define SKY_BLUE    0x87CEEBFF
+# define FOREST_GREEN 0x228B22FF
+# define STONE_GRAY  0x708090FF
+# define SAND_YELLOW 0xF4A460FF
+
+// Common Floor/Ceiling Colors
+# define FLOOR_BROWN  0x8B4513FF
+# define CEILING_BLUE 0x87CEEBFF
+# define FLOOR_GRAY   0x696969FF
+# define CEILING_WHITE 0xF5F5F5FF
+
+// Minimap Colors
+# define WALL_COLOR   0x000000FF  // Black walls
+# define FLOOR_COLOR  0xFFFFFFFF  // White floor
+# define PLAYER_COLOR 0xFF0000FF  // Red player dot
+# define EMPTY_COLOR  0xC0C0C0FF  // Light gray for empty space
+
+// Debug Colors
+# define DEBUG_RED    0xFF000080  // Semi-transparent red
+# define DEBUG_GREEN  0x00FF0080  // Semi-transparent green
+# define DEBUG_BLUE   0x0000FF80  // Semi-transparent blue
+
 
 typedef struct s_player
 {
@@ -35,16 +91,23 @@ typedef struct s_player
 	int				start_y;
 } t_player;
 
+typedef struct s_map
+{
+	int			fd;
+	int			height;
+	int			width;
+	mlx_image_t	*overview;
+	t_player	*player;
+} t_map;
+
 typedef struct s_game
 {
-	mlx_t			*mlx;
-	mlx_image_t		*map_img;
-	mlx_image_t		*main_img;
-	t_map			*map;
-	t_player		*player;
-	mlx_texture_t	*walls[4];
+	mlx_t			*mlx;		// for window and mlx library
+	mlx_image_t		*img_3d;	// for ray-casted 3D image to put on the window
+	t_map			*map;		// pointer to map struct, also hold map image 
+	t_player		*player;	// pionter to player struct for player position
+	mlx_texture_t	*walls[4];	// for wall textures
 } t_game;
-
 
 /* ------------------------------- Functions ------------------------------- */
 
@@ -56,8 +119,13 @@ t_player	*get_player(void);
 // init_game.c
 t_game		*init_game(t_game *game, char *input);
 
+// start.c
+void		game_start(t_game *game, char *path_to_map);
+
+// renders.c
+void		render_overview(t_game *game, char *path_to_map);
 
 // error.c
-void		ft_error2(t_game *game, char *msg, int ret);
+void		exit_early(t_game *game, char *msg, int ret);
 
 #endif

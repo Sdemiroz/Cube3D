@@ -6,53 +6,59 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/05 22:40:22 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/06 22:47:45 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-t_game		*init_game(t_game *game, char *input);
+t_game			*init_game(t_game *game, char *input);
 
-static void	set_game(t_game *game);
-static void	read_input(t_game *game, char *input);
+static t_game	*set_game(t_game *game);
+// static void		read_input(t_game *game, char *input);
 
 t_game	*init_game(t_game *game, char *input)
 {
-	set_game(game);
-	read_input(game, input);
-
+	game = set_game(game);
+	(void)input;
+	// read_input(game, input);
+	// parse_map(game, input);
 	return (game);
 }
 
-static void	set_game(t_game *game)
+static t_game	*set_game(t_game *game)
 {
-	t_map		*map;
-	t_player	*player;
-
 	game = get_game();
 	if(!game)
-		ft_error2(game, "Malloc error Game\n", 1);
-
-	map = get_map();
-	if(!map)
-		ft_error2(game, "Malloc error Map\n", 1);
-	ft_bzero(map, sizeof(map));
-
-	player = get_player();
-	if(!player)
-		ft_error2(game, "Malloc error Player\n", 1);
-	ft_bzero(player, sizeof(player));
+		exit_early(game, "Malloc error Game\n", 1);
+	game->mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", false);
+	if (!game->mlx)
+		exit_early(game, "game_mlx: mlx_init", EXIT_FAILURE);
+	game->img_3d = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	if (!game->img_3d)
+		exit_early(game, "game_img_3d: mlx_new_image", EXIT_FAILURE);
 	
-	game->map = map;
-	game->player = player;
+	game->map = get_map();
+	if(!game->map)
+		exit_early(game, "map: struct malloc", 1);
+	// ft_bzero(game->map, sizeof(t_map));						// required?
+	game->map->overview = mlx_new_image(game->mlx, MAP_H, MAP_W);
+	if (!game->map->overview)
+		exit_early(game, "map_overview: mlx_new_image", EXIT_FAILURE);
+
+	game->player = get_player();
+	if(!game->player)
+		exit_early(game, "game_player: malloc\n", 1);
+	// ft_bzero(game->player, sizeof(t_player));			// required?
+	
+	return (game);
 }
 
-static void	read_input(t_game *game, char *input)
-{
-	// int fd;
+// static void	read_input(t_game *game, char *input)
+// {
+// 	// int fd;
 
-	(void)game;
-	(void)input;
+// 	(void)game;
+// 	(void)input;
 
-}
+// }

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/05 22:25:36 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/06 19:23:27 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ t_game	*get_game(void)
 		if (game)
 		{
 			game->mlx = NULL;
-			game->main_img = NULL;
-			game->map_img = NULL;
+			game->img_3d = NULL;
 			game->walls[0] = NULL;
 			game->walls[1] = NULL;
 			game->walls[2] = NULL;
@@ -48,6 +47,7 @@ t_map	*get_map(void)
 		{
 			map->height = -1;
 			map->width = -1;
+			map->overview = NULL;
 		}
 	}
 	return (map);
