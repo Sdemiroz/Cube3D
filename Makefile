@@ -6,11 +6,11 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/03 19:49:59 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/06 03:05:59 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			:=	cube3d
+NAME			:=	cub3d
 NAME_TEST		:=	tests.out
 .DEFAULT_GOAL	:=	all
 CC				:=	cc
@@ -28,8 +28,8 @@ LIB_DIR			:=	lib
 OBJ_DIR			:=	obj
 LIBFT			:=	$(LIB_DIR)/libft.a
 
-INC_DIRS		:=	inc includes lib/includes lib/MLX42/include/MLX42
-SRC_DIRS		:=	src_fractals
+INC_DIRS		:=	include lib/includes lib/MLX42/include/MLX42
+SRC_DIRS		:=	src
 
 MLX_DIR			:=	$(LIB_DIR)/MLX42
 MLX				:=	$(MLX_DIR)/build/libmlx42.a
@@ -38,8 +38,12 @@ MLX				:=	$(MLX_DIR)/build/libmlx42.a
 ###############                     FLAGS                         ##############
 ################################################################################
 
-# Compiler flags
+# Compiler flags for warnings
 CFLAGS			:=	-Wall -Werror -Wextra
+# Compiler dependency flags for generating dependency (.d) files
+DEPFLAGS		:=	-MMD -MP
+
+CFLAGS			+=	$(DEPFLAGS)
 
 # Compiler flags for debugging
 DEBUG_FLAGS		:=	-fsanitize=address -g
@@ -73,12 +77,19 @@ ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
-# SRCS :=  main.c error.c init_game.c
-SRCS	:=	./src/main.c ./src/initiations.c ./src/renditions.c \
-			./src/boundaries.c ./src/manage_events.c \
-			./src/complex_arithmetic.c ./src/iterations.c ./src/utils.c
+# SRCS	:=	main.c \
+# 			spawn.c string_utils.c \
+# 			error.c init_game.c
 
-OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
+SRCS	:=	main.c initiations.c renditions.c \
+			boundaries.c manage_events.c \
+			complex_arithmetic.c iterations.c utils.c
+
+OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
+DEPS	:=	$(OBJS:%.o=%.d)
+
+# For header changes tracking through dependency files
+-include $(DEPS)
 
 ################################################################################
 ##########                          COLORS                           ###########
@@ -117,11 +128,13 @@ verbos:
 		echo "User = $(USER)"; \
 		echo "Ldflags = $(LDFLAGS)"; \
 		echo "All flags = $(ALL_FLAGS)"; \
-		echo "echo = $(ECHO)"; \
+	fi
+	@if [ ! -f "$(NAME)" ]; then \
+		echo "$(YELLOW)$(BOLD)Compiling...$(NC)"; \
 	fi
 
 $(LIBFT):
-	@echo "$(YELLOW)$(BOLD)Compiling...$(NC)"
+	@echo "$(YELLOW)$(BOLD)Building libft library...$(NC)"
 	@make -C $(LIB_DIR)
 
 $(NAME): $(MLX) $(OBJS)
@@ -135,6 +148,9 @@ $(NAME): $(MLX) $(OBJS)
 $(MLX):
 	@if [ ! -d "$(MLX_DIR)" ]; then \
 		git submodule add https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
+	fi
+	@if [ ! -d "$(MLX_DIR)/build" ]; then \
+		echo "$(YELLOW)$(BOLD)Building MLX42 library...$(NC)"; \
 	fi
 	@cd $(MLX_DIR) && cmake -B build > /dev/null 2>&1 \
 	&& cmake --build build -j4 > /dev/null 2>&1
@@ -153,13 +169,13 @@ banner:
 	@echo "$(C3)██║     ██║   ██║ ██████╔╝    █████║ ██║  ██║	$(NC)"
 	@echo "$(C4)██║     ██║   ██║ ██║══██╗    ╚══██║ ██║  ██║	$(NC)"
 	@echo "$(C5)██████╗ ████████║ ██████╔╝  ███████║ ██████╔╝	$(NC)"
-	@echo "$(C6)╚═════╝ ╚═══════╝ ╚═════╝   ╚═════╝  ╚════╝		$(NC)"
+	@echo "$(C6)╚═════╝ ╚═══════╝ ╚═════╝   ╚══════╝ ╚═════╝	$(NC)"
 	@echo "\n"
 
 clean:
 	@$(RMR) $(OBJ_DIR)
 	@make clean -C $(LIB_DIR)
-	@echo "$(RED)$(BOLD)Cleaned object files$(NC)"
+	@echo "$(RED)$(BOLD)Cleaned objects and dependencies$(NC)"
 
 fclean: clean
 	@$(RM) $(NAME) $(NAME_TEST)
@@ -200,7 +216,7 @@ sub_init:
 	
 
 ######## -------------------------------------------------------------- ########
-##########                          TESTING                          ###########
+##########                    TESTING (UNCHANGED)                    ###########
 ######## -------------------------------------------------------------- ########
 
 test:
@@ -208,7 +224,6 @@ test:
 
 retest: fclean test
 
--include $(OBJS:%.o=%.d)
 
-
-.PHONY: all clean fclean re bonus re_sub submodule_rebuild san debug test
+# ---------------------------------  PHONY  ---------------------------------- #
+.PHONY: all clean fclean re bonus debug rebug resub rebuild test retest
