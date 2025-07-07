@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/06 22:50:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/07 22:28:19 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ void		game_start(t_game *game, char *path_to_map);
 
 // renders.c
 void		render_overview(t_game *game, char *path_to_map);
+
+// events.c
+void		init_events(t_game *game);
 
 // error.c
 void		exit_early(t_game *game, char *msg, int ret);
