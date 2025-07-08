@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/07 22:20:05 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/08 02:51:45 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,6 +112,15 @@ NC				:=	\033[0m
 # ╝
 
 ################################################################################
+##########                          DOCKER                           ###########
+################################################################################
+
+DK_FILE			:=	Dockerfile
+DK_COMP			:=	docker-compose.yml
+DK_SH			:=	docker_build.sh
+DK_IMG			:= 	cub3d
+
+################################################################################
 ##########                        COMPILATION                        ###########
 ################################################################################
 
@@ -191,6 +200,21 @@ debug:
 
 rebug: fclean debug
 
+docker:
+	@if [ ! -f "$(DK_FILE)" ]; then \
+		echo "$(RED)$(BOLD)Docker file not found!$(NC)"; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(DK_COMP)" ]; then \
+		echo "$(RED)$(BOLD)Docker Compose file not found at $(DK_COMP)!$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)$(BOLD)Building Docker image...$(NC)"
+	@docker build -t $(DK_IMG) -f $(DK_FILE) .
+	@echo "$(GREEN)$(BOLD)Docker image built successfully!$(NC)"
+	@echo "$(YELLOW)$(BOLD)Running Docker container...$(NC)"
+	@docker-compose -f $(DK_COMP) run --rm $(DK_IMG)
+
 ######## -------------------------------------------------------------- ########
 ##########                         SUBMODULE                         ###########
 ######## -------------------------------------------------------------- ########
@@ -222,4 +246,4 @@ retest: fclean test
 
 
 # ---------------------------------  PHONY  ---------------------------------- #
-.PHONY: all clean fclean re bonus debug rebug resub rebuild test retest
+.PHONY: all clean fclean re bonus debug rebug docker resub rebuild test retest

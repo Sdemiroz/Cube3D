@@ -1,0 +1,13 @@
+services:
+  cub3d:
+    image: cub3d:latest
+    container_name: cub3d_container
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    volumes:
+      - ~/.bashrc:/home/user/.bashrc
+      - .:/project
+    environment:
+      - TERM=xterm-256color
+      - USER=user
