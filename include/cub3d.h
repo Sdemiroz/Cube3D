@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/07 22:28:19 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/09 18:53:25 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@
 # define HEIGHT 1080
 # define WIDTH 1920
 # define FOV 60.0f	// Field of View in degrees, f for float
-# define MAP_H 300
-# define MAP_W 700
+# define MAP_H 200
+# define MAP_W 200
 # define START_PX 50
 # define START_PY 50
 
 
-# define READ_BUFFER 42
+# define READ_BUFFER 100
 # define BLOCK_SIZE 20
+# define MAP_OFFSET_X 50
+# define MAP_OFFSET_Y 50
 
 /******************************************************************************/
 /********     COLORS     ******************************************************/
@@ -85,6 +87,10 @@
 # define DEBUG_BLUE   0x0000FF80  // Semi-transparent blue
 
 
+
+typedef mlx_image_t		t_img;
+typedef mlx_texture_t	t_txr;
+
 typedef struct s_player
 {
 	int				start_x;
@@ -96,17 +102,17 @@ typedef struct s_map
 	int			fd;
 	int			height;
 	int			width;
-	mlx_image_t	*overview;
+	t_img		*overview;
 	t_player	*player;
 } t_map;
 
 typedef struct s_game
 {
-	mlx_t			*mlx;		// for window and mlx library
-	mlx_image_t		*img_3d;	// for ray-casted 3D image to put on the window
-	t_map			*map;		// pointer to map struct, also hold map image 
-	t_player		*player;	// pionter to player struct for player position
-	mlx_texture_t	*walls[4];	// for wall textures
+	mlx_t		*mlx;		// for window and mlx library
+	t_img		*img_3d;	// for ray-casted 3D image to put on the window
+	t_map		*map;		// pointer to map struct, also hold map image 
+	t_player	*player;	// pionter to player struct for player position
+	t_txr		*walls[4];	// for wall textures
 } t_game;
 
 /* ------------------------------- Functions ------------------------------- */
