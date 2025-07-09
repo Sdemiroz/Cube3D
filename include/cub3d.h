@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/09 18:53:25 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/09 20:47:03 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define HEIGHT 1080
 # define WIDTH 1920
 # define FOV 60.0f	// Field of View in degrees, f for float
-# define MAP_H 200
-# define MAP_W 200
+# define MAP_H 1000
+# define MAP_W 1000
 # define START_PX 50
 # define START_PY 50
 
