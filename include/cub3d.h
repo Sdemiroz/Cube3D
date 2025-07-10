@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/10 03:39:38 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 16:45:12 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define WIDTH 1920
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 50
+# define PLAYER_DIA 10
 # define START_PX 100
 # define START_PY 150
 # define FOV 60.0f	// Field of View in degrees, f for float
