@@ -12,7 +12,7 @@
 
 #include "../include/cub3d.h"
 
-void	init_events(t_game *game);
+void	init_events(void *param);
 
 static void	upon_press(t_key keydata, void *param);
 // static void	upon_scroll(double xdelta, double ydelta, void *param);
@@ -20,12 +20,15 @@ static void	upon_close(void *param);
 
 
 
-void	init_events(t_game *game)
+void	init_events(void *param)
 {
-	mlx_loop_hook(game->mlx, &render_overview, game);
+	t_game	*game;
+
+	game = (t_game *)param;
+	mlx_loop_hook(game->mlx, &render_overview, param);
 	// mlx_scroll_hook(game->mlx, &upon_scroll, game);
-	mlx_key_hook(game->mlx, &upon_press, game);
-	mlx_close_hook(game->mlx, &upon_close, game);
+	mlx_key_hook(game->mlx, &upon_press, param);
+	mlx_close_hook(game->mlx, &upon_close, param);
 }
 
 static void	upon_press(t_key keydata, void *param)

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/06 19:45:49 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 19:56:39 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	exit_early(t_game *game, char *msg, int ret)
 		perror(msg);
 	if (!game)
 		exit(ret);
-	while (x != 5)	// why 5?
+	while (x < 4)
 	{
 		if (game->walls[x])
 			mlx_delete_texture(game->walls[x]);
@@ -36,5 +36,7 @@ void	exit_early(t_game *game, char *msg, int ret)
 		mlx_close_window(game->mlx);	// close a window if it is open to free the resources, mlx instance stays allocated
 		mlx_terminate(game->mlx);		// terminate the mlx instance by freeing the allocation
 	}
+	if (!(game->map->fd < 0))
+		close(game->map->fd);
 	main_cleanup(ret);
 }

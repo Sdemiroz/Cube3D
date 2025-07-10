@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/06 19:23:27 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 19:58:49 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ t_map	*get_map(void)
 		map = ft_malloc(sizeof(t_map));
 		if (map)
 		{
+			// ft_bzero(map, sizeof(t_map));			// required?
+			map->fd = -1;
 			map->height = -1;
 			map->width = -1;
 			map->overview = NULL;
@@ -62,6 +64,7 @@ t_player	*get_player(void)
 		player = ft_malloc(sizeof(t_player));
 		if (player)
 		{
+			// ft_bzero(player, sizeof(t_player));		// required?
 			player->start_x = -1;
 			player->start_y = -1;
 		}

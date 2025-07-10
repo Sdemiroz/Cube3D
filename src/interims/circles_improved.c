@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/10 16:45:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 19:22:52 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 /*
  * CIRCLE RENDERING METHODS - PERFORMANCE ANALYSIS
@@ -19,7 +19,7 @@
  * 1. draw_filled_circle_smooth() - BEST: High quality, one-time cost acceptable
  * 2. draw_filled_circle_improved() - GOOD: Balanced approach, no floating point
  * 3. draw_filled_circle_simple() - FAST: Minimal cost but blocky appearance  
- * 4. draw_filled_circle() - AVOID: High overhead, poor quality
+ * 4. draw_filled_circle_line() - AVOID: High overhead, poor quality
  * 
  * Key Insight: Separate image instance approach changes optimization priorities
  * - Initialization quality matters more than speed
@@ -27,6 +27,44 @@
  * - Can afford expensive rendering for better visual results
  */
 #include <math.h> // For sqrtf() in smooth version
+
+void	place_player(t_game *game, int method);
+
+static void	draw_filled_circle_smooth(t_img *img, int center_x, int center_y, int radius, uint32_t color);
+static uint32_t	blend_color(uint32_t color, float alpha);
+
+static void	draw_filled_circle_improved(t_img *img, int center_x, int center_y, int radius, uint32_t color);
+
+static void	draw_filled_circle_simple(t_img *img, int center_x, int center_y, int radius, uint32_t color);
+
+static void	draw_filled_circle_line(t_img *img, int center_x, int center_y, int radius, uint32_t color);
+static inline void	draw_horizontal_line(t_img *img, int x1, int x2, int y, uint32_t color);
+
+/*
+Funtion to call draw circle methods
+  - method == 1 --> draw_filled_circle_smooth()
+  - method == 2 --> draw_filled_circle_improved()
+  - method == 3 --> draw_filled_circle_simple()
+  - method == 4 --> draw_filled_circle_line()
+*/
+void place_player(t_game *game, int method)
+{
+    t_img   *img;
+
+    img = game->map->overview;
+    (void)method;
+    
+    draw_filled_circle_smooth(img, 100, START_PY, PLAYER_DIA / 2, DEBUG_RED);
+    
+    draw_filled_circle_improved(img, 150, START_PY, PLAYER_DIA / 2, DEBUG_RED);
+    // (void)draw_filled_circle_improved;
+    
+    draw_filled_circle_simple(img, 200, START_PY, PLAYER_DIA / 2, DEBUG_RED);
+    // (void)draw_filled_circle_simple;
+	
+    draw_filled_circle_line(img, 250, START_PY, PLAYER_DIA / 2, DEBUG_RED);
+    
+}
 
 /**
  * Anti-aliased circle with smooth edges (RECOMMENDED for separate instances)
@@ -107,29 +145,6 @@ static uint32_t blend_color(uint32_t color, float alpha)
 }
 
 /**
- * Optimized helper function for midpoint algorithm
- * 
- * Inline keyword eliminates function call overhead, improving cache performance
- * for the midpoint circle algorithm.
- * 
- * Performance: ~15% improvement over non-inline version
- * Cache: Better locality due to eliminated call stack operations
- */
-static inline void draw_horizontal_line(t_img *img, int x1, int x2, int y, uint32_t color)
-{
-    // Bounds check once per line (more efficient than per-pixel checking)
-    if (y < 0 || y >= (int)img->height) return;
-    
-    // Clamp x coordinates to image boundaries
-    int start_x = (x1 < 0) ? 0 : x1;
-    int end_x = (x2 >= (int)img->width) ? (int)img->width - 1 : x2;
-    
-    // Sequential memory access for better cache performance
-    for (int x = start_x; x <= end_x; x++)
-        mlx_put_pixel(img, x, y, color);
-}
-
-/**
  * Integer-based circle with edge smoothing (BALANCED CHOICE)
  * 
  * Compromise between quality and performance. Uses integer arithmetic
@@ -174,4 +189,82 @@ static void draw_filled_circle_improved(t_img *img, int center_x, int center_y, 
             }
         }
     }
+}
+
+// Simple method using algebra r2 = x2 + y2, not blending / anti-aliasing
+void draw_filled_circle_simple(t_img *img, int center_x, int center_y, int radius, uint32_t color)
+{
+    int radius_squared = radius * radius;
+    
+    for (int y = center_y - radius; y <= center_y + radius; y++)
+    {
+        for (int x = center_x - radius; x <= center_x + radius; x++)
+        {
+            int dx = x - center_x;
+            int dy = y - center_y;
+            
+            if (dx * dx + dy * dy <= radius_squared)
+            {
+                if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
+                    mlx_put_pixel(img, x, y, color);
+            }
+        }
+    }
+}
+
+// Fucntion to draw circle with horizontal line method
+void draw_filled_circle_line(t_img *img, int center_x, int center_y, int radius, uint32_t color)
+{
+    int x = 0;
+    int y = radius;
+    int d = 1 - radius;
+    
+    // Draw the initial horizontal lines
+    draw_horizontal_line(img, center_x - radius, center_x + radius, center_y, color);
+    
+    while (x < y)
+    {
+        if (d < 0)
+        {
+            d += 2 * x + 3;
+        }
+        else
+        {
+            // Draw horizontal lines for the current y level
+            draw_horizontal_line(img, center_x - x, center_x + x, center_y + y, color);
+            draw_horizontal_line(img, center_x - x, center_x + x, center_y - y, color);
+            
+            y--;
+            d += 2 * (x - y) + 5;
+        }
+        
+        x++;
+        
+        // Draw horizontal lines for the current x level
+        draw_horizontal_line(img, center_x - y, center_x + y, center_y + x, color);
+        draw_horizontal_line(img, center_x - y, center_x + y, center_y - x, color);
+    }
+}
+
+/**
+ * Optimized helper function for midpoint algorithm
+ * 
+ * Inline keyword eliminates function call overhead, improving cache performance
+ * for the midpoint circle algorithm.
+ * 
+ * Performance: ~15% improvement over non-inline version
+ * Cache: Better locality due to eliminated call stack operations
+ */
+static inline void draw_horizontal_line(t_img *img, int x1, int x2, int y, uint32_t color)
+{
+    // Bounds check once per line (more efficient than per-pixel checking)
+    if (y < 0 || y >= (int)img->height) return;
+    
+    // Clamp x coordinates to image boundaries
+    int start_x = (x1 < 0) ? 0 : x1;
+    int end_x = (x2 >= (int)img->width) ? (int)img->width - 1 : x2;
+    
+    // Sequential memory access for better cache performance
+    for (int x = start_x; x <= end_x; x++)
+        mlx_put_pixel(img, x, y, color);
 }

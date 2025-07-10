@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/10 16:45:12 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 20:10:44 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,18 +137,22 @@ t_map		*get_map(void);
 t_player	*get_player(void);
 
 // init_game.c
-t_game		*init_game(t_game *game, char *input);
+t_game		*init_game(char *arg);
 
 // start.c
-void		game_start(t_game *game, char *path_to_map);
+void		game_start(t_game *game);
 
 // renders.c
-void		render_overview(t_game *game, char *path_to_map);
+void		render_overview(void *param);
 
 // events.c
-void		init_events(t_game *game);
+void		init_events(void *param);
 
 // error.c
 void		exit_early(t_game *game, char *msg, int ret);
+
+
+// interims/circles_improved.c
+void	place_player(t_game *game, int method);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/07 22:20:05 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/10 19:31:03 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,8 +78,9 @@ vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 SRCS	:=	main.c \
-			spawn.c start.c renders.c string_utils.c \
-			error.c init_game.c
+			spawn.c start.c renders.c events.c string_utils.c \
+			error.c init_game.c \
+			interims/circles_improved.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

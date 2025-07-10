@@ -6,37 +6,50 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/10 15:42:33 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 21:01:51 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void		render_overview(t_game *game, char *path_to_map);
+void		render_overview(void *param);
 // static void	place_block(int hor, int vert, int block_color, int offset);
 static void	place_block(t_img *img, int i, int j, int block_color);
 static void	draw_border(t_img *img, int	width, int height, int color);
 
-/* -------------------------------------------------------------------------- */
-static void	draw_filled_circle(t_img *img, int center_x, int center_y, int radius, uint32_t color);
-static void	draw_horizontal_line(t_img *img, int x1, int x2, int y, uint32_t color);
-static void	draw_filled_circle_simple(t_img *img, int center_x, int center_y, int radius, uint32_t color);
-static void	place_circle(t_img *img, int center_x, int center_y, int radius, uint32_t color);
-// static void	draw_player(t_game *game);
-/* -------------------------------------------------------------------------- */
-
-void	render_overview(t_game *game, char *path_to_map)
+void	render_overview(void *param)
 {
+	t_game	*game;
 	char	*map_layer;
 	int		i;
 	int		j;
 	
-	game->map->fd = open(path_to_map, O_RDONLY);
-	if (game->map->fd < 0)
-		exit_early(game, path_to_map, EXIT_FAILURE);
+	// game = (t_game *)param;
+	game = get_game();
+	(void)param;
+	map_layer = NULL;
+	
+	
+	// DEBUG: Check if file descriptor is valid
+    printf("DEBUG: map->fd = %d\n", game->map->fd);
+    if (game->map->fd < 0) {
+        printf("ERROR: Invalid file descriptor\n");
+        exit_early(game, "Invalid file descriptor", EXIT_FAILURE);
+    }
+    
+    // DEBUG: Test if fd is readable
+    if (fcntl(game->map->fd, F_GETFL) == -1) {
+        perror("fcntl check failed");
+        exit_early(game, "File descriptor not accessible", EXIT_FAILURE);
+	}
+		
 	map_layer = get_next_line(game->map->fd);
 	if (!map_layer)
+	{
+		printf("Exiting over here\n");
 		exit_early(game, "map_layer: gnl", EXIT_FAILURE);
+	}
+	
 	i = -1;
 	j = 0;
 	while (map_layer)
@@ -51,14 +64,26 @@ void	render_overview(t_game *game, char *path_to_map)
 			// usleep(200);
 			// if (mlx_image_to_window(game->mlx, game->map->overview, 0, 0) < 0)
 			// 	exit_early(game, "Image to window failed", EXIT_FAILURE);
+			printf("I am in the inner loop\n");
 		}
 		free(map_layer);
 		map_layer = get_next_line(game->map->fd);
 		j++;
+		printf("I am in the loop\n");
 	}
+	draw_border(game->img_3d, WIDTH, HEIGHT, RED);
 	draw_border(game->map->overview, MAP_W, MAP_H, SAND_YELLOW);
-	draw_filled_circle(game->map->overview, START_PX, START_PY, PLAYER_DIA / 2, DEBUG_RED);
-	place_circle(game->map->overview, START_PY, 150, PLAYER_DIA / 2, DEBUG_RED);
+	place_player(game, 1);
+	sleep(5);
+	if (mlx_image_to_window(game->mlx, game->img_3d, 0, 0) < 0)
+		exit_early(game, "Image to window failed", EXIT_FAILURE);
+
+	sleep(5);
+	
+	if (mlx_image_to_window(game->mlx, game->map->overview, MAP_OFFSET_X, MAP_OFFSET_Y) < 0)
+		exit_early(game, "Image to window failed", EXIT_FAILURE);
+	printf("It reached here the first time\n");
+	sleep(5);
 }
 
 /*
@@ -74,7 +99,7 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 	int		j;
 
 	if (!block_color)
-		block_color = WHITE;
+		return ;
 	j = -1;
 	while (++j < BLOCK_SIZE)
 	{
@@ -110,7 +135,7 @@ static void	draw_border(t_img *img, int	width, int height, int color)
 			while (++i < block_x)
 			{
 				if (i == 0 || i == (block_x - 1))
-					place_block(img, i, j, color);
+					place_block(img, i, j, color);	
 			}
 		}
 	}
