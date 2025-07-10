@@ -14,7 +14,7 @@
 
 void	init_events(t_game *game);
 
-static void	upon_press(mlx_key_data_t keydata, void *param);
+static void	upon_press(t_key keydata, void *param);
 // static void	upon_scroll(double xdelta, double ydelta, void *param);
 static void	upon_close(void *param);
 
@@ -28,7 +28,7 @@ void	init_events(t_game *game)
 	mlx_close_hook(game->mlx, &upon_close, game);
 }
 
-static void	upon_press(mlx_key_data_t keydata, void *param)
+static void	upon_press(t_key keydata, void *param)
 {
 	// t_game	*game;
 

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/06 22:47:45 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 02:38:08 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static t_game	*set_game(t_game *game)
 	game = get_game();
 	if(!game)
 		exit_early(game, "Malloc error Game\n", 1);
-	game->mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", false);
+	game->mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", true);
 	if (!game->mlx)
 		exit_early(game, "game_mlx: mlx_init", EXIT_FAILURE);
 	game->img_3d = mlx_new_image(game->mlx, WIDTH, HEIGHT);
@@ -42,7 +42,7 @@ static t_game	*set_game(t_game *game)
 	if(!game->map)
 		exit_early(game, "map: struct malloc", 1);
 	// ft_bzero(game->map, sizeof(t_map));						// required?
-	game->map->overview = mlx_new_image(game->mlx, MAP_H, MAP_W);
+	game->map->overview = mlx_new_image(game->mlx, MAP_W, MAP_H);
 	if (!game->map->overview)
 		exit_early(game, "map_overview: mlx_new_image", EXIT_FAILURE);
 

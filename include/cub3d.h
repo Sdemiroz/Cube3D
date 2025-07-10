@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/09 22:28:32 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/10 03:39:38 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,29 @@
 # include <stdbool.h>
 # include <unistd.h>
 
+/******************************************************************************/
+/******     CONSTANTS     *****************************************************/
+/******************************************************************************/
+
 # define PI 3.141592654
+# define READ_BUFFER 100
+
+// Window Dimensions
 # define HEIGHT 1080
 # define WIDTH 1920
+
+// Player and Raycasting Constants
+# define PLAYER_DIA 50
+# define START_PX 100
+# define START_PY 150
 # define FOV 60.0f	// Field of View in degrees, f for float
-# define MAP_H 1000
-# define MAP_W 700
-# define START_PX 50
-# define START_PY 50
 
-
-# define READ_BUFFER 100
-# define BLOCK_SIZE 20
-# define MAP_OFFSET_X 50
-# define MAP_OFFSET_Y 50
+// Overview Map Constants
+# define BLOCK_SIZE 15
+# define MAP_H 210
+# define MAP_W 525
+# define MAP_OFFSET_X 25
+# define MAP_OFFSET_Y 25
 
 /******************************************************************************/
 /********     COLORS     ******************************************************/
@@ -86,10 +95,13 @@
 # define DEBUG_GREEN  0x00FF0080  // Semi-transparent green
 # define DEBUG_BLUE   0x0000FF80  // Semi-transparent blue
 
-
+/******************************************************************************/
+/********     STRUCTS     *****************************************************/
+/******************************************************************************/
 
 typedef mlx_image_t		t_img;
 typedef mlx_texture_t	t_txr;
+typedef mlx_key_data_t	t_key;
 
 typedef struct s_player
 {
@@ -115,7 +127,9 @@ typedef struct s_game
 	t_txr		*walls[4];	// for wall textures
 } t_game;
 
-/* ------------------------------- Functions ------------------------------- */
+/******************************************************************************/
+/*******     FUNCTIONS     ****************************************************/
+/******************************************************************************/
 
 // spawn.c
 t_game		*get_game(void);
