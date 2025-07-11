@@ -1,0 +1,21 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    DESIGN.txt                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
+#    Updated: 2025/07/11 20:51:22 by pamatya          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
+1. Necessary coordinations between parsing and rendering - 
+ - After parsing, the field in map struct -> width and height, must be initialized
+   using the maximum size of the map. This means the width and the height of the
+   the rectangle that is able to completely contain the whole map inside of it.
+   This size will be used to create a 2D char pointer and initialize it accordingly
+   which will be useful in controlling the bounds of the map and the movement of
+   the player within it.
+ - 

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 16:03:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:47:49 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ t_map	*get_map(void)
 			map->fd = -1;
 			map->height = MAP_H;
 			map->width = MAP_W;
+			map->pl_posx = START_PX;
+			map->pl_posy = START_PY;
 			map->player = NULL;
 		}
 	}
@@ -74,8 +76,8 @@ t_player	*get_player(void)
 			player->blob2D = NULL;
 			player->blob_inst_id = -1;
 			player->blob_dia = PLAYER_DIA;
-			player->pos_x = START_PX;
-			player->pos_y = START_PY;
+			player->center_x = BLOCK_SIZE / 2;
+			player->center_y = BLOCK_SIZE / 2;
 			player->dia2D = PLAYER_DIA;
 			player->gun3D = NULL;
 		}

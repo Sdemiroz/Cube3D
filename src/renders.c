@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:00:57 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:53:34 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,19 @@ static void render_map_instance(t_game *game, t_map *map)
 
 static void	render_player_blob_instance(t_game *game, t_player *pl)
 {
+	t_map	*map;
+
+	map = game->map;
 	if (pl->blob_inst_id == -1)
 	{
 		pl->blob_inst_id = mlx_image_to_window(game->mlx, pl->blob2D,
-				pl->pos_x + MAP_OFFSET_X, pl->pos_y + MAP_OFFSET_Y);
+				map->pl_posx + MAP_OFFSET_X, map->pl_posy + MAP_OFFSET_Y);
 		if (pl->blob_inst_id < 0)
 			exit_early(game, "blob2D: mlx_image_to_window", EXIT_FAILURE);
 	}
 	else
 	{
-		pl->blob2D->instances[pl->blob_inst_id].x = pl->pos_x + MAP_OFFSET_X;
-		pl->blob2D->instances[pl->blob_inst_id].y = pl->pos_y + MAP_OFFSET_Y;
+		pl->blob2D->instances[pl->blob_inst_id].x = map->pl_posx + MAP_OFFSET_X;
+		pl->blob2D->instances[pl->blob_inst_id].y = map->pl_posy + MAP_OFFSET_Y;
 	}
 }

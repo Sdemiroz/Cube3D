@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/11 19:14:34 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:46:14 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ typedef struct s_player
 	t_img		*blob2D;		// pointer to 2D player blob image
 	int32_t		blob_inst_id;	// instance ID for 2D player blob	
 	int			blob_dia;		// size of player blob in 2D view
-	int			pos_x;			// starting x position of player on 2D map
-	int			pos_y;			// starting y position of player on 2D map
+	int			center_x;		// x-coordinate of center of blob-image/ filled-circle
+	int			center_y;		// y-coordinate of center of blob-image/ filled-circle
 	int			dia2D;			// diameter of player-blob in 2D view
 	t_img		*gun3D;			// gun image to be used in 3D view
 } t_player;
@@ -122,6 +122,8 @@ typedef struct s_map
 	int			fd;				// file descriptor for map file
 	int			height;			// height of the 2D map overlaying the 3D view
 	int			width;			// width of the 2D map overlaying the 3D view
+	int			pl_posx;		// player position x-coordinate on the map
+	int			pl_posy;		// player position y-coordinate on the map
 	t_player	*player;		// pointer to player struct for convenience
 } t_map;
 

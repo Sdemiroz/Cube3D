@@ -81,19 +81,19 @@ static void	upon_close(void *param)
 
 static void	move_player(void *param, t_key keydata)
 {
-	t_game		*game;
-	t_player	*pl;
+	t_game	*game;
+	t_map	*map;
 	int		move_step;
 
 	game = (t_game *)param;
-	pl = game->player;
-	move_step = 5; // Define a step size for movement
+	map = game->map;
+	move_step = 1; // Define a step size for movement
 	if (keydata.key == MLX_KEY_W)
-		pl->pos_y -= move_step;
+		map->pl_posy -= move_step;
 	else if (keydata.key == MLX_KEY_S)
-		pl->pos_y += move_step;
+		map->pl_posy += move_step;
 	else if (keydata.key == MLX_KEY_A)
-		pl->pos_x -= move_step;
+		map->pl_posx -= move_step;
 	else if (keydata.key == MLX_KEY_D)
-		pl->pos_x += move_step;
+		map->pl_posx += move_step;
 }

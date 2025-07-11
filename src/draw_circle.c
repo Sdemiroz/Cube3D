@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:02:05 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:41:49 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void place_player2D_2(t_game *game, int method)
 	t_img		*img;
 	t_player	*pl;
 
-	img = game->player->blob2D;
 	pl = game->player;
+	img = pl->blob2D;
 	if (!method)
 		method = 1;	// Default to smooth method
 	if (method == 1) 
@@ -82,6 +82,7 @@ void place_player2D_2(t_game *game, int method)
  * Quality: Excellent - smooth edges, anti-aliased appearance
  * Best for: Player circles, important UI elements, one-time rendering
  */
+// static void draw_filled_circle_smooth(t_img *img, int center_x, int center_y, int radius, uint32_t color)
 static void draw_filled_circle_smooth(t_img *img, int center_x, int center_y, int radius, uint32_t color)
 {
 	float		radius_f;
@@ -280,10 +281,10 @@ static inline void draw_horizontal_line(t_img *img, int x1, int x2, int y, uint3
     if (y < 0 || y >= (int)img->height) return;
     
     // Clamp x coordinates to image boundaries
-    int pos_x = (x1 < 0) ? 0 : x1;
+    int center_x = (x1 < 0) ? 0 : x1;
     int end_x = (x2 >= (int)img->width) ? (int)img->width - 1 : x2;
     
     // Sequential memory access for better cache performance
-    for (int x = pos_x; x <= end_x; x++)
+    for (int x = center_x; x <= end_x; x++)
         mlx_put_pixel(img, x, y, color);
 }
