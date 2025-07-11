@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   circles_improved.c                                 :+:      :+:    :+:   */
+/*   draw_circle.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 17:55:36 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:02:05 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/cub3d.h"
+#include "../include/cub3d.h"
 
 /*
  * CIRCLE RENDERING METHODS - PERFORMANCE ANALYSIS
@@ -28,7 +28,7 @@
  */
 #include <math.h> // For sqrtf() in smooth version
 
-void	place_player2D(t_game *game, int method);
+void	place_player2D_2(t_game *game, int method);
 
 static void	draw_filled_circle_smooth(t_img *img, int center_x, int center_y, int radius, uint32_t color);
 static uint32_t	blend_color(uint32_t color, float alpha);
@@ -47,7 +47,7 @@ Funtion to call draw circle methods
   - method == 3 --> draw_filled_circle_simple()
   - method == 4 --> draw_filled_circle_line()
 */
-void place_player2D(t_game *game, int method)
+void place_player2D_2(t_game *game, int method)
 {
 	t_img		*img;
 	t_player	*pl;
@@ -57,13 +57,17 @@ void place_player2D(t_game *game, int method)
 	if (!method)
 		method = 1;	// Default to smooth method
 	if (method == 1) 
-       draw_filled_circle_smooth(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2, pl->blob_dia / 2, RED);
-    else if (method == 2)
-    	draw_filled_circle_improved(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2, pl->blob_dia / 2, RED);
-    else if (method == 3)
-    	draw_filled_circle_simple(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2, pl->blob_dia / 2, RED);
+		draw_filled_circle_smooth(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2,
+				pl->blob_dia / 2, RED);
+	else if (method == 2)
+		draw_filled_circle_improved(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2,
+				pl->blob_dia / 2, RED);
+	else if (method == 3)
+		draw_filled_circle_simple(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2,
+				pl->blob_dia / 2, RED);
 	else if (method == 4)
-    	draw_filled_circle_line(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2, pl->blob_dia / 2, RED);
+		draw_filled_circle_line(img, BLOCK_SIZE / 2, BLOCK_SIZE / 2,
+				pl->blob_dia / 2, RED);
 }
 
 /**
@@ -80,42 +84,52 @@ void place_player2D(t_game *game, int method)
  */
 static void draw_filled_circle_smooth(t_img *img, int center_x, int center_y, int radius, uint32_t color)
 {
-    float radius_f = (float)radius;
-    int radius_ceil = radius + 1; // Check beyond exact radius for edge smoothing
-    
-    for (int y = center_y - radius_ceil; y <= center_y + radius_ceil; y++)
-    {
-        for (int x = center_x - radius_ceil; x <= center_x + radius_ceil; x++)
-        {
-            // Bounds checking to prevent buffer overflow
-            if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
-            {
-                // Calculate exact distance from center (expensive but accurate)
-                float dx = (float)(x - center_x);
-                float dy = (float)(y - center_y);
-                float distance = sqrtf(dx * dx + dy * dy); // EXPENSIVE: sqrt calculation
-                
-                // Soft boundary for anti-aliasing effect
-                if (distance <= radius_f + 0.5f)
-                {
-                    // Edge zone: apply alpha blending for smooth appearance
-                    if (distance > radius_f - 0.5f)
-                    {
-                        // Calculate transparency based on distance from exact radius
-                        float alpha = (radius_f + 0.5f - distance);
-                        uint32_t blended_color = blend_color(color, alpha);
-                        mlx_put_pixel(img, x, y, blended_color);
-                    }
-                    else
-                    {
-                        // Interior: full opacity
-                        mlx_put_pixel(img, x, y, color);
-                    }
-                }
-            }
-        }
-    }
+	float		radius_f;
+	int			radius_ceil;
+	int			x;
+	int			y;
+	float		dx;
+	float		dy;
+	float		distance;
+	float		alpha;
+	uint32_t	blended_color;
+
+	radius_f = (float)radius;
+	radius_ceil = radius + 1; 	// Check beyond exact radius for edge smoothing
+	y = center_y - radius;
+	while (++y <= center_y + radius_ceil)
+	{
+		x = center_x - radius;
+		while (++x <= center_x + radius_ceil)
+		{
+			// Bounds checking to prevent buffer overflow
+			if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
+			{
+				// Calculate exact distance from center (expensive but accurate)
+				dx = (float)(x - center_x);
+				dy = (float)(y - center_y);
+				distance = sqrtf(dx * dx + dy * dy); // EXPENSIVE: sqrt calculation
+
+				// Soft boundary for anti-aliasing effect
+				if (distance <= radius_f + 0.5f)
+				{
+					// Edge zone: apply alpha blending for smooth appearance
+					if (distance > radius_f - 0.5f)
+					{
+						// Calculate transparency based on distance from exact radius
+						alpha = (radius_f + 0.5f - distance);
+						blended_color = blend_color(color, alpha);
+						mlx_put_pixel(img, x, y, blended_color);
+					}
+					else
+						mlx_put_pixel(img, x, y, color);	// Interior: full opacity
+				}
+			}
+		}
+	}
 }
+
+
 
 /**
  * Alpha blending helper for anti-aliasing
@@ -128,20 +142,25 @@ static void draw_filled_circle_smooth(t_img *img, int center_x, int center_y, in
  */
 static uint32_t blend_color(uint32_t color, float alpha)
 {
-    if (alpha >= 1.0f) return color;           // Full opacity
-    if (alpha <= 0.0f) return 0x00000000;     // Transparent
-    
-    // Extract RGBA components using bit manipulation
-    uint8_t r = (uint8_t)((color >> 24) & 0xFF);
-    uint8_t g = (uint8_t)((color >> 16) & 0xFF);
-    uint8_t b = (uint8_t)((color >> 8) & 0xFF);
-    uint8_t original_alpha = (uint8_t)(color & 0xFF);
-    
-    // Apply alpha scaling to transparency channel
-    uint8_t new_alpha = (uint8_t)(original_alpha * alpha);
-    
-    // Reconstruct color with modified alpha
-    return (r << 24) | (g << 16) | (b << 8) | new_alpha;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+	uint8_t	original_alpha;
+	uint8_t	new_alpha;
+
+	if (alpha >= 1.0f) return color;           // Full opacity
+	if (alpha <= 0.0f) return 0x00000000;     // Transparent
+	// Extract RGBA components using bit manipulation
+	r = (uint8_t)((color >> 24) & 0xFF);
+	g = (uint8_t)((color >> 16) & 0xFF);
+	b = (uint8_t)((color >> 8) & 0xFF);
+	original_alpha = (uint8_t)(color & 0xFF);
+
+	// Apply alpha scaling to transparency channel
+	new_alpha = (uint8_t)(original_alpha * alpha);
+
+	// Reconstruct color with modified alpha
+	return (r << 24) | (g << 16) | (b << 8) | new_alpha;
 }
 
 /**

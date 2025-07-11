@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/10 20:10:44 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 19:14:34 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,6 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <unistd.h>
-
-/******************************************************************************/
-/******     CONSTANTS     *****************************************************/
-/******************************************************************************/
-
-# define PI 3.141592654
-# define READ_BUFFER 100
-
-// Window Dimensions
-# define HEIGHT 1080
-# define WIDTH 1920
-
-// Player and Raycasting Constants
-# define PLAYER_DIA 10
-# define START_PX 100
-# define START_PY 150
-# define FOV 60.0f	// Field of View in degrees, f for float
-
-// Overview Map Constants
-# define BLOCK_SIZE 15
-# define MAP_H 210
-# define MAP_W 525
-# define MAP_OFFSET_X 25
-# define MAP_OFFSET_Y 25
 
 /******************************************************************************/
 /********     COLORS     ******************************************************/
@@ -96,6 +72,30 @@
 # define DEBUG_BLUE   0x0000FF80  // Semi-transparent blue
 
 /******************************************************************************/
+/******     CONSTANTS     *****************************************************/
+/******************************************************************************/
+
+# define PI 3.141592654
+# define READ_BUFFER 100
+
+// Window Dimensions
+# define HEIGHT 900
+# define WIDTH 1600
+
+// Player and Raycasting Constants
+# define PLAYER_DIA 5
+# define START_PX 100
+# define START_PY 100
+# define FOV 60.0f	// Field of View in degrees, f for float
+
+// Overview Map Constants
+# define BLOCK_SIZE 15
+# define MAP_H 210
+# define MAP_W 525
+# define MAP_OFFSET_X 25
+# define MAP_OFFSET_Y 25
+
+/******************************************************************************/
 /********     STRUCTS     *****************************************************/
 /******************************************************************************/
 
@@ -105,26 +105,34 @@ typedef mlx_key_data_t	t_key;
 
 typedef struct s_player
 {
-	int				start_x;
-	int				start_y;
+	t_img		*blob2D;		// pointer to 2D player blob image
+	int32_t		blob_inst_id;	// instance ID for 2D player blob	
+	int			blob_dia;		// size of player blob in 2D view
+	int			pos_x;			// starting x position of player on 2D map
+	int			pos_y;			// starting y position of player on 2D map
+	int			dia2D;			// diameter of player-blob in 2D view
+	t_img		*gun3D;			// gun image to be used in 3D view
 } t_player;
 
 typedef struct s_map
 {
-	int			fd;
-	int			height;
-	int			width;
-	t_img		*overview;
-	t_player	*player;
+	t_img		*image;			// pointer to the image of the 2D map
+	int			image_inst_id;	// instance ID for 2D map image
+	char		**map_array;	// 2D array of map data (strings)
+	int			fd;				// file descriptor for map file
+	int			height;			// height of the 2D map overlaying the 3D view
+	int			width;			// width of the 2D map overlaying the 3D view
+	t_player	*player;		// pointer to player struct for convenience
 } t_map;
 
 typedef struct s_game
 {
-	mlx_t		*mlx;		// for window and mlx library
-	t_img		*img_3d;	// for ray-casted 3D image to put on the window
-	t_map		*map;		// pointer to map struct, also hold map image 
-	t_player	*player;	// pionter to player struct for player position
-	t_txr		*walls[4];	// for wall textures
+	mlx_t		*mlx;			// for window and mlx context
+	t_img		*img3D;			// for ray-casted 3D image to be put on the window
+	int32_t		img3D_inst_id;	// instance ID for 3D image
+	t_txr		*walls[4];		// for wall textures
+	t_map		*map;			// pointer to map struct, also holds map image
+	t_player	*player;		// pointer to player struct for player position
 } t_game;
 
 /******************************************************************************/
@@ -142,8 +150,11 @@ t_game		*init_game(char *arg);
 // start.c
 void		game_start(t_game *game);
 
+// draw.c
+void		draw_map(t_game *game);
+
 // renders.c
-void		render_overview(void *param);
+void		render_map(void *param);
 
 // events.c
 void		init_events(void *param);
@@ -153,6 +164,9 @@ void		exit_early(t_game *game, char *msg, int ret);
 
 
 // interims/circles_improved.c
-void	place_player(t_game *game, int method);
+void		place_player2D(t_game *game, int method);
+
+// draw_circle.c
+void	place_player2D_2(t_game *game, int method);
 
 #endif

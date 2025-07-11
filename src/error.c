@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/10 19:56:39 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 00:59:41 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	exit_early(t_game *game, char *msg, int ret)
 	}
 	if (game->mlx)	// still experimental
 	{
-		if (game->map->overview)
-			mlx_delete_image(game->mlx, game->map->overview);
-		if (game->img_3d)
-			mlx_delete_image(game->mlx, game->img_3d);
+		if (game->map->image)
+			mlx_delete_image(game->mlx, game->map->image);
+		if (game->img3D)
+			mlx_delete_image(game->mlx, game->img3D);
 		mlx_close_window(game->mlx);	// close a window if it is open to free the resources, mlx instance stays allocated
 		mlx_terminate(game->mlx);		// terminate the mlx instance by freeing the allocation
 	}

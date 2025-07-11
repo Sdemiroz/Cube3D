@@ -18,14 +18,14 @@ static void	upon_press(t_key keydata, void *param);
 // static void	upon_scroll(double xdelta, double ydelta, void *param);
 static void	upon_close(void *param);
 
-
+static void	move_player(void *param, t_key keydata);
 
 void	init_events(void *param)
 {
 	t_game	*game;
 
 	game = (t_game *)param;
-	mlx_loop_hook(game->mlx, &render_overview, param);
+	mlx_loop_hook(game->mlx, &render_map, param);
 	// mlx_scroll_hook(game->mlx, &upon_scroll, game);
 	mlx_key_hook(game->mlx, &upon_press, param);
 	mlx_close_hook(game->mlx, &upon_close, param);
@@ -38,11 +38,15 @@ static void	upon_press(t_key keydata, void *param)
 	// game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		upon_close(param);
-	// else if ((keydata.key == MLX_KEY_UP && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_DOWN && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS))
-	// 	move_player(game, keydata);
+	else if ((keydata.key == MLX_KEY_W &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_S &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_A &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_D &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
+		move_player(param, keydata);
 	// else if ((keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
 	// 	|| (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
 	// 	|| (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
@@ -73,4 +77,23 @@ static void	upon_close(void *param)
 
 	game = (t_game *)param;
 	exit_early(game, NULL, EXIT_SUCCESS);
+}
+
+static void	move_player(void *param, t_key keydata)
+{
+	t_game		*game;
+	t_player	*pl;
+	int		move_step;
+
+	game = (t_game *)param;
+	pl = game->player;
+	move_step = 5; // Define a step size for movement
+	if (keydata.key == MLX_KEY_W)
+		pl->pos_y -= move_step;
+	else if (keydata.key == MLX_KEY_S)
+		pl->pos_y += move_step;
+	else if (keydata.key == MLX_KEY_A)
+		pl->pos_x -= move_step;
+	else if (keydata.key == MLX_KEY_D)
+		pl->pos_x += move_step;
 }

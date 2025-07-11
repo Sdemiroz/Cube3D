@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:41:41 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/10 15:46:41 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/11 01:29:48 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ void draw_filled_circle_simple(t_img *img, int center_x, int center_y, int radiu
 // void draw_player(t_game *game)
 // {
 //     // Get player position (you'll need to implement this based on your player system)
-//     int player_x = game->player->start_x;
-//     int player_y = game->player->start_y;
+//     int player_x = game->player->pos_x;
+//     int player_y = game->player->pos_y;
     
 //     // Convert to minimap coordinates
 //     int map_x = player_x * BLOCK_SIZE + MAP_OFFSET_X;
 //     int map_y = player_y * BLOCK_SIZE + MAP_OFFSET_Y;
     
 //     // Draw filled circle for player
-//     draw_filled_circle_simple(game->map->overview, map_x, map_y, PLAYER_DIA / 2, PLAYER_COLOR);
+//     draw_filled_circle_simple(game->map->image, map_x, map_y, PLAYER_DIA / 2, PLAYER_COLOR);
 // }
 
 void place_circle(t_img *img, int center_x, int center_y, int radius, uint32_t color)
