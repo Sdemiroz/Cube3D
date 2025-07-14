@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:47:49 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/14 17:55:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ t_game	*get_game(void)
 			game->mlx = NULL;
 			game->img3D = NULL;
 			game->img3D_inst_id = -1;	// Initialize 3D image instance ID to -1
-			while (++i < 4)
-				game->walls[i] = NULL;	// Initialize wall textures to NULL
+			// while (++i < 4)
+			// 	game->walls[i] = NULL;	// Initialize wall textures to NULL
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
 		}
@@ -48,15 +48,19 @@ t_map	*get_map(void)
 		map = ft_malloc(sizeof(t_map));
 		if (map)
 		{
-			// ft_bzero(map, sizeof(t_map));			// required?
+			// ft_bzero(map, sizeof(t_map));		// required?
 			map->image = NULL;
 			map->image_inst_id = -1;
 			map->map_array = NULL;
 			map->fd = -1;
 			map->height = MAP_H;
 			map->width = MAP_W;
+			map->horiz_blocks = MAP_W / BLOCK_SIZE;
+			map->vert_blocks = MAP_H / BLOCK_SIZE;
 			map->pl_posx = START_PX;
 			map->pl_posy = START_PY;
+			map->pl_dir_initial = 'N';
+			map->pl_dir = PI / 2;		// Initial direction set to North (90 degrees in radians)
 			map->player = NULL;
 		}
 	}
@@ -76,8 +80,6 @@ t_player	*get_player(void)
 			player->blob2D = NULL;
 			player->blob_inst_id = -1;
 			player->blob_dia = PLAYER_DIA;
-			player->center_x = BLOCK_SIZE / 2;
-			player->center_y = BLOCK_SIZE / 2;
 			player->dia2D = PLAYER_DIA;
 			player->gun3D = NULL;
 		}

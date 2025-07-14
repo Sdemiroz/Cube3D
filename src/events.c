@@ -38,7 +38,7 @@ static void	upon_press(t_key keydata, void *param)
 	// game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		upon_close(param);
-	else if ((keydata.key == MLX_KEY_W &&
+	else if (((keydata.key == MLX_KEY_W) &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
 			(keydata.key == MLX_KEY_S &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
@@ -84,10 +84,15 @@ static void	move_player(void *param, t_key keydata)
 	t_game	*game;
 	t_map	*map;
 	int		move_step;
+	bool	is_running;
 
 	game = (t_game *)param;
 	map = game->map;
-	move_step = 1; // Define a step size for movement
+	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
+	if (is_running)
+		move_step = 5; // Increase step size when running
+	else
+		move_step = 1; // Define a step size for movement
 	if (keydata.key == MLX_KEY_W)
 		map->pl_posy -= move_step;
 	else if (keydata.key == MLX_KEY_S)

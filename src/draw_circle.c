@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:41:49 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/13 19:54:45 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ Funtion to call draw circle methods
   - method == 3 --> draw_filled_circle_simple()
   - method == 4 --> draw_filled_circle_line()
 */
-void place_player2D_2(t_game *game, int method)
+void    place_player2D_2(t_game *game, int method)
 {
 	t_img		*img;
 	t_player	*pl;

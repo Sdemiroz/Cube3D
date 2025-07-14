@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/11 18:16:32 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/13 02:50:46 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,9 @@ CC				:=	cc
 RM				:=	rm -f
 RMR				:=	rm -rf
 
-# For verbose output
+# For verbose output and termporarily ignoring warnings
 VERB			:=	no
+IGNORE			:=	no
 
 ################################################################################
 ###############                  DIRECTORIES                      ##############
@@ -53,6 +54,10 @@ ifeq ($(DEBUG), yes)
 	CFLAGS		+=	$(DEBUG_FLAGS)
 endif
 
+ifeq ($(IGNORE), yes)
+	CFLAGS		=	$(DEPFLAGS)
+endif
+
 # For graphics and window management libraries (for both macOS and Linux)
 UNAME_S			:=	$(shell uname -s)
 ifeq ($(UNAME_S), Darwin)
@@ -79,9 +84,9 @@ vpath %.c $(SRC_DIRS)
 
 SRCS	:=	main.c \
 			spawn.c start.c draw.c renders.c events.c string_utils.c \
-			draw_circle.c \
+			draw_circle.c utils_valids.c\
 			error.c init_game.c \
-			interims/circles_improved.c
+			interims/circles_improved.c print_map_utils.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)
@@ -122,7 +127,7 @@ all: verbos $(LIBFT) $(NAME) banner
 verbos:
 	@if [ "$(VERB)" = "yes" ]; then \
 		echo "Debug = $(DEBUG)"; \
-		echo "Cflags flags = $(CFLAGS)"; \
+		echo "Cflags = $(CFLAGS)"; \
 		echo "User = $(USER)"; \
 		echo "Ldflags = $(LDFLAGS)"; \
 		echo "All flags = $(ALL_FLAGS)"; \

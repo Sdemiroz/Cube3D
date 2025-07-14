@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils_valids.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/12 01:12:56 by pamatya          ###   ########.fr       */
+/*   Created: 2025/07/13 02:48:36 by pamatya           #+#    #+#             */
+/*   Updated: 2025/07/13 02:51:47 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	main(int argc, char **argv)
+bool is_valid(char c);
+bool is_valid_block(char c);
+bool is_player(char c);
+
+bool is_valid(char c)
 {
-	t_game	*game = NULL;
+	return (c == '1' || c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
 
-	gc_init_garbage_collector();
-	
-	
-	if (argc != 2)
-		exit_early(game, "Error, Invalid Argument\n", 1);
-    game = init_game(argv[1]);
+bool is_valid_block(char c)
+{
+	return (c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
 
-	printf("Let the games begin!!!\n");
-	game_start(game);
-	init_events((void *)game);
-	mlx_loop((*game).mlx);
-	mlx_terminate((*game).mlx);
-	gc_free_all();
-    return(0);
+bool is_player(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
