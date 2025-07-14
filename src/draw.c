@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/14 17:58:32 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/14 20:56:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static void	draw_border(t_img *img, int	width, int height, int color);
 
 static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
 static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
+
+static void	draw_player_direction(t_map *map);
 
 // void	draw_map(t_game *game)
 // {
@@ -70,6 +72,7 @@ void	draw_map(t_game *game)
 				place_block(game->map->image, i, j, 0);
 		}
 	}
+	draw_player_direction(game->map);
 	draw_border(game->img3D, WIDTH, HEIGHT, CYAN);
 	// draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
 	draw_border2(game->player->blob2D, BLOCK_SIZE, BLOCK_SIZE, RED, 1);
@@ -90,8 +93,6 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 
 	if (!block_color)
 		return ;
-	// if (!block_color)
-	// 	block_color = BLACK ;
 	j = -1;
 	while (++j < BLOCK_SIZE)
 	{
@@ -184,19 +185,43 @@ static void	draw_border2(t_img *img, int width, int height, int color, int bls)
 Function to draw the player direction as a line extending from the center of
 the player blob, but by only updating the instance with the line orientation and
 not redrawing the whole blob image.
+  - distance = x * sqrt(1 + tan * tan)
 */
-static void	draw_player_direction(t_game *game, t_map *map, t_player *pl)
+static void	draw_player_direction(t_map *map)
 {
 	int		center_x;
 	int		center_y;
-	float	direction;
+	double	distance;
+	double	x;
+	double	y;
+	int		ix;
+	int		iy;
+	double	angle;
 
-	center_x = map->pl_posx + BLOCK_SIZE / 2 + MAP_OFFSET_X;
-	center_y = map->pl_posy + BLOCK_SIZE / 2 + MAP_OFFSET_Y;
-	direction = map->pl_dir;	// in radians
+	double	sine;
+	double	cosine;
+	
+	angle = (double)map->pl_dir;
+	// angle = PI / 4;
+	sine = sin(angle);
+	cosine = cos(angle);
+	center_x = BLOCK_SIZE / 2;
+	center_y = BLOCK_SIZE / 2;
 
-	// Draw the line representing player direction
-	mlx_draw_line(game->img3D, center_x, center_y,
-			center_x + cos(direction) * BLOCK_SIZE,
-			center_y + sin(direction) * BLOCK_SIZE, RED);
+	printf("Center x = %d\n", center_x);
+	printf("Center y = %d\n", center_y);
+	printf("Pl direciton = %f\n", angle);
+
+	distance = 0;
+	while (distance++ < 8)
+	{
+		x = distance * cosine;
+		y = distance * sine;
+		ix = center_x + (int)x;	// As for image coordinates, right is still plus positive and left is still negative
+		iy = center_y - (int)y; // As for image coordinates, up is negative/decrement and down is positive/increment
+		printf("c_x	= %d,	c_y	= %d\n", center_x, center_y);
+		printf("x	= %lf,	y	= %lf\n", x, y);
+		printf("ix	= %d,	iy	= %d\n", ix, iy);
+		mlx_put_pixel(map->player->blob2D, ix, iy, RED);
+	}
 }

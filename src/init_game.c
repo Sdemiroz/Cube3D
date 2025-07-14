@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/14 17:57:28 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/14 19:49:36 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ static void	set_game_elements(t_game *game, char *path_to_map)
 	if (game->map->fd < 0)
 		exit_early(game, path_to_map, EXIT_FAILURE);
 	initialize_map2D(game, game->map);
+	
 	write_map_colorful(game->map);		// print from parsed map
 	print_map(game->map);	// print from parsed map
 	print_map_colorful(game->map);	// print from parsed map
+	
 	game->player = get_player();
 	if (!game->player)
 		exit_early(game, "game_player: malloc\n", 1);
+	game->map->player = game->player;
 	// game->player->blob2D = mlx_new_image(game->mlx, PLAYER_DIA + 2, PLAYER_DIA + 2);
 	game->player->blob2D = mlx_new_image(game->mlx, BLOCK_SIZE, BLOCK_SIZE);	// rectangular frame for player blob
 }

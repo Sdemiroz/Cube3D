@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/14 17:54:09 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/14 19:37:11 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <math.h>
 
 /******************************************************************************/
 /********     COLORS     ******************************************************/
@@ -108,7 +109,7 @@ typedef struct s_player
 	t_img		*blob2D;		// pointer to 2D player blob image
 	int32_t		blob_inst_id;	// instance ID for 2D player blob	
 	int			blob_dia;		// size of player blob in 2D view
-	int			dia2D;			// diameter of player-blob in 2D view
+	// int			dia2D;			// diameter of player-blob in 2D view
 	t_img		*gun3D;			// gun image to be used in 3D view
 } t_player;
 

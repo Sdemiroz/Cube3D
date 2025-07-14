@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/14 17:55:09 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/14 19:11:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_player	*get_player(void)
 			player->blob2D = NULL;
 			player->blob_inst_id = -1;
 			player->blob_dia = PLAYER_DIA;
-			player->dia2D = PLAYER_DIA;
+			// player->dia2D = PLAYER_DIA;
 			player->gun3D = NULL;
 		}
 	}
