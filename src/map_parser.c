@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/17 20:19:06 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/17 21:06:03 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,20 @@ static void	parse_key_data(t_game *game, char *line)
 	if (line[0] == '\n')
 		return ;
 	key = get_key_index(line);
-	if (key == -1)
+	if (checker[key] || key == -1)
+	{
+		free(line);
 		exit_early(game, "Error: Invalid identifier", 1);
-	if (checker[key])
-		exit_early(game, "Error: Identifier defined twice", 1);
+	}
 	checker[key] = 1;
 	if (key == NO_CHECK)
-		assign_textures(game, &(game->NO_texture), line);
+		assign_textures(game, &(game->NO_texture), line, "NO");
 	else if (key == SO_CHECK)
-		assign_textures(game, &(game->SO_texture), line);
+		assign_textures(game, &(game->SO_texture), line, "SO");
 	else if (key == WE_CHECK)
-		assign_textures(game, &(game->WE_texture), line);
+		assign_textures(game, &(game->WE_texture), line, "WE");
 	else if (key == EA_CHECK)
-		assign_textures(game, &(game->EA_texture), line);
+		assign_textures(game, &(game->EA_texture), line, "EA");
 	else if (key == F_CHECK)
 		parse_rgb(game, line, &(game->floor_color));
 	else if (key == C_CHECK)
