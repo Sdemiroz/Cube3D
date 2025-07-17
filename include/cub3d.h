@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/14 19:37:11 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/17 20:09:44 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,36 @@ typedef mlx_image_t		t_img;
 typedef mlx_texture_t	t_txr;
 typedef mlx_key_data_t	t_key;
 
+enum e_key_type
+{
+	NO_CHECK,
+	SO_CHECK,
+	WE_CHECK,
+	EA_CHECK,
+	F_CHECK,
+	C_CHECK,
+	KEY_COUNT
+};
+
+enum	e_current_state
+{
+	INITIAL_STATE,
+	WAITING_FOR_MAP,
+	PARSING_MAP
+};
+
+typedef struct s_colour
+{
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
+	unsigned int	a;
+}	t_color;
+
 typedef struct s_player
 {
 	t_img		*blob2D;		// pointer to 2D player blob image
-	int32_t		blob_inst_id;	// instance ID for 2D player blob	
+	int32_t		blob_inst_id;	// instance ID for 2D player blob
 	int			blob_dia;		// size of player blob in 2D view
 	// int			dia2D;			// diameter of player-blob in 2D view
 	t_img		*gun3D;			// gun image to be used in 3D view
@@ -132,12 +158,22 @@ typedef struct s_map
 
 typedef struct s_game
 {
-	mlx_t		*mlx;			// for window and mlx context
-	t_img		*img3D;			// for ray-casted 3D image to be put on the window
-	int32_t		img3D_inst_id;	// instance ID for 3D image
+	mlx_t			*mlx;			// for window and mlx context
+	t_img			*img3D;			// for ray-casted 3D image to be put on the window
+	int32_t			img3D_inst_id;	// instance ID for 3D image
 	// t_txr		*walls[4];		// for wall textures
-	t_map		*map;			// pointer to map struct, also holds map image
-	t_player	*player;		// pointer to player struct for player position
+	t_map			*map;			// pointer to map struct, also holds map image
+	t_player		*player;		// pointer to player struct for player position
+	mlx_texture_t 	*NO_texture;
+	mlx_texture_t 	*SO_texture;
+	mlx_texture_t 	*WE_texture;
+	mlx_texture_t 	*EA_texture;
+	t_color			floor_color;
+	t_color			ceiling_color;
+
+
+
+
 } t_game;
 
 /******************************************************************************/
@@ -179,6 +215,10 @@ void		place_player2D(t_game *game, int method);
 
 // draw_circle.c
 void		place_player2D_2(t_game *game, int method);
+
+//map_parser.c
+void		parse_game_data(t_game *game, char *map_name);
+
 
 
 

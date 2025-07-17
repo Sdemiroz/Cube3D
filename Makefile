@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/13 02:50:46 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/17 17:18:52 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,8 @@ SRCS	:=	main.c \
 			spawn.c start.c draw.c renders.c events.c string_utils.c \
 			draw_circle.c utils_valids.c\
 			error.c init_game.c \
-			interims/circles_improved.c print_map_utils.c
+			interims/circles_improved.c print_map_utils.c \
+			map_parser.c parsing_helper.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)
@@ -192,7 +193,7 @@ bonus: all
 ######## -------------------------------------------------------------- ########
 ##########                         DEBUGGING                         ###########
 ######## -------------------------------------------------------------- ########
-	
+
 debug:
 	@$(MAKE) DEBUG=yes all
 
@@ -216,7 +217,7 @@ sub_deinit:
 
 sub_init:
 	@printf "$(YELLOW)" && git submodule update --init --recursive
-	
+
 
 ######## -------------------------------------------------------------- ########
 ##########                    TESTING (UNCHANGED)                    ###########
