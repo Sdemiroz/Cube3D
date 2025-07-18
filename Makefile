@@ -6,7 +6,7 @@
 #    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/17 17:18:52 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/07/18 16:26:41 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,7 @@ SRCS	:=	main.c \
 			draw_circle.c utils_valids.c\
 			error.c init_game.c \
 			interims/circles_improved.c print_map_utils.c \
-			map_parser.c parsing_helper.c
+			map_parser.c parsing_helper.c handle_input.c \
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

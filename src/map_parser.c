@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/17 21:06:03 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/18 16:23:30 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ static void	parse_key_data(t_game *game, char *line)
 	else if (key == EA_CHECK)
 		assign_textures(game, &(game->EA_texture), line, "EA");
 	else if (key == F_CHECK)
-		parse_rgb(game, line, &(game->floor_color));
+		identify_rgb(game, line, &(game->floor_color));
 	else if (key == C_CHECK)
-		parse_rgb(game, line, &(game->ceiling_color));
+		identify_rgb(game, line, &(game->ceiling_color));
 }
 
 
