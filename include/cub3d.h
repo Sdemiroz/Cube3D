@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/17 20:09:44 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:04:56 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ typedef struct s_colour
 	unsigned int	r;
 	unsigned int	g;
 	unsigned int	b;
-	unsigned int	a;
 }	t_color;
 
 typedef struct s_player

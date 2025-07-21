@@ -6,11 +6,67 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/18 16:28:47 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:54:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	parse_line(t_game *game, char *line)
+{
+	int		i;
+
+	i = 0;
+	while (line[i] && line[i] != '\n')
+	{
+		if (!ft_strchr("01NSEW ", line[i]))
+		{
+			free(line);
+			exit_early(game, "Error: Invalid character in map", 1);
+		}
+		i++;
+	}
+	game->map->map_array[game->map->height] = ft_strdup(line);
+	gc_add_global(game->map->map_array[game->map->height]);
+	if (!game->map->map_array[game->map->height])
+	{
+		free(line);
+		exit_early(game, "Error allocating map line", 1);
+	}
+	if (i > game->map->width)
+		game->map->width = i;
+	game->map->height++;
+}
+
+static int	parse_rgb(char *rgb_str, t_color *color)
+{
+	char	**parts;
+	int		i;
+	int		value;
+
+	i = 0;
+	parts = ft_split(rgb_str, ',');
+	if (!parts)
+		return (0);
+	while (++i < 3)
+	{
+		value = ft_atoi(parts[i]);
+		if (value < 0 || value > 255)
+		{
+			ft_free2d(parts);
+			return (0);
+		}
+		if (i == 0)
+			color->r = value;
+		else if (i == 1)
+			color->g = value;
+		else
+			color->b = value;
+	}
+	ft_free2d(parts);
+	return (1);
+}
+
 
 void	identify_rgb(t_game *game, char *line, t_color *color)
 {
@@ -19,12 +75,17 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 	char	*rgb_str;
 
 	end = 2;
+	if(line[1] != ' ')	// maybe not mandatory to check, can be deletd for norminette
+	{
+		free(line);
+		exit_early(game, "Error with Color Code", 1);
+	}
 	while (line[end] && ft_isspace(line[end]))
 		end++;
 	start = end;
 	while (line[end] && line[end] != '\n')
 		end++;
-	rgb_str = ft_calloc(end - start + 1, sizeof(char));
+	rgb_str = ft_malloc_global((end - start + 1) * sizeof(char));
 	if (!rgb_str)
 	{
 		free(line);
@@ -33,7 +94,6 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 	ft_strlcpy(rgb_str, line + start, end - start + 1);
 	if (!parse_rgb(rgb_str, color))
 	{
-		free(rgb_str);
 		free(line);
 		exit_early(game, "Error parsing RGB values", 1);
 	}
