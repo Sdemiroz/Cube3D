@@ -6,13 +6,14 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/22 21:04:53 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
 t_game		*get_game(void);
+t_data	*get_scale(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
 
@@ -40,13 +41,13 @@ t_game	*get_game(void)
 	return (game);
 }
 
-t_scales	*get_scale(void)
+t_data	*get_scale(void)
 {
-	static t_scales	*scale = NULL;
+	static t_data	*scale = NULL;
 
 	if (!scale)
 	{
-		scale = ft_malloc(sizeof(t_scales));
+		scale = ft_malloc(sizeof(t_data));
 		if (scale)
 		{
 			scale->wind_w = WIDTH;
@@ -62,7 +63,6 @@ t_scales	*get_scale(void)
 			scale->minimap_offx = MAP_OFFSET_X;
 			scale->minimap_offy = MAP_OFFSET_Y;
 			scale->minimap_scale = MAP_SCALE;
-			
 		}
 	}
 	return (scale);
@@ -84,11 +84,11 @@ t_map	*get_map(void)
 			map->fd = -1;
 			map->height = MAP_H;
 			map->width = MAP_W;
-			map->horiz_blocks = MAP_W / TILE_SIZE;
-			map->vert_blocks = MAP_H / TILE_SIZE;
+			map->data->tiles_x = MAP_W / TILE_SIZE;
+			map->data->tiles_y = MAP_H / TILE_SIZE;
 			map->pl_posx = START_PX;
 			map->pl_posy = START_PY;
-			map->pl_dir_initial = 'N';
+			map->pl_ini_dir = 'N';
 			map->pl_dir = PI / 2;		// Initial direction set to North (90 degrees in radians)
 			map->player = NULL;
 			map->game = NULL;

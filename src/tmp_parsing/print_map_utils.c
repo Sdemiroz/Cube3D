@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 02:44:00 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/18 13:27:06 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/22 20:51:05 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 void	map_array_printer(int flag);
 
@@ -44,7 +44,7 @@ void	print_map(t_map *map)
 	int	i;
 
 	i = -1;
-	while (++i < map->vert_blocks)
+	while (++i < map->data->tiles_y)
 		printf("%s\n", map->map_array[i]);
 }
 
@@ -55,10 +55,10 @@ void	print_map_colorful(t_map *map)
 
 	i = -1;
 	printf("\033[0;34m"); // Blue for walls
-	while (++i < map->vert_blocks)
+	while (++i < map->data->tiles_y)
 	{
 		j = -1;
-		while (++j < map->horiz_blocks)
+		while (++j < map->data->tiles_x)
 		{
 			if (map->map_array[i][j] == '1')
 				printf("0");

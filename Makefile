@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/17 17:35:28 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/22 20:15:35 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,14 +48,14 @@ CFLAGS			+=	$(DEPFLAGS)
 
 # Compiler flags for debugging
 DEBUG_FLAGS		:=	-fsanitize=address -g
-DEBUG			:=	no
-
-ifeq ($(DEBUG), yes)
-	CFLAGS		+=	$(DEBUG_FLAGS)
-endif
+debug			:=	no
 
 ifeq ($(ignore), yes)
 	CFLAGS		=	$(DEPFLAGS)
+endif
+
+ifeq ($(debug), yes)
+	CFLAGS		+=	$(DEBUG_FLAGS)
 endif
 
 # For graphics and window management libraries (for both macOS and Linux)
@@ -86,7 +86,8 @@ SRCS	:=	main.c \
 			spawn.c start.c draw.c renders.c events.c string_utils.c \
 			draw_circle.c utils_valids.c\
 			error.c init_game.c \
-			interims/circles_improved.c print_map_utils.c
+			interims/circles_improved.c \
+			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)
@@ -126,7 +127,7 @@ all: verbos $(LIBFT) $(NAME) banner
 
 verbos:
 	@if [ "$(verb)" = "yes" ]; then \
-		echo "Debug = $(DEBUG)"; \
+		echo "Debug = $(debug)"; \
 		echo "Cflags = $(CFLAGS)"; \
 		echo "User = $(USER)"; \
 		echo "Ldflags = $(LDFLAGS)"; \
@@ -142,7 +143,7 @@ $(LIBFT):
 
 $(NAME): $(MLX) $(OBJS)
 	@$(CC) $(ALL_FLAGS) $(LIBFT) $(MLX) $(OBJS) -o $(NAME)
-	@if [ "$(DEBUG)" = "yes" ]; then \
+	@if [ "$(debug)" = "yes" ]; then \
 		echo "$(GREEN)$(BOLD)Compilation successful for debugging$(NC)"; \
 	else \
 		echo "$(GREEN)$(BOLD)Compilation successful$(NC)"; \
@@ -194,7 +195,8 @@ bonus: all
 ######## -------------------------------------------------------------- ########
 	
 debug:
-	@$(MAKE) DEBUG=yes all
+	@$(MAKE) re debug=yes
+	lldb
 
 rebug: fclean debug
 

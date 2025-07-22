@@ -114,8 +114,8 @@ static bool	has_space_to_move(t_game *game, int new_x, int new_y)
 	block_x = new_x / TILE_SIZE;
 	block_y = new_y / TILE_SIZE;
 
-	if (block_x < 0 || block_x >= map->horiz_blocks ||
-		block_y < 0 || block_y >= map->vert_blocks)
+	if (block_x < 0 || block_x >= map->data->tiles_x ||
+		block_y < 0 || block_y >= map->data->tiles_y)
 		return (false); // Out of bounds
 
 	if (map->map_array[block_y][block_x] == '1')
