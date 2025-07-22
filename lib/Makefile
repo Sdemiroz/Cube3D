@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 14:30:19 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/05 22:34:16 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/23 01:03:17 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ SRCS	=	$(A1)/ft_isalnum.c $(A1)/ft_isalpha.c $(A1)/ft_isascii.c $(A1)/ft_isdigit
 			$(A6)/ft_atoi.c $(A6)/ft_itoa.c $(A6)/ft_tolower.c $(A6)/ft_toupper.c \
 			$(B)/ft_printf.c $(B1)/ft_form.c $(B1)/ft_putdec.c $(B1)/ft_puthex.c $(B1)/ft_putptr.c $(B1)/ft_putstr.c $(B1)/ft_utils.c $(B1)/ft_lengths.c \
 			$(C)/get_next_line.c \
-			$(D)/gc_collector.c $(D)/gc_exit.c $(D)/gc_utils.c
+			$(D)/gc_core.c $(D)/gc_interface.c $(D)/gc_utils.c
 # $(D)/collector.c $(D)/exit.c $(D)/utils.c
 
 OBJS 	= $(SRCS:%.c=$(OBJ_D)/%.o)
