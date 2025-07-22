@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/14 19:37:11 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/20 23:39:55 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,15 @@
 # define PLAYER_DIA 5
 # define START_PX 100
 # define START_PY 100
-# define FOV 60.0f	// Field of View in degrees, f for float
+# define FOV 60.0f				// Field of View in degrees, f for float
 
-// Overview Map Constants
-# define BLOCK_SIZE 15
+// Mini-Map Constants
+# define TILE_SIZE 15
 # define MAP_W 600
 # define MAP_H 210
 # define MAP_OFFSET_X 25
 # define MAP_OFFSET_Y 25
+# define MAP_SCALE 1.0f			// Scale for the minimap
 
 /******************************************************************************/
 /********     STRUCTS     *****************************************************/
@@ -103,6 +104,31 @@
 typedef mlx_image_t		t_img;
 typedef mlx_texture_t	t_txr;
 typedef mlx_key_data_t	t_key;
+typedef struct s_player t_player;
+typedef struct s_map t_map;
+typedef struct s_game t_game;
+typedef struct s_scales t_scales;
+
+typedef struct s_scales
+{
+	// Window Dimensions
+	int		wind_w;
+	int		wind_h;
+
+	// Player and Raycasting Constants
+	int	 	pl_dia;
+	int	 	pl_posx;
+	int	 	pl_posy;
+	float	pl_fov;	// Field of View in degrees, f for float
+
+	// Overview Map Constants
+	int	 	tile_size;	// size of each tile/block in the overview map
+	int	 	minimap_w;
+	int	 	minimap_h;
+	int	 	minimap_offx;
+	int	 	minimap_offy;
+	int		minimap_scale;
+} t_scales;
 
 typedef struct s_player
 {
@@ -111,6 +137,8 @@ typedef struct s_player
 	int			blob_dia;		// size of player blob in 2D view
 	// int			dia2D;			// diameter of player-blob in 2D view
 	t_img		*gun3D;			// gun image to be used in 3D view
+	t_map		*map;
+	t_game		*game;
 } t_player;
 
 typedef struct s_map
@@ -128,10 +156,12 @@ typedef struct s_map
 	char		pl_dir_initial;	// player direction character (N, S, E, W)
 	float		pl_dir;		// player direction in radians
 	t_player	*player;		// pointer to player struct for convenience
+	t_game		*game;
 } t_map;
 
 typedef struct s_game
 {
+	t_scales	scl;			// for dynamic scaling and dimensioning
 	mlx_t		*mlx;			// for window and mlx context
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
@@ -145,30 +175,38 @@ typedef struct s_game
 /******************************************************************************/
 
 // spawn.c
+
 t_game		*get_game(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
 
 // init_game.c
-t_game		*init_game(char *arg);
+
+t_game		*init_game_elements(t_game *game, char *arg);
 bool 		is_valid(char c);
 
 // start.c
+
 void		game_start(t_game *game);
 
 // draw.c
+
 void		draw_map(t_game *game);
 
 // renders.c
+
 void		render_map(void *param);
 
 // events.c
+
 void		init_events(void *param);
 
 // error.c
+
 void		exit_early(t_game *game, char *msg, int ret);
 
 // utils_valids.c
+
 bool 		is_valid(char c);
 bool 		is_valid_block(char c);
 bool 		is_player(char c);
@@ -187,8 +225,7 @@ void		place_player2D_2(t_game *game, int method);
 /******************************************************************************/
 
 // print_map_utils.c
-void	print_map(t_map *map);
-void	print_map_colorful(t_map *map);
-void	write_map_colorful(t_map *map);
+
+void		map_array_printer(int flag);
 
 #endif

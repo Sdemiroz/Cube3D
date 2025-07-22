@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/13 02:50:46 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/17 17:35:28 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ RM				:=	rm -f
 RMR				:=	rm -rf
 
 # For verbose output and termporarily ignoring warnings
-VERB			:=	no
-IGNORE			:=	no
+verb			:=	no
+ignore			:=	no
 
 ################################################################################
 ###############                  DIRECTORIES                      ##############
@@ -54,7 +54,7 @@ ifeq ($(DEBUG), yes)
 	CFLAGS		+=	$(DEBUG_FLAGS)
 endif
 
-ifeq ($(IGNORE), yes)
+ifeq ($(ignore), yes)
 	CFLAGS		=	$(DEPFLAGS)
 endif
 
@@ -125,7 +125,7 @@ NC				:=	\033[0m
 all: verbos $(LIBFT) $(NAME) banner
 
 verbos:
-	@if [ "$(VERB)" = "yes" ]; then \
+	@if [ "$(verb)" = "yes" ]; then \
 		echo "Debug = $(DEBUG)"; \
 		echo "Cflags = $(CFLAGS)"; \
 		echo "User = $(USER)"; \

@@ -19,6 +19,7 @@ static void	upon_press(t_key keydata, void *param);
 static void	upon_close(void *param);
 
 static void	move_player(void *param, t_key keydata);
+static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
 void	init_events(void *param)
 {
@@ -33,9 +34,9 @@ void	init_events(void *param)
 
 static void	upon_press(t_key keydata, void *param)
 {
-	// t_game	*game;
+	t_game	*game;
 
-	// game = (t_game *)param;
+	game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		upon_close(param);
 	else if (((keydata.key == MLX_KEY_W) &&
@@ -88,11 +89,10 @@ static void	move_player(void *param, t_key keydata)
 
 	game = (t_game *)param;
 	map = game->map;
+	move_step = 1; // Define a step size for movement	
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
 		move_step = 5; // Increase step size when running
-	else
-		move_step = 1; // Define a step size for movement
 	if (keydata.key == MLX_KEY_W)
 		map->pl_posy -= move_step;
 	else if (keydata.key == MLX_KEY_S)
@@ -101,4 +101,25 @@ static void	move_player(void *param, t_key keydata)
 		map->pl_posx -= move_step;
 	else if (keydata.key == MLX_KEY_D)
 		map->pl_posx += move_step;
+}
+
+// Function to determine before a movement if the player has collided with a wall
+static bool	has_space_to_move(t_game *game, int new_x, int new_y)
+{
+	t_map	*map;
+	int		block_x;
+	int		block_y;
+
+	map = game->map;
+	block_x = new_x / TILE_SIZE;
+	block_y = new_y / TILE_SIZE;
+
+	if (block_x < 0 || block_x >= map->horiz_blocks ||
+		block_y < 0 || block_y >= map->vert_blocks)
+		return (false); // Out of bounds
+
+	if (map->map_array[block_y][block_x] == '1')
+		return (true); // Collision with wall
+
+	return (false); // No collision
 }

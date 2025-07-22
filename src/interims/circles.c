@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:41:41 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:42:00 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void draw_filled_circle_simple(t_img *img, int center_x, int center_y, int radiu
 //     int player_y = game->player->center_y;
     
 //     // Convert to minimap coordinates
-//     int map_x = player_x * BLOCK_SIZE + MAP_OFFSET_X;
-//     int map_y = player_y * BLOCK_SIZE + MAP_OFFSET_Y;
+//     int map_x = player_x * TILE_SIZE + MAP_OFFSET_X;
+//     int map_y = player_y * TILE_SIZE + MAP_OFFSET_Y;
     
 //     // Draw filled circle for player
 //     draw_filled_circle_simple(game->map->image, map_x, map_y, PLAYER_DIA / 2, PLAYER_COLOR);

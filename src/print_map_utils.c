@@ -6,15 +6,38 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 02:44:00 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/14 00:55:48 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/18 13:27:06 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	print_map(t_map *map);
-void	print_map_colorful(t_map *map);
-void	write_map_colorful(t_map *map);
+void	map_array_printer(int flag);
+
+static void	print_map(t_map *map);
+static void	print_map_colorful(t_map *map);
+static void	write_map_colorful(t_map *map);
+
+/*
+Function to print map array using an int-based flag
+  - Turn the first bit on for write-based with color
+  - Turn the second bit on for printf-based without color
+  - Turn the third bit on for printf-based with color
+Note: write-based is the least computationally-heavy, and why it was written
+*/
+void	map_array_printer(int flag)
+{
+	t_map	*map;
+
+	map = get_map();
+
+	if (flag & 4)
+		print_map_colorful(map);	// print from parsed map
+	if (flag & 2)
+		print_map(map);	// print from parsed map
+	if (flag & 1)
+		write_map_colorful(map);		// print from parsed map
+}
 
 void	print_map(t_map *map)
 {

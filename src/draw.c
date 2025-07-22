@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/14 20:56:09 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	draw_player_direction(t_map *map);
 // 	}
 // 	draw_border(game->img3D, WIDTH, HEIGHT, CYAN);
 // 	draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-// 	draw_border2(game->player->blob2D, BLOCK_SIZE, BLOCK_SIZE, RED, 1);
+// 	draw_border2(game->player->blob2D, TILE_SIZE, TILE_SIZE, RED, 1);
 // 	place_player2D_2(game, 1);
 // }
 
@@ -75,15 +75,15 @@ void	draw_map(t_game *game)
 	draw_player_direction(game->map);
 	draw_border(game->img3D, WIDTH, HEIGHT, CYAN);
 	// draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-	draw_border2(game->player->blob2D, BLOCK_SIZE, BLOCK_SIZE, RED, 1);
+	draw_border2(game->player->blob2D, TILE_SIZE, TILE_SIZE, RED, 1);
 	place_player2D_2(game, 1);
 }
 
 /*
-Function to place a block/tile of size as defined in the HEADER as BLOCK_SIZE
+Function to place a block/tile of size as defined in the HEADER as TILE_SIZE
   - if block color is provided as 0, then block_color will be white
   - x and y are the starting coordinates (from upper left corner) of blocks in a
-  	tiled world representing the whole block of several pixels BLOCK_SIZE in 
+  	tiled world representing the whole block of several pixels TILE_SIZE in 
 	width and height
 */
 static void	place_block(t_img *img, int x, int y, int block_color)
@@ -94,11 +94,11 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 	if (!block_color)
 		return ;
 	j = -1;
-	while (++j < BLOCK_SIZE)
+	while (++j < TILE_SIZE)
 	{
 		i = -1;
-		while (++i < BLOCK_SIZE)
-			mlx_put_pixel(img, x * BLOCK_SIZE + i, y * BLOCK_SIZE + j,
+		while (++i < TILE_SIZE)
+			mlx_put_pixel(img, x * TILE_SIZE + i, y * TILE_SIZE + j,
 					block_color);
 	}
 }
@@ -112,8 +112,8 @@ static void	draw_border(t_img *img, int width, int height, int color)
 
 	i = -1;
 	j = -1;
-	block_x = width / BLOCK_SIZE;
-	block_y = height / BLOCK_SIZE;
+	block_x = width / TILE_SIZE;
+	block_y = height / TILE_SIZE;
 	while (++j < block_y)
 	{
 		i = -1;
@@ -133,7 +133,7 @@ static void	draw_border(t_img *img, int width, int height, int color)
 	}
 }
 
-// bls = BLOCK_SIZE 
+// bls = TILE_SIZE 
 static void	place_block2(t_img *img, int x, int y, int block_color, int bls)
 {
 	int		i;
@@ -200,18 +200,13 @@ static void	draw_player_direction(t_map *map)
 
 	double	sine;
 	double	cosine;
-	
+
 	angle = (double)map->pl_dir;
 	// angle = PI / 4;
 	sine = sin(angle);
 	cosine = cos(angle);
-	center_x = BLOCK_SIZE / 2;
-	center_y = BLOCK_SIZE / 2;
-
-	printf("Center x = %d\n", center_x);
-	printf("Center y = %d\n", center_y);
-	printf("Pl direciton = %f\n", angle);
-
+	center_x = TILE_SIZE / 2;
+	center_y = TILE_SIZE / 2;
 	distance = 0;
 	while (distance++ < 8)
 	{
@@ -219,9 +214,6 @@ static void	draw_player_direction(t_map *map)
 		y = distance * sine;
 		ix = center_x + (int)x;	// As for image coordinates, right is still plus positive and left is still negative
 		iy = center_y - (int)y; // As for image coordinates, up is negative/decrement and down is positive/increment
-		printf("c_x	= %d,	c_y	= %d\n", center_x, center_y);
-		printf("x	= %lf,	y	= %lf\n", x, y);
-		printf("ix	= %d,	iy	= %d\n", ix, iy);
 		mlx_put_pixel(map->player->blob2D, ix, iy, RED);
 	}
 }

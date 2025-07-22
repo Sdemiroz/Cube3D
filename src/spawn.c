@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/14 19:11:09 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,38 @@ t_game	*get_game(void)
 			// 	game->walls[i] = NULL;	// Initialize wall textures to NULL
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
+			game->map = NULL;
 		}
 	}
 	return (game);
+}
+
+t_scales	*get_scale(void)
+{
+	static t_scales	*scale = NULL;
+
+	if (!scale)
+	{
+		scale = ft_malloc(sizeof(t_scales));
+		if (scale)
+		{
+			scale->wind_w = WIDTH;
+			scale->wind_h = HEIGHT;
+
+			scale->pl_dia = PLAYER_DIA;
+			scale->pl_posx = START_PX;
+			scale->pl_posy = START_PY;
+			scale->pl_fov = FOV;		// Field of View in degrees, f for float
+			
+			scale->minimap_w = MAP_W;
+			scale->minimap_h = MAP_H;
+			scale->minimap_offx = MAP_OFFSET_X;
+			scale->minimap_offy = MAP_OFFSET_Y;
+			scale->minimap_scale = MAP_SCALE;
+			
+		}
+	}
+	return (scale);
 }
 
 t_map	*get_map(void)
@@ -55,13 +84,14 @@ t_map	*get_map(void)
 			map->fd = -1;
 			map->height = MAP_H;
 			map->width = MAP_W;
-			map->horiz_blocks = MAP_W / BLOCK_SIZE;
-			map->vert_blocks = MAP_H / BLOCK_SIZE;
+			map->horiz_blocks = MAP_W / TILE_SIZE;
+			map->vert_blocks = MAP_H / TILE_SIZE;
 			map->pl_posx = START_PX;
 			map->pl_posy = START_PY;
 			map->pl_dir_initial = 'N';
 			map->pl_dir = PI / 2;		// Initial direction set to North (90 degrees in radians)
 			map->player = NULL;
+			map->game = NULL;
 		}
 	}
 	return (map);
@@ -82,6 +112,8 @@ t_player	*get_player(void)
 			player->blob_dia = PLAYER_DIA;
 			// player->dia2D = PLAYER_DIA;
 			player->gun3D = NULL;
+			player->map = NULL;
+			player->game = NULL;
 		}
 	}
 	return (player);
