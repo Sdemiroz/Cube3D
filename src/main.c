@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/21 18:59:03 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/23 05:04:36 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		exit_early(game, "Error, Invalid Argument\n", 1);
 	game = ft_malloc(sizeof(t_game));
+	if(!game)
+		exit_early(game, "Error allocating Game\n", 1);
 	ft_bzero(game, sizeof(t_game));
 	parse_game_data(game, argv[1]);
     game = init_game(argv[1]);

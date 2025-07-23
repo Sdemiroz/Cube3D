@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/21 16:04:56 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/23 05:45:39 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@ typedef struct s_player
 	int			blob_dia;		// size of player blob in 2D view
 	// int			dia2D;			// diameter of player-blob in 2D view
 	t_img		*gun3D;			// gun image to be used in 3D view
+	int			start_x;
+	int			start_y;
 } t_player;
 
 typedef struct s_map

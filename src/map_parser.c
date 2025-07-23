@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/21 18:56:43 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/23 05:25:23 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,8 @@ void	parse_game_data(t_game *game, char *map_name)
 	if(!game->map->fd)
 		exit_early(game, "Error opening file", 1);
 	read_and_parse_map(game);
+	close(game->map->fd);
+	pad_shorter_lines(game);
+	check_map(game);
 
 }

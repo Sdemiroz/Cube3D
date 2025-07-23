@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/23 00:50:30 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/23 05:30:48 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	parse_line(t_game *game, char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strchr("01NSEW ", line[i]) || line[0] == '\n')
+		if (!ft_strchr("01NSEW ", line[i]) || line[0] == '\n') // add check for i <= MAX WIDTH
 		{
 			free(line);
 			exit_early(game, "Error: Invalid character or empty line in map", 1);
@@ -29,7 +29,7 @@ void	parse_line(t_game *game, char *line)
 		i++;
 	}
 	game->map->map_array[game->map->height] = ft_strdup(line);
-	gc_add_global(game->map->map_array[game->map->height]);
+	gc_add_local(game->map->map_array[game->map->height]);
 	if (!game->map->map_array[game->map->height])
 	{
 		free(line);

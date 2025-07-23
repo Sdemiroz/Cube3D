@@ -1,0 +1,62 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/07/23 06:00:21 by sdemiroz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cub3d.h"
+
+static int	player_counter_check(t_game *game)
+{
+	int	x;
+	int	y;
+	int	player_count;
+
+	x = 0;
+	player_count = 0;
+	while (game->map->map_array[x])
+	{
+		y = 0;
+		while (game->map->map_array[x][y])
+		{
+			if (game->map->map_array[x][y] == 'N'
+				|| game->map->map_array[x][y] == 'E'
+				|| game->map->map_array[x][y] == 'S'
+				|| game->map->map_array[x][y] == 'W')
+			{
+				game->player->start_x = x;
+				game->player->start_y = y;
+				player_count++;
+			}
+			y++;
+		}
+		x++;
+	}
+	return(player_count);
+}
+
+void	check_game(t_game *game)
+{
+	int		x;
+	char	**dup_map;
+	bool	valid;
+
+	x = player_counter_check(game);
+	if (x != 1)
+		exit_early(game, "Error: map must contain exactly 1 player start position\n", 1);
+	check_walls(game);
+	dup_map = copy_map(game->map->map_array);
+	if (!dup_map)
+		exit_early(game, "Error: failed to duplicate map\n", 1);
+	valid = flood_fill(dup_map,
+		game->player->start_x,
+		game->player->start_y);
+	if (!valid)
+		exit_early(game, "Error: map is not surrounded by walls\n", 1);
+}
