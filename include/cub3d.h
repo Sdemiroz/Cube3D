@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/22 21:02:22 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:47:53 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,27 @@
 typedef mlx_image_t		t_img;
 typedef mlx_texture_t	t_txr;
 typedef mlx_key_data_t	t_key;
-typedef struct s_player t_player;
-typedef struct s_map t_map;
+
 typedef struct s_game t_game;
 typedef struct s_data t_data;
+typedef struct s_map t_map;
+typedef struct s_player t_player;
+typedef struct s_rays t_rays;
+typedef struct s_game
+{
+	t_data		*data;			// for dynamic scaling and dimensioning
+	mlx_t		*mlx;			// for window and mlx context
+	t_img		*img3D;			// for ray-casted 3D image to be put on the window
+	int32_t		img3D_inst_id;	// instance ID for 3D image
+	
+	// t_img		*gun3D;			// gun image to be used in 3D view
+	// int32_t		gun_inst_id;	// gun instance ID for 3D image
+	// t_txr		*walls[4];	// for wall textures
+	
+	t_map		*map;			// pointer to map struct, also holds map image
+	t_player	*player;		// pointer to player struct for player position
+	t_rays		*rays;
+} t_game;
 
 typedef struct s_data
 {
@@ -116,75 +133,75 @@ typedef struct s_data
 	int		wind_w;
 	int		wind_h;
 
-	// Player and Raycasting Constants
+	// Player elements
 	int	 	pl_dia;
 	int	 	pl_posx;
 	int	 	pl_posy;
-	float	pl_fov;			// Field of View in degrees, f for float
-	int		pl_rays;		// No. of rays to cast within the FOV
 
-	// Overview Map Constants
+	// Ray casting elements
+	float	fov;			// Field of View in degrees, f for float
+	int		num_rays;		// No. of rays to cast within the FOV
+	char	ini_dir;		// initial player direction character (N, S, E, W), initialized to N
+	float	cur_dir;		// player direction in radians
+	
+	// Mini-map elements
+	int	 	mmp_w;
+	int	 	mmp_h;
+	int	 	mmp_offx;
+	int	 	mmp_offy;
+	int		mmp_scale;
 	int	 	tile_size;		// size of each tile/block in the overview map
-	int	 	minimap_w;
-	int	 	minimap_h;
 	int		tiles_x;
 	int		tiles_y;
-	char	pl_ini_dir;		// initial player direction character (N, S, E, W), initialized to N
-	float	pl_dir;			// player direction in radians
-	int	 	minimap_offx;
-	int	 	minimap_offy;
-	int		minimap_scale;
 } t_data;
-
-typedef struct s_player
-{
-	t_img		*blob2D;		// pointer to 2D player blob image
-	int32_t		blob_inst_id;	// instance ID for 2D player blob	
-	int			blob_dia;		// size of player blob in 2D view
-	// int			dia2D;			// diameter of player-blob in 2D view
-	t_img		*gun3D;			// gun image to be used in 3D view
-	t_data		*data;
-	t_map		*map;
-	t_game		*game;
-} t_player;
 
 typedef struct s_map
 {
+	t_data		*data;
 	t_img		*image;			// pointer to the image of the 2D map
 	int			image_inst_id;	// instance ID for 2D map image
-	char		**map_array;	// 2D array of map data (strings)
 	int			fd;				// file descriptor for map file
-	t_data		*data;
-	t_player	*player;		// pointer to player struct for convenience
+	char		**map_array;	// 2D array of map data (strings)
 	t_game		*game;
+	t_player	*player;		// pointer to player struct for convenience
+	t_rays		*rays;
 } t_map;
 
-typedef struct s_game
+typedef struct s_player
 {
-	t_data		*data;			// for dynamic scaling and dimensioning
-	mlx_t		*mlx;			// for window and mlx context
-	t_img		*img3D;			// for ray-casted 3D image to be put on the window
-	int32_t		img3D_inst_id;	// instance ID for 3D image
-	// t_txr		*walls[4];	// for wall textures
-	t_map		*map;			// pointer to map struct, also holds map image
-	t_player	*player;		// pointer to player struct for player position
-} t_game;
+	t_data		*data;
+	t_img		*blob2D;		// pointer to 2D player blob image
+	int32_t		blob_inst_id;	// instance ID for 2D player blob	
+	t_game		*game;
+	t_map		*map;
+	t_rays		*rays;
+} t_player;
+
+typedef struct s_rays
+{
+	t_data		*data;
+	t_img		*rays;
+	int			rays_inst_id;
+	t_game		*game;
+	t_map		*map;
+	t_player	*player;
+} t_rays;
 
 /******************************************************************************/
 /*******     FUNCTIONS     ****************************************************/
 /******************************************************************************/
 
-// spawn.c
+// // spawn.c
 
 t_game		*get_game(void);
-t_data	*get_scale(void);
+t_data		*get_data(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
+t_rays		*get_rays(void);
 
 // init_game.c
 
-t_game		*init_game_elements(t_game *game, char *arg);
-bool 		is_valid(char c);
+void		init_game_elements(t_game *game, char *arg);
 
 // start.c
 
@@ -227,10 +244,10 @@ void		place_player2D_2(t_game *game, int method);
 
 // src/temp_sources/parse_minimap.c
 
-void		parse_minimap(t_game *game, t_map *map);
+void		parse_minimap(t_map *map);
 
 // src/temp_sources/print_map_utils.c
 
-void		map_array_printer(int flag);
+void		map_array_printer(t_map *map, int flag);
 
 #endif

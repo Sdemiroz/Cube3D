@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/18 19:18:46 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:28:23 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int	main(int argc, char **argv)
 	init_events((void *)&game);
 	mlx_loop((game).mlx);
 	mlx_terminate(game.mlx);
-	
-	
-	
+
 	gc_free_all();
     return(0);
 }

@@ -83,36 +83,38 @@ static void	upon_close(void *param)
 static void	move_player(void *param, t_key keydata)
 {
 	t_game	*game;
-	t_map	*map;
+	t_data	*data;
 	int		move_step;
 	bool	is_running;
 
 	game = (t_game *)param;
-	map = game->map;
-	move_step = 1; // Define a step size for movement	
+	data = game->data;
+	move_step = 3; // Define a step size for movement	
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
-		move_step = 5; // Increase step size when running
+		move_step = 15; // Increase step size when running
 	if (keydata.key == MLX_KEY_W)
-		map->pl_posy -= move_step;
+		data->pl_posy -= move_step;
 	else if (keydata.key == MLX_KEY_S)
-		map->pl_posy += move_step;
+		data->pl_posy += move_step;
 	else if (keydata.key == MLX_KEY_A)
-		map->pl_posx -= move_step;
+		data->pl_posx -= move_step;
 	else if (keydata.key == MLX_KEY_D)
-		map->pl_posx += move_step;
+		data->pl_posx += move_step;
 }
 
 // Function to determine before a movement if the player has collided with a wall
 static bool	has_space_to_move(t_game *game, int new_x, int new_y)
 {
+	t_data	*data;
 	t_map	*map;
 	int		block_x;
 	int		block_y;
 
+	data = game->data;
 	map = game->map;
-	block_x = new_x / TILE_SIZE;
-	block_y = new_y / TILE_SIZE;
+	block_x = new_x / data->tile_size;
+	block_y = new_y / data->tile_size;
 
 	if (block_x < 0 || block_x >= map->data->tiles_x ||
 		block_y < 0 || block_y >= map->data->tiles_y)

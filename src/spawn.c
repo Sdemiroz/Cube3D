@@ -6,16 +6,20 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/22 21:04:53 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:28:48 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
 t_game		*get_game(void);
-t_data	*get_scale(void);
+t_data		*get_data(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
+t_rays		*get_rays(void);
+
+static void	initialize_map_data(t_data *data);
+
 
 t_game	*get_game(void)
 {
@@ -28,44 +32,56 @@ t_game	*get_game(void)
 		game = ft_malloc(sizeof(t_game));
 		if (game)
 		{
+			game->data = NULL;
 			game->mlx = NULL;
 			game->img3D = NULL;
 			game->img3D_inst_id = -1;	// Initialize 3D image instance ID to -1
+			// game->gun3D = NULL;
+			// game->gun_inst_id = -1;
 			// while (++i < 4)
 			// 	game->walls[i] = NULL;	// Initialize wall textures to NULL
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
-			game->map = NULL;
+			game->rays = NULL;
 		}
 	}
 	return (game);
 }
 
-t_data	*get_scale(void)
+t_data	*get_data(void)
 {
-	static t_data	*scale = NULL;
-
-	if (!scale)
+	static t_data	*data = NULL;
+	
+	if (!data)
 	{
-		scale = ft_malloc(sizeof(t_data));
-		if (scale)
+		data = ft_malloc(sizeof(t_data));
+		if (data)
 		{
-			scale->wind_w = WIDTH;
-			scale->wind_h = HEIGHT;
-
-			scale->pl_dia = PLAYER_DIA;
-			scale->pl_posx = START_PX;
-			scale->pl_posy = START_PY;
-			scale->pl_fov = FOV;		// Field of View in degrees, f for float
-			
-			scale->minimap_w = MAP_W;
-			scale->minimap_h = MAP_H;
-			scale->minimap_offx = MAP_OFFSET_X;
-			scale->minimap_offy = MAP_OFFSET_Y;
-			scale->minimap_scale = MAP_SCALE;
-		}
+			data->wind_w = WIDTH;
+			data->wind_h = HEIGHT;
+			data->pl_dia = PLAYER_DIA;
+			data->pl_posx = START_PX;
+			data->pl_posy = START_PY;
+			data->fov = FOV;
+			data->num_rays = NUM_RAYS;
+			data->ini_dir = 'N';
+			data->cur_dir = PI / 2;
+			initialize_map_data(data);
+		}	
 	}
-	return (scale);
+	return (data);
+}
+
+static void	initialize_map_data(t_data *data)
+{
+	data->mmp_w = MAP_W;
+	data->mmp_h = MAP_H;
+	data->mmp_offx = MAP_OFFSET_X;
+	data->mmp_offy = MAP_OFFSET_Y;
+	data->mmp_scale = MAP_SCALE;
+	data->tile_size = TILE_SIZE;
+	data->tiles_x = MAP_W / TILE_SIZE;
+	data->tiles_y = MAP_H / TILE_SIZE;
 }
 
 t_map	*get_map(void)
@@ -77,21 +93,14 @@ t_map	*get_map(void)
 		map = ft_malloc(sizeof(t_map));
 		if (map)
 		{
-			// ft_bzero(map, sizeof(t_map));		// required?
+			map->data = NULL;
 			map->image = NULL;
 			map->image_inst_id = -1;
-			map->map_array = NULL;
 			map->fd = -1;
-			map->height = MAP_H;
-			map->width = MAP_W;
-			map->data->tiles_x = MAP_W / TILE_SIZE;
-			map->data->tiles_y = MAP_H / TILE_SIZE;
-			map->pl_posx = START_PX;
-			map->pl_posy = START_PY;
-			map->pl_ini_dir = 'N';
-			map->pl_dir = PI / 2;		// Initial direction set to North (90 degrees in radians)
-			map->player = NULL;
+			map->map_array = NULL;
 			map->game = NULL;
+			map->player = NULL;
+			map->rays = NULL;
 		}
 	}
 	return (map);
@@ -106,15 +115,33 @@ t_player	*get_player(void)
 		player = ft_malloc(sizeof(t_player));
 		if (player)
 		{
-			// ft_bzero(player, sizeof(t_player));		// required?
+			player->data = NULL;
 			player->blob2D = NULL;
 			player->blob_inst_id = -1;
-			player->blob_dia = PLAYER_DIA;
-			// player->dia2D = PLAYER_DIA;
-			player->gun3D = NULL;
-			player->map = NULL;
 			player->game = NULL;
+			player->map = NULL;
+			player->rays = NULL;
 		}
 	}
 	return (player);
+}
+
+t_rays	*get_rays(void)
+{
+	static t_rays	*rays = NULL;
+	
+	if (!rays)
+	{
+		rays = ft_malloc(sizeof(t_rays));
+		if (rays)
+		{
+			rays->data = NULL;
+			rays->rays = NULL;
+			rays->rays_inst_id = -1;
+			rays->game = NULL;
+			rays->map = NULL;
+			rays->player = NULL;
+		}
+	}
+	return (rays);
 }

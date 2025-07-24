@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 19:53:34 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:34:06 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	render_map(void *param)
 	game = (t_game *)param;
 	map = game->map;
 	pl = game->player;
-	
+
 	render_3D_instance(game);
 	render_map_instance(game, map);
 	render_player_blob_instance(game, pl);
@@ -46,10 +46,14 @@ static void render_3D_instance(t_game *game)
 
 static void render_map_instance(t_game *game, t_map *map)
 {
-	if (game->map->image_inst_id == -1)
+	t_data	*data;
+
+	data = game->data;
+	
+	if (map->image_inst_id == -1)
 	{
-		game->map->image_inst_id = mlx_image_to_window(game->mlx, map->image,
-				MAP_OFFSET_X, MAP_OFFSET_Y);
+		map->image_inst_id = mlx_image_to_window(game->mlx, map->image,
+			data->mmp_offx, data->mmp_offy);
 		if (map->image_inst_id < 0)
 			exit_early(game, "map_image: mlx_image_to_window", EXIT_FAILURE);
 	}
@@ -57,19 +61,21 @@ static void render_map_instance(t_game *game, t_map *map)
 
 static void	render_player_blob_instance(t_game *game, t_player *pl)
 {
-	t_map	*map;
+	t_data	*data;
 
-	map = game->map;
+	data = game->data;
 	if (pl->blob_inst_id == -1)
 	{
 		pl->blob_inst_id = mlx_image_to_window(game->mlx, pl->blob2D,
-				map->pl_posx + MAP_OFFSET_X, map->pl_posy + MAP_OFFSET_Y);
+				data->pl_posx + data->mmp_offx, data->pl_posy + data->mmp_offy);
 		if (pl->blob_inst_id < 0)
 			exit_early(game, "blob2D: mlx_image_to_window", EXIT_FAILURE);
 	}
 	else
 	{
-		pl->blob2D->instances[pl->blob_inst_id].x = map->pl_posx + MAP_OFFSET_X;
-		pl->blob2D->instances[pl->blob_inst_id].y = map->pl_posy + MAP_OFFSET_Y;
+		pl->blob2D->instances[pl->blob_inst_id].x = data->pl_posx +
+				data->mmp_offx;
+		pl->blob2D->instances[pl->blob_inst_id].y = data->pl_posy +
+				data->mmp_offy;
 	}
 }

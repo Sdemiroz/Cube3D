@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:57:46 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,26 @@ void    place_player2D_2(t_game *game, int method)
 {
 	t_img		*img;
 	t_player	*pl;
+    t_data      *data;
 
 	pl = game->player;
 	img = pl->blob2D;
-	if (!method)
+    data = game->data;
+	
+    if (!method)
 		method = 1;	// Default to smooth method
 	if (method == 1) 
-		draw_filled_circle_smooth(img, TILE_SIZE / 2, TILE_SIZE / 2,
-				pl->blob_dia / 2, RED);
+		draw_filled_circle_smooth(img, data->tile_size / 2,
+                data->tile_size / 2, data->pl_dia / 2, RED);
 	else if (method == 2)
-		draw_filled_circle_improved(img, TILE_SIZE / 2, TILE_SIZE / 2,
-				pl->blob_dia / 2, RED);
+		draw_filled_circle_improved(img, data->tile_size / 2,
+                data->tile_size / 2, data->pl_dia / 2, RED);
 	else if (method == 3)
-		draw_filled_circle_simple(img, TILE_SIZE / 2, TILE_SIZE / 2,
-				pl->blob_dia / 2, RED);
+		draw_filled_circle_simple(img, data->tile_size / 2,
+                data->tile_size / 2, data->pl_dia / 2, RED);
 	else if (method == 4)
-		draw_filled_circle_line(img, TILE_SIZE / 2, TILE_SIZE / 2,
-				pl->blob_dia / 2, RED);
+		draw_filled_circle_line(img, data->tile_size / 2,
+                data->tile_size / 2, data->pl_dia / 2, RED);
 }
 
 /**

@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_map_utils.c                                  :+:      :+:    :+:   */
+/*   printf_map_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 02:44:00 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/22 20:51:05 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 13:44:42 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	map_array_printer(int flag);
+void	map_array_printer(t_map *map, int flag);
 
-static void	print_map(t_map *map);
-static void	print_map_colorful(t_map *map);
+static void	printf_map(t_map *map);
+static void	printf_map_colorful(t_map *map);
 static void	write_map_colorful(t_map *map);
 
 /*
@@ -25,21 +25,17 @@ Function to print map array using an int-based flag
   - Turn the third bit on for printf-based with color
 Note: write-based is the least computationally-heavy, and why it was written
 */
-void	map_array_printer(int flag)
+void	map_array_printer(t_map *map, int flag)
 {
-	t_map	*map;
-
-	map = get_map();
-
 	if (flag & 4)
-		print_map_colorful(map);	// print from parsed map
+		printf_map_colorful(map);	// print from parsed map
 	if (flag & 2)
-		print_map(map);	// print from parsed map
+		printf_map(map);	// print from parsed map
 	if (flag & 1)
 		write_map_colorful(map);		// print from parsed map
 }
 
-void	print_map(t_map *map)
+static void	printf_map(t_map *map)
 {
 	int	i;
 
@@ -48,7 +44,7 @@ void	print_map(t_map *map)
 		printf("%s\n", map->map_array[i]);
 }
 
-void	print_map_colorful(t_map *map)
+static void	printf_map_colorful(t_map *map)
 {
 	int	i;
 	int	j;
@@ -77,7 +73,7 @@ void	print_map_colorful(t_map *map)
 	printf("\033[0m"); // Reset color
 }
 
-void	write_map_colorful(t_map *map)
+static void	write_map_colorful(t_map *map)
 {
 	int	i;
 	int	j;

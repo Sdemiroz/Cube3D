@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/20 23:39:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 20:25:29 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ static void	draw_player_direction(t_map *map);
 
 void	draw_map(t_game *game)
 {
+	t_data	*data;
 	char	**map;
 	int		i;
 	int		j;
 
+	data = game->data;
 	map = game->map->map_array;
 	i = -1;
 	while (map[++i])
@@ -73,9 +75,9 @@ void	draw_map(t_game *game)
 		}
 	}
 	draw_player_direction(game->map);
-	draw_border(game->img3D, WIDTH, HEIGHT, CYAN);
+	draw_border(game->img3D, data->wind_w, data->wind_h, CYAN);
 	// draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-	draw_border2(game->player->blob2D, TILE_SIZE, TILE_SIZE, RED, 1);
+	draw_border2(game->player->blob2D, data->tile_size, data->tile_size, RED, 1);
 	place_player2D_2(game, 1);
 }
 
@@ -201,7 +203,7 @@ static void	draw_player_direction(t_map *map)
 	double	sine;
 	double	cosine;
 
-	angle = (double)map->pl_dir;
+	angle = (double)map->data->cur_dir;
 	// angle = PI / 4;
 	sine = sin(angle);
 	cosine = cos(angle);
