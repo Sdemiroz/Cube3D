@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/23 20:28:48 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/24 21:08:11 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ t_data	*get_data(void)
 			data->fov = FOV;
 			data->num_rays = NUM_RAYS;
 			data->ini_dir = 'N';
+			data->prev_dir = PI / 2;
 			data->cur_dir = PI / 2;
+			data->cosine = cos(data->cur_dir);
+			data->sine = sin(data->cur_dir);
 			initialize_map_data(data);
 		}	
 	}

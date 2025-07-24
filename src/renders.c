@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/23 20:34:06 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:06:59 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,24 @@ void		render_map(void *param);
 static void render_3D_instance(t_game *game);
 static void render_map_instance(t_game *game, t_map *map);
 static void	render_player_blob_instance(t_game *game, t_player *pl);
+static void render_rays_instance(t_game *game, t_rays *rays);
 
 void	render_map(void *param)
 {
 	t_game		*game;
 	t_map		*map;
 	t_player	*pl;
+	t_rays		*rays;
 
 	game = (t_game *)param;
 	map = game->map;
 	pl = game->player;
+	rays = game->rays;
 
 	render_3D_instance(game);
 	render_map_instance(game, map);
 	render_player_blob_instance(game, pl);
+	render_rays_instance(game, rays);
 }
 
 static void render_3D_instance(t_game *game)
@@ -77,5 +81,20 @@ static void	render_player_blob_instance(t_game *game, t_player *pl)
 				data->mmp_offx;
 		pl->blob2D->instances[pl->blob_inst_id].y = data->pl_posy +
 				data->mmp_offy;
+	}
+}
+
+static void render_rays_instance(t_game *game, t_rays *rays)
+{
+	t_data	*data;
+
+	data = game->data;
+	
+	if (rays->rays_inst_id == -1)
+	{
+		rays->rays_inst_id = mlx_image_to_window(game->mlx, rays->rays,
+			data->mmp_offx, data->mmp_offy);
+		if (rays->rays_inst_id < 0)
+			exit_early(game, "rays_img: mlx_image_to_window", EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/23 20:47:53 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/24 21:08:17 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,48 +29,49 @@
 /******************************************************************************/
 
 // Colors
-# define BLACK       0x000000FF
-# define WHITE       0xFFFFFFFF
-# define RED         0xFF0000FF
-# define GREEN       0x00FF00FF
-# define BLUE        0x0000FFFF
-# define YELLOW      0xFFFF00FF
-# define CYAN        0x00FFFFFF
-# define MAGENTA     0xFF00FFFF
+# define BLACK			0x000000FF
+# define WHITE			0xFFFFFFFF
+# define RED			0xFF0000FF
+# define GREEN			0x00FF00FF
+# define BLUE			0x0000FFFF
+# define YELLOW			0xFFFF00FF
+# define CYAN			0x00FFFFFF
+# define MAGENTA		0xFF00FFFF
+# define RESET			0x00000000
 
 // Gray Scale
-# define GRAY        0x808080FF
-# define LIGHT_GRAY  0xC0C0C0FF
-# define DARK_GRAY   0x404040FF
+# define GRAY			0x808080FF
+# define LIGHT_GRAY		0xC0C0C0FF
+# define DARK_GRAY		0x404040FF
 
 // Common Game Colors
-# define ORANGE      0xFF8000FF
-# define PURPLE      0x8000FFFF
-# define BROWN       0x8B4513FF
-# define PINK        0xFF69B4FF
+# define ORANGE			0xFF8000FF
+# define PURPLE			0x8000FFFF
+# define BROWN			0x8B4513FF
+# define PINK			0xFF69B4FF
 
 // Environment Colors
-# define SKY_BLUE    0x87CEEBFF
-# define FOREST_GREEN 0x228B22FF
-# define STONE_GRAY  0x708090FF
-# define SAND_YELLOW 0xF4A460FF
+# define SKY_BLUE		0x87CEEBFF
+# define FOREST_GREEN	0x228B22FF
+# define STONE_GRAY		0x708090FF
+# define SAND_YELLOW	0xF4A460FF
 
 // Common Floor/Ceiling Colors
-# define FLOOR_BROWN  0x8B4513FF
-# define CEILING_BLUE 0x87CEEBFF
-# define FLOOR_GRAY   0x696969FF
-# define CEILING_WHITE 0xF5F5F5FF
+# define FLOOR_BROWN	0x8B4513FF
+# define CEILING_BLUE	0x87CEEBFF
+# define FLOOR_GRAY		0x696969FF
+# define CEILING_WHITE	0xF5F5F5FF
 
 // Minimap Colors
-# define WALL_COLOR   0x000000FF  // Black walls
-# define FLOOR_COLOR  0xFFFFFFFF  // White floor
-# define PLAYER_COLOR 0xFF0000FF  // Red player dot
-# define EMPTY_COLOR  0xC0C0C0FF  // Light gray for empty space
+# define WALL_COLOR		0x000000FF  // Black walls
+# define FLOOR_COLOR	0xFFFFFFFF  // White floor
+# define PLAYER_COLOR	0xFF0000FF  // Red player dot
+# define EMPTY_COLOR	0xC0C0C0FF  // Light gray for empty space
 
 // Debug Colors
-# define DEBUG_RED    0xFF000080  // Semi-transparent red
-# define DEBUG_GREEN  0x00FF0080  // Semi-transparent green
-# define DEBUG_BLUE   0x0000FF80  // Semi-transparent blue
+# define DEBUG_RED		0xFF000080  // Semi-transparent red
+# define DEBUG_GREEN	0x00FF0080  // Semi-transparent green
+# define DEBUG_BLUE		0x0000FF80  // Semi-transparent blue
 
 /******************************************************************************/
 /******     CONSTANTS     *****************************************************/
@@ -142,7 +143,10 @@ typedef struct s_data
 	float	fov;			// Field of View in degrees, f for float
 	int		num_rays;		// No. of rays to cast within the FOV
 	char	ini_dir;		// initial player direction character (N, S, E, W), initialized to N
+	float	prev_dir;		// player direction in radians
 	float	cur_dir;		// player direction in radians
+	float	cosine;			// cos(cur_dir)
+	float	sine;			// sin(cur_dir)
 	
 	// Mini-map elements
 	int	 	mmp_w;
@@ -210,6 +214,9 @@ void		game_start(t_game *game);
 // draw.c
 
 void		draw_map(t_game *game);
+void	draw_player_direction(t_rays *rays, t_data *data);
+void	erase_previous_ray(t_rays *rays, t_data *data);
+void	draw_forward_ray(t_rays *rays, t_data *data);
 
 // renders.c
 

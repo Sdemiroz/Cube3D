@@ -19,6 +19,8 @@ static void	upon_press(t_key keydata, void *param);
 static void	upon_close(void *param);
 
 static void	move_player(void *param, t_key keydata);
+static void turn_player(void *param, t_key keydata);
+
 static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
 void	init_events(void *param)
@@ -48,11 +50,11 @@ static void	upon_press(t_key keydata, void *param)
 			(keydata.key == MLX_KEY_D &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
 		move_player(param, keydata);
-	// else if ((keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
-	// 	|| (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS))
-	// 	rotate_player(game, keydata);
+	else if ((keydata.key == MLX_KEY_LEFT &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+			|| (keydata.key == MLX_KEY_RIGHT &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
+		turn_player(param, keydata);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -92,15 +94,48 @@ static void	move_player(void *param, t_key keydata)
 	move_step = 3; // Define a step size for movement	
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
-		move_step = 15; // Increase step size when running
+		move_step *= 5; // Increase step size when running
+	
+	erase_previous_ray(game->rays, data);
 	if (keydata.key == MLX_KEY_W)
-		data->pl_posy -= move_step;
-	else if (keydata.key == MLX_KEY_S)
-		data->pl_posy += move_step;
-	else if (keydata.key == MLX_KEY_A)
-		data->pl_posx -= move_step;
-	else if (keydata.key == MLX_KEY_D)
-		data->pl_posx += move_step;
+	{
+		data->pl_posx += (int)data->cosine * move_step;
+		data->pl_posy += (int)data->sine * move_step;
+	}
+	if (keydata.key == MLX_KEY_S)
+	{
+		data->pl_posx -= (int)data->cosine * move_step;
+		data->pl_posy -= (int)data->sine * move_step;
+	}
+	if (keydata.key == MLX_KEY_A)
+	{
+		data->pl_posx += (int)cos(data->cosine - PI / 2) * move_step;
+		data->pl_posy += (int)sin(data->sine - PI / 2) * move_step;
+	}
+	if (keydata.key == MLX_KEY_D)
+	{
+		data->pl_posx += (int)cos(data->cosine + PI / 2) * move_step;
+		data->pl_posy += (int)sin(data->sine + PI / 2) * move_step;
+	}
+	draw_forward_ray(game->rays, data);
+}
+
+static void turn_player(void *param, t_key keydata)
+{
+	t_game	*game;
+	t_data	*data;
+	float	rotation;
+
+	game = (t_game *)param;
+	data = game->data;
+	rotation = (2 * PI / 360) * 20;	// Rotation in radians equivalent to 5 degrees
+	
+	if (keydata.key == MLX_KEY_LEFT)
+		data->cur_dir += rotation;
+	else if (keydata.key == MLX_KEY_RIGHT)
+		data->cur_dir -= rotation;
+
+	draw_player_direction(game->rays, data);
 }
 
 // Function to determine before a movement if the player has collided with a wall
@@ -117,7 +152,7 @@ static bool	has_space_to_move(t_game *game, int new_x, int new_y)
 	block_y = new_y / data->tile_size;
 
 	if (block_x < 0 || block_x >= map->data->tiles_x ||
-		block_y < 0 || block_y >= map->data->tiles_y)
+			block_y < 0 || block_y >= map->data->tiles_y)
 		return (false); // Out of bounds
 
 	if (map->map_array[block_y][block_x] == '1')

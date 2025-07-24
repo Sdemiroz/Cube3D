@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/23 20:28:08 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:22:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static void	init_rays(t_game *game)
 	rays = game->rays;
 	
 	rays->data = data;
-	rays->rays = mlx_new_image(game->mlx, data->wind_w, data->wind_h);
+	rays->rays = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
 	if (!rays->rays)
 		exit_early(game, "rays_img: mlx_new_image failed", EXIT_FAILURE);
 
