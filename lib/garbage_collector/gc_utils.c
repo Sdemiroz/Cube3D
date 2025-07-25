@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 01:09:01 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 16:02:57 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/23 01:02:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/garbage_collector.h"
-
-void	gc_add_to(t_garbage_collector *gc, void *ptr)
-{
-	t_gc_node	*new;
-
-	new = gc_create_node(ptr);
-	if (!new)
-		ft_error("malloc fail", __FILE__, __LINE__, 1);
-	new->next = gc->head;
-	gc->head = new;
-	gc->size++;
-}
-
-t_double_gc	*get_gc(void)
-{
-	static t_double_gc	dgc = {0};
-
-	return (&dgc);
-}
-
-void	gc_print_linked_list(t_garbage_collector *gc)
-{
-	if (!gc)
-		return ;
-	printf("Len of Linked List: %zu\n", gc->size);
-	return ;
-}
 
 void	*ft_malloc_global(size_t size)
 {
@@ -60,3 +33,27 @@ void	*ft_malloc_local(size_t size)
 	gc_add_local(ptr);
 	return (ptr);
 }
+
+void	ft_error(char *msg, char *file, int line, uint8_t exit_stat)
+{
+	ft_fprintf(STDERR_FILENO, "Error: File %s line %d: %s\n", file, line, msg);
+	main_cleanup(exit_stat);
+}
+
+void	main_cleanup(uint8_t exit_stat)
+{
+	gc_free_all();
+	ft_bzero(get_gc(), sizeof(t_double_gc));
+	exit(exit_stat);
+}
+
+void	gc_print_linked_list(t_garbage_collector *gc)
+{
+	if (!gc)
+		return ;
+	printf("Len of Linked List: %zu\n", gc->size);
+	return ;
+}
+
+
+

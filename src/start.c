@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:22:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/11 02:06:06 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/17 05:59:54 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	game_start(t_game *game)
+void			game_start(t_game *game)
 {
 	printf("Game started\n");
 	draw_map(game);

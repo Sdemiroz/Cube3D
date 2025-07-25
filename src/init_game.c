@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/24 17:22:09 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 17:24:27 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,14 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	map = game->map;
 
 	map->data = data;
-	map->image = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
+	
+	parse_game_data(&game, path_to_map);
+	
+	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
 
-	// this block may be removed after merging with parsing, maybe replaced with sth else
-	map->fd = open(path_to_map, O_RDONLY);
-	if (map->fd < 0)
-		exit_early(game, path_to_map, EXIT_FAILURE);
-	parse_minimap(map);			// Later to be replaced with proper parsing or removed as this may be carried out during parsing the whole scene file
+	// parse_minimap(map);
 	map_array_printer(map, 1);	// extra utility, to be removed later
 
 	map->game = game;

@@ -3,10 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2025/07/23 19:24:32 by pamatya          ###   ########.fr        #
+=======
+#    Updated: 2025/07/18 16:26:41 by sdemiroz         ###   ########.fr        #
+>>>>>>> samed
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +91,9 @@ SRCS	:=	main.c \
 			draw_circle.c utils_valids.c\
 			error.c init_game.c \
 			interims/circles_improved.c \
-			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c
+			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c \
+			interims/circles_improved.c print_map_utils.c \
+			map_parser.c parsing_helper.c handle_input.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)
@@ -193,7 +199,7 @@ bonus: all
 ######## -------------------------------------------------------------- ########
 ##########                         DEBUGGING                         ###########
 ######## -------------------------------------------------------------- ########
-	
+
 debug:
 	@$(MAKE) re debug=yes
 	lldb
@@ -218,7 +224,7 @@ sub_deinit:
 
 sub_init:
 	@printf "$(YELLOW)" && git submodule update --init --recursive
-	
+
 
 ######## -------------------------------------------------------------- ########
 ##########                    TESTING (UNCHANGED)                    ###########

@@ -1,28 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   gc_core.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 01:09:32 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 20:35:43 by pamatya          ###   ########.fr       */
+/*   Created: 2025/07/23 00:56:05 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/07/23 01:13:28 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/garbage_collector.h"
 
-void	main_cleanup(uint8_t exit_stat)
+void	gc_add_to(t_garbage_collector *gc, void *ptr)
 {
-	gc_free_all();
-	ft_bzero(get_gc(), sizeof(t_double_gc));
-	exit(exit_stat);
+	t_gc_node	*new;
+
+	new = gc_create_node(ptr);
+	if (!new)
+		ft_error("malloc fail", __FILE__, __LINE__, 1);
+	new->next = gc->head;
+	gc->head = new;
+	gc->size++;
 }
 
-void	ft_error(char *msg, char *file, int line, uint8_t exit_stat)
+void	gc_free_gc(t_garbage_collector *gc)
 {
-	ft_fprintf(STDERR_FILENO, "Error: File %s line %d: %s\n", file, line, msg);
-	main_cleanup(exit_stat);
+	t_gc_node	*cur;
+	t_gc_node	*tmp;
+
+	if (!gc)
+		return ;
+	cur = gc->head;
+	while (cur)
+	{
+		tmp = cur->next;
+		free(cur->pointer);
+		free(cur);
+		cur = tmp;
+	}
+	gc->head = NULL;
+	gc->size = 0;
 }
 
 t_gc_node	*gc_create_node(void *pointer2mem)
@@ -35,6 +53,13 @@ t_gc_node	*gc_create_node(void *pointer2mem)
 	new_node->pointer = pointer2mem;
 	new_node->next = NULL;
 	return (new_node);
+}
+
+t_double_gc	*get_gc(void)
+{
+	static t_double_gc	dgc = {0};
+
+	return (&dgc);
 }
 
 t_garbage_collector	*gc_init_garbage_collector(void)
@@ -51,7 +76,4 @@ t_garbage_collector	*gc_init_garbage_collector(void)
 	return (&(dgc->global));
 }
 
-void	*ft_malloc(size_t size)
-{
-	return (ft_malloc_local(size));
-}
+

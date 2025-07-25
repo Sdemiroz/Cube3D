@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/24 21:08:11 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 16:55:16 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ t_data	*get_data(void)
 
 static void	initialize_map_data(t_data *data)
 {
-	data->mmp_w = MAP_W;
-	data->mmp_h = MAP_H;
+	data->mmp_w = 0;
+	data->mmp_h = 0;
 	data->mmp_offx = MAP_OFFSET_X;
 	data->mmp_offy = MAP_OFFSET_Y;
 	data->mmp_scale = MAP_SCALE;

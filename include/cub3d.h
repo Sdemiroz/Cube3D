@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/24 21:08:17 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 17:14:47 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,37 @@ typedef mlx_image_t		t_img;
 typedef mlx_texture_t	t_txr;
 typedef mlx_key_data_t	t_key;
 
+enum e_key_type
+{
+	NO_CHECK,
+	SO_CHECK,
+	WE_CHECK,
+	EA_CHECK,
+	F_CHECK,
+	C_CHECK,
+	KEY_COUNT
+};
+
+enum	e_current_state
+{
+	INITIAL_STATE,
+	WAITING_FOR_MAP,
+	PARSING_MAP
+};
+
+typedef struct s_colour
+{
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
+}	t_color;
+
 typedef struct s_game t_game;
 typedef struct s_data t_data;
 typedef struct s_map t_map;
 typedef struct s_player t_player;
 typedef struct s_rays t_rays;
+
 typedef struct s_game
 {
 	t_data		*data;			// for dynamic scaling and dimensioning
@@ -121,10 +147,15 @@ typedef struct s_game
 	
 	// t_img		*gun3D;			// gun image to be used in 3D view
 	// int32_t		gun_inst_id;	// gun instance ID for 3D image
-	// t_txr		*walls[4];	// for wall textures
 	
 	t_map		*map;			// pointer to map struct, also holds map image
 	t_player	*player;		// pointer to player struct for player position
+	t_txr 		*NO_texture;
+	t_txr 		*SO_texture;
+	t_txr 		*WE_texture;
+	t_txr 		*EA_texture;
+	t_color		floor_color;
+	t_color		ceiling_color;
 	t_rays		*rays;
 } t_game;
 
@@ -242,6 +273,10 @@ void		place_player2D(t_game *game, int method);
 
 // draw_circle.c
 void		place_player2D_2(t_game *game, int method);
+
+//map_parser.c
+void		parse_game_data(t_game *game, char *map_name);
+
 
 
 

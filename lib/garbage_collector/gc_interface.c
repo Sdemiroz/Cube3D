@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   collector.c                                        :+:      :+:    :+:   */
+/*   gc_interface.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 01:09:29 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/01 16:02:44 by pamatya          ###   ########.fr       */
+/*   Created: 2025/07/23 00:59:21 by sdemiroz          #+#    #+#             */
+/*   Updated: 2025/07/23 01:00:49 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,6 @@ void	gc_add_local(void *ptr)
 		gc_add_to(&get_gc()->local, ptr);
 }
 
-void	gc_free_gc(t_garbage_collector *gc)
-{
-	t_gc_node	*cur;
-	t_gc_node	*tmp;
-
-	if (!gc)
-		return ;
-	cur = gc->head;
-	while (cur)
-	{
-		tmp = cur->next;
-		free(cur->pointer);
-		free(cur);
-		cur = tmp;
-	}
-	gc->head = NULL;
-	gc->size = 0;
-}
-
 void	gc_free_all(void)
 {
 	gc_free_gc(&get_gc()->local);
@@ -52,4 +33,9 @@ void	gc_free_all(void)
 void	gc_free_local(void)
 {
 	gc_free_gc(&get_gc()->local);
+}
+
+void	*ft_malloc(size_t size)
+{
+	return (ft_malloc_local(size));
 }
