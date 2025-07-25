@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
+#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 14:30:19 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/23 01:03:17 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/07/25 19:47:00 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ B1		=	./ft_printf/Utils
 C		=	./GNL
 D		=	./garbage_collector
 
-SRCS	=	$(A1)/ft_isalnum.c $(A1)/ft_isalpha.c $(A1)/ft_isascii.c $(A1)/ft_isdigit.c $(A1)/ft_isprint.c \
+SRCS	=	$(A1)/ft_isalnum.c $(A1)/ft_isalpha.c $(A1)/ft_isascii.c $(A1)/ft_isdigit.c $(A1)/ft_isprint.c $(A1)/ft_isspace.c \
 			$(A2)/ft_lstadd_back.c $(A2)/ft_lstadd_front.c $(A2)/ft_lstclear.c $(A2)/ft_lstdelone.c $(A2)/ft_lstiter.c $(A2)/ft_lstlast.c $(A2)/ft_lstmap.c $(A2)/ft_lstnew.c $(A2)/ft_lstsize.c \
 			$(A3)/ft_bzero.c $(A3)/ft_memchr.c $(A3)/ft_memcmp.c $(A3)/ft_memcpy.c $(A3)/ft_memmove.c $(A3)/ft_memset.c $(A3)/ft_calloc.c $(A3)/ft_realloc.c $(A3)/ft_free.c \
 			$(A4)/ft_putchar_fd.c $(A4)/ft_putendl_fd.c $(A4)/ft_putnbr_fd.c $(A4)/ft_putstr_fd.c \

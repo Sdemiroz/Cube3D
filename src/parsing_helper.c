@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:17:28 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 18:40:07 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/25 19:39:18 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+int		check_key_data_completion(t_game *game);
+void	pad_shorter_lines(t_game *game);
+char	**copy_map(char **original);
+bool	flood_fill(char **map, int x, int y);
+void	allocate_map_array(t_game *game, char *line);
+
 
 void	allocate_map_array(t_game *game, char *line)
 {

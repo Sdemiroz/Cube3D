@@ -3,14 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
+#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/20 13:23:57 by pamatya           #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2025/07/23 19:24:32 by pamatya          ###   ########.fr        #
-=======
-#    Updated: 2025/07/18 16:26:41 by sdemiroz         ###   ########.fr        #
->>>>>>> samed
+#    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
+#    Updated: 2025/07/25 19:42:37 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,10 +86,9 @@ SRCS	:=	main.c \
 			spawn.c start.c draw.c renders.c events.c string_utils.c \
 			draw_circle.c utils_valids.c\
 			error.c init_game.c \
+			check_map.c map_parser.c parsing_helper.c handle_input.c \
 			interims/circles_improved.c \
-			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c \
-			interims/circles_improved.c print_map_utils.c \
-			map_parser.c parsing_helper.c handle_input.c
+			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

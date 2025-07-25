@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/25 18:37:11 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/25 19:57:58 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void		parse_game_data(t_game *game, char *map_name);
+
+static void	check_file_type(t_game *game, char *map_name);
+static void	read_and_parse_map(t_game *game);
+static void	parse_key_data(t_game *game, char *line);
+static int	get_key_index(char *line);
+
 
 static int	get_key_index(char *line)
 {
@@ -63,7 +71,7 @@ static void		read_and_parse_map(t_game *game)
 	int		cur_state;
 	char	*cur_line;
 
-	cur_state = INITIAL_STATE;
+	cur_state = WAITING_FOR_MAP;
 	cur_line = get_next_line(game->map->fd);
 	if (!cur_line)
 		exit_early(game, "Error, map empty", 1);
@@ -87,6 +95,35 @@ static void		read_and_parse_map(t_game *game)
 	}
 }
 
+// static void		read_and_parse_map(t_game *game)
+// {
+// 	int		cur_state;
+// 	char	*cur_line;
+
+// 	cur_state = INITIAL_STATE;
+// 	cur_line = get_next_line(game->map->fd);
+// 	if (!cur_line)
+// 		exit_early(game, "Error, map empty", 1);
+// 	while (cur_line)
+// 	{
+// 		if (cur_state == INITIAL_STATE)
+// 		{
+// 			parse_key_data(game, cur_line);
+// 			if (check_key_data_completion(game))
+// 					cur_state = WAITING_FOR_MAP;
+// 		}
+// 		else if (cur_state == WAITING_FOR_MAP && cur_line[0] == '\n')
+// 			;
+// 		else
+// 		{
+// 			cur_state = PARSING_MAP;
+// 			parse_line(game, cur_line);
+// 		}
+// 		free(cur_line);
+// 		cur_line = get_next_line(game->map->fd);
+// 	}
+// }
+
 static void		check_file_type(t_game *game, char *map_name)
 {
 	char	*str;
@@ -109,5 +146,4 @@ void	parse_game_data(t_game *game, char *map_name)
 	close(game->map->fd);
 	pad_shorter_lines(game);
 	check_map(game);
-
 }

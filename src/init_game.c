@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 17:24:27 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 19:22:32 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	init_minimap(t_game *game, char *path_to_map)
 
 	map->data = data;
 	
-	parse_game_data(&game, path_to_map);
+	parse_game_data(game, path_to_map);
 	
 	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
 	if (!map->image)

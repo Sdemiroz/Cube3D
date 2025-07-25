@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 18:34:51 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/25 20:00:51 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
+			char *prefix);
+void	identify_rgb(t_game *game, char *line, t_color *color);
+void	parse_line(t_game *game, char *line);
+int	validate_map_line(t_game *game, char *line);
+
+static int	parse_rgb(char *rgb_str, t_color *color);
+
 
 int	validate_map_line(t_game *game, char *line)
 {
@@ -24,7 +33,7 @@ int	validate_map_line(t_game *game, char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strchr("01NSEW ", line[i]))
+		if (!ft_strchr("01NSEW\n ", line[i]))
 		{
 			free(line);
 			exit_early(game, "Error: Invalid character in map", 1);
@@ -131,12 +140,12 @@ void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
 		exit_early(game, "Error, allocating texture path", 1);
 	}
 	ft_strlcpy(texture_path, line + start, end - start + 1);
-	*img = mlx_load_png(texture_path);
-	if (!(*img))
-	{
-		free(texture_path);
-		free(line);
-		exit_early(game, "Error loading texture", 1);
-	}
+	// *img = mlx_load_png(texture_path);
+	// if (!(*img))
+	// {
+	// 	free(texture_path);
+	// 	free(line);
+	// 	exit_early(game, "Error loading texture", 1);
+	// }
 	free(texture_path);
 }

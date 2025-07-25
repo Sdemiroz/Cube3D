@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/25 16:55:16 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 19:55:03 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_game	*get_game(void)
 			game->img3D_inst_id = -1;	// Initialize 3D image instance ID to -1
 			// game->gun3D = NULL;
 			// game->gun_inst_id = -1;
-			// while (++i < 4)
-			// 	game->walls[i] = NULL;	// Initialize wall textures to NULL
+			
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
 			game->rays = NULL;

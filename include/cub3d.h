@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 18:22:05 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/25 19:43:49 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,10 @@ t_rays		*get_rays(void);
 
 void		init_game_elements(t_game *game, char *arg);
 
+// parser fns
+
+
+
 // start.c
 
 void		game_start(t_game *game);
@@ -274,11 +278,28 @@ void		place_player2D(t_game *game, int method);
 // draw_circle.c
 void		place_player2D_2(t_game *game, int method);
 
-//map_parser.c
+// map_parser.c
 void		parse_game_data(t_game *game, char *map_name);
 
+// parsing_helper.c
 
+int			check_key_data_completion(t_game *game);
+void		pad_shorter_lines(t_game *game);
+char		**copy_map(char **original);
+bool		flood_fill(char **map, int x, int y);
+void		allocate_map_array(t_game *game, char *line);
 
+// check_map.c
+
+void		check_map(t_game *game);
+
+// handle_input.c
+
+void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
+			char *prefix);
+void		identify_rgb(t_game *game, char *line, t_color *color);
+void		parse_line(t_game *game, char *line);
+int			validate_map_line(t_game *game, char *line);
 
 /******************************************************************************/
 /*******    EXTRA FUNCTIONS     ***********************************************/

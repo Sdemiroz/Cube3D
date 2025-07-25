@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 18:41:18 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/25 19:44:28 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void		check_map(t_game *game);
+static int	player_counter_check(t_game *game);
 
 static int	player_counter_check(t_game *game)
 {
@@ -41,7 +44,7 @@ static int	player_counter_check(t_game *game)
 	return(player_count);
 }
 
-void	check_game(t_game *game)
+void	check_map(t_game *game)
 {
 	int		x;
 	char	**dup_map;
