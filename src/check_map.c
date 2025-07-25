@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 16:42:25 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:41:18 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	check_game(t_game *game)
 	x = player_counter_check(game);
 	if (x != 1)
 		exit_early(game, "Error: map must contain exactly 1 player start position\n", 1);
-	check_walls(game);
 	dup_map = copy_map(game->map->map_array);
 	if (!dup_map)
 		exit_early(game, "Error: failed to duplicate map\n", 1);

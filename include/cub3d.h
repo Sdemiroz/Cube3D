@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 17:14:47 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:22:05 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,10 @@ typedef struct s_game
 	mlx_t		*mlx;			// for window and mlx context
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
-	
+
 	// t_img		*gun3D;			// gun image to be used in 3D view
 	// int32_t		gun_inst_id;	// gun instance ID for 3D image
-	
+
 	t_map		*map;			// pointer to map struct, also holds map image
 	t_player	*player;		// pointer to player struct for player position
 	t_txr 		*NO_texture;
@@ -178,7 +178,7 @@ typedef struct s_data
 	float	cur_dir;		// player direction in radians
 	float	cosine;			// cos(cur_dir)
 	float	sine;			// sin(cur_dir)
-	
+
 	// Mini-map elements
 	int	 	mmp_w;
 	int	 	mmp_h;
@@ -206,7 +206,7 @@ typedef struct s_player
 {
 	t_data		*data;
 	t_img		*blob2D;		// pointer to 2D player blob image
-	int32_t		blob_inst_id;	// instance ID for 2D player blob	
+	int32_t		blob_inst_id;	// instance ID for 2D player blob
 	t_game		*game;
 	t_map		*map;
 	t_rays		*rays;

@@ -3,41 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 16:49:31 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:34:51 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	parse_line(t_game *game, char *line)
+int	validate_map_line(t_game *game, char *line)
 {
-	int		i;
+	int	i;
 
+	if (line[0] == '\n')
+	{
+		free(line);
+		exit_early(game, "Error: Empty line in map", 1);
+	}
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strchr("01NSEW ", line[i]) || line[0] == '\n') // add check for i <= MAX WIDTH
+		if (!ft_strchr("01NSEW ", line[i]))
 		{
 			free(line);
-			exit_early(game, "Error: Invalid character or empty line in map", 1);
+			exit_early(game, "Error: Invalid character in map", 1);
 		}
 		if (line[i] == '\n')
-			break;
+			break ;
 		i++;
 	}
-	game->map->map_array[game->data->mmp_h] = ft_strdup(line);
-	gc_add_local(game->map->map_array[game->data->mmp_h]);
-	if (!game->map->map_array[game->data->mmp_h])
+	return (i);
+}
+
+void	parse_line(t_game *game, char *line)
+{
+	int	i;
+
+	allocate_map_array(game, line);
+	i = validate_map_line(game, line);
+	game->map->map_array[game->data->tiles_y] = ft_strdup(line);
+	if (!game->map->map_array[game->data->tiles_y])
 	{
 		free(line);
 		exit_early(game, "Error allocating map line", 1);
 	}
-	if (i > game->data->mmp_w)
-		game->data->mmp_w = i;
-	game->data->mmp_h++;
+	gc_add_local(game->map->map_array[game->data->tiles_y]);
+	free(line);
+	if (i > game->data->tiles_x)
+		game->data->tiles_x = i;
+	game->data->tiles_y++;
 }
 
 static int	parse_rgb(char *rgb_str, t_color *color)
@@ -69,7 +84,6 @@ static int	parse_rgb(char *rgb_str, t_color *color)
 	return (1);
 }
 
-
 void	identify_rgb(t_game *game, char *line, t_color *color)
 {
 	int		start;
@@ -77,11 +91,6 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 	char	*rgb_str;
 
 	end = 2;
-	if(line[1] != ' ')	// maybe not mandatory to check, can be deletd for norminette
-	{
-		free(line);
-		exit_early(game, "Error with Color Code", 1);
-	}
 	while (line[end] && ft_isspace(line[end]))
 		end++;
 	start = end;
@@ -102,7 +111,8 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 	free(rgb_str);
 }
 
-void	assign_textures(t_game *game, mlx_texture_t **img, char *line, char *prefix)
+void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
+		char *prefix)
 {
 	int		start;
 	int		end;

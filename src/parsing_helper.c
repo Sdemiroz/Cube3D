@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:17:28 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 16:47:56 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:40:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	allocate_map_array(t_game *game, char *line)
+{
+	if (!game->map->map_array)
+		game->map->map_array = malloc(sizeof(char *));
+	else
+		game->map->map_array = ft_recalloc(game->map->map_array,
+				(game->data->tiles_y + 1) * sizeof(char *),
+				game->data->tiles_y * sizeof(char *));
+	if (!game->map->map_array)
+	{
+		free(line);
+		exit_early(game, "Error: Allocating map", 1);
+	}
+}
 
 bool	flood_fill(char **map, int x, int y)
 {
@@ -61,22 +76,22 @@ void	pad_shorter_lines(t_game *game)
 	char	*padded_line;
 	int		line_len;
 
-	padded_line = ft_malloc(sizeof(char) * (game->data->mmp_w + 1));
+	padded_line = ft_malloc(sizeof(char) * (game->data->tiles_x + 1));
 	if (!padded_line)
 		exit_early(game, "Error allocating padded line\n", 1);
 	i = 0;
-	while (i < game->data->mmp_h)
+	while (i < game->data->tiles_y)
 	{
 		line_len = ft_strlen(game->map->map_array[i]);
-		if (line_len < game->data->mmp_w)
+		if (line_len < game->data->tiles_x)
 		{
-			ft_memset(padded_line, ' ', game->data->mmp_w);
-			padded_line[game->data->mmp_w] = '\0';
+			ft_memset(padded_line, ' ', game->data->tiles_x);
+			padded_line[game->data->tiles_x] = '\0';
 			ft_memcpy(padded_line, game->map->map_array[i], line_len);
-			game->map->map_array[i] = ft_malloc(sizeof(char) * (game->data->mmp_w + 1));
+			game->map->map_array[i] = ft_malloc(sizeof(char) * (game->data->tiles_x + 1));
 			if (!game->map->map_array[i])
 				exit_early(game, "Error allocating padded line\n", 1);
-			ft_strlcpy(game->map->map_array[i], padded_line, game->data->mmp_w + 1);
+			ft_strlcpy(game->map->map_array[i], padded_line, game->data->tiles_x + 1);
 		}
 		i++;
 	}
