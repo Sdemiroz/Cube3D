@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:17:28 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 19:39:18 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 22:10:19 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@ void	allocate_map_array(t_game *game, char *line);
 void	allocate_map_array(t_game *game, char *line)
 {
 	if (!game->map->map_array)
-		game->map->map_array = malloc(sizeof(char *));
+		game->map->map_array = malloc(2 * sizeof(char *));
 	else
 		game->map->map_array = ft_recalloc(game->map->map_array,
-				(game->data->tiles_y + 1) * sizeof(char *),
-				game->data->tiles_y * sizeof(char *));
+				(game->data->tiles_y + 2) * sizeof(char *),
+				(game->data->tiles_y + 1) * sizeof(char *));
 	if (!game->map->map_array)
 	{
 		free(line);
 		exit_early(game, "Error: Allocating map", 1);
 	}
+	game->map->map_array[game->data->tiles_y + 1] = NULL;
 }
 
 bool	flood_fill(char **map, int x, int y)

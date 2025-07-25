@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 20:00:51 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 22:20:55 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	validate_map_line(t_game *game, char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strchr("01NSEW\n ", line[i]))
+		if (!ft_strchr("01NSEW ", line[i]))
 		{
 			free(line);
 			exit_early(game, "Error: Invalid character in map", 1);
@@ -45,24 +45,50 @@ int	validate_map_line(t_game *game, char *line)
 	return (i);
 }
 
+// void	parse_line(t_game *game, char *line)
+// {
+// 	int	i;
+
+// 	allocate_map_array(game, line);
+// 	i = validate_map_line(game, line);
+// 	game->map->map_array[game->data->tiles_y] = ft_strdup(line);
+// 	if (!game->map->map_array[game->data->tiles_y])
+// 	{
+// 		free(line);
+// 		exit_early(game, "Error allocating map line", 1);
+// 	}
+// 	gc_add_local(game->map->map_array[game->data->tiles_y]);
+// 	if (i > game->data->tiles_x)
+// 		game->data->tiles_x = i;
+// 	game->data->tiles_y++;
+// }
+
 void	parse_line(t_game *game, char *line)
 {
-	int	i;
+	int		i;
+	char	*trimmed;
 
-	allocate_map_array(game, line);
-	i = validate_map_line(game, line);
-	game->map->map_array[game->data->tiles_y] = ft_strdup(line);
-	if (!game->map->map_array[game->data->tiles_y])
+	trimmed = ft_strtrim(line, "\n");
+	if (!trimmed)
 	{
 		free(line);
+		exit_early(game, "Error: trimming line", 1);
+	}
+	allocate_map_array(game, trimmed);
+	i = validate_map_line(game, trimmed);
+	game->map->map_array[game->data->tiles_y] = ft_strdup(trimmed);
+	if (!game->map->map_array[game->data->tiles_y])
+	{
+		free(trimmed);
 		exit_early(game, "Error allocating map line", 1);
 	}
 	gc_add_local(game->map->map_array[game->data->tiles_y]);
-	free(line);
 	if (i > game->data->tiles_x)
 		game->data->tiles_x = i;
 	game->data->tiles_y++;
+	free(trimmed);
 }
+
 
 static int	parse_rgb(char *rgb_str, t_color *color)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spawn.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/25 19:55:03 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 21:26:00 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_game	*get_game(void)
 {
 	static t_game	*game = NULL;
 	int				i;
-	
+
 	i = -1;
 	if (!game)
 	{
@@ -38,7 +38,7 @@ t_game	*get_game(void)
 			game->img3D_inst_id = -1;	// Initialize 3D image instance ID to -1
 			// game->gun3D = NULL;
 			// game->gun_inst_id = -1;
-			
+
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
 			game->rays = NULL;
@@ -50,7 +50,7 @@ t_game	*get_game(void)
 t_data	*get_data(void)
 {
 	static t_data	*data = NULL;
-	
+
 	if (!data)
 	{
 		data = ft_malloc(sizeof(t_data));
@@ -69,7 +69,7 @@ t_data	*get_data(void)
 			data->cosine = cos(data->cur_dir);
 			data->sine = sin(data->cur_dir);
 			initialize_map_data(data);
-		}	
+		}
 	}
 	return (data);
 }
@@ -82,8 +82,8 @@ static void	initialize_map_data(t_data *data)
 	data->mmp_offy = MAP_OFFSET_Y;
 	data->mmp_scale = MAP_SCALE;
 	data->tile_size = TILE_SIZE;
-	data->tiles_x = MAP_W / TILE_SIZE;
-	data->tiles_y = MAP_H / TILE_SIZE;
+	data->tiles_x = 0;
+	data->tiles_y = 0;
 }
 
 t_map	*get_map(void)
@@ -131,7 +131,7 @@ t_player	*get_player(void)
 t_rays	*get_rays(void)
 {
 	static t_rays	*rays = NULL;
-	
+
 	if (!rays)
 	{
 		rays = ft_malloc(sizeof(t_rays));

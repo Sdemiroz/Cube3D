@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/25 19:57:58 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/25 22:11:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,14 @@ void	parse_game_data(t_game *game, char *map_name)
 	if(!game->map->fd)
 		exit_early(game, "Error opening file", 1);
 	read_and_parse_map(game);
+	int x;
+	x = 0;
+	while(game->map->map_array[x])
+	{
+		printf("%s\n", game->map->map_array[x]);
+		x++;
+	}
+	printf("finished\n");
 	gc_add_local(game->map->map_array);
 	close(game->map->fd);
 	pad_shorter_lines(game);
