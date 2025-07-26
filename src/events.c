@@ -86,7 +86,7 @@ static void	move_player(void *param, t_key keydata)
 {
 	t_game	*game;
 	t_data	*data;
-	int		move_step;
+	double	move_step;
 	bool	is_running;
 
 	game = (t_game *)param;
@@ -99,23 +99,23 @@ static void	move_player(void *param, t_key keydata)
 	erase_previous_ray(game->rays, data);
 	if (keydata.key == MLX_KEY_W)
 	{
-		data->pl_posx += (int)data->cosine * move_step;
-		data->pl_posy += (int)data->sine * move_step;
+		data->pl_posx += (int)rint(data->cosine * move_step);
+		data->pl_posy -= (int)rint(data->sine * move_step);
 	}
 	if (keydata.key == MLX_KEY_S)
 	{
-		data->pl_posx -= (int)data->cosine * move_step;
-		data->pl_posy -= (int)data->sine * move_step;
+		data->pl_posx -= (int)rint(data->cosine * move_step);
+		data->pl_posy += (int)rint(data->sine * move_step);
 	}
 	if (keydata.key == MLX_KEY_A)
 	{
-		data->pl_posx += (int)cos(data->cosine - PI / 2) * move_step;
-		data->pl_posy += (int)sin(data->sine - PI / 2) * move_step;
+		data->pl_posx += (int)rint(cos(data->cur_dir + PI / 2) * move_step);
+		data->pl_posy -= (int)rint(sin(data->cur_dir + PI / 2) * move_step);
 	}
 	if (keydata.key == MLX_KEY_D)
 	{
-		data->pl_posx += (int)cos(data->cosine + PI / 2) * move_step;
-		data->pl_posy += (int)sin(data->sine + PI / 2) * move_step;
+		data->pl_posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
+		data->pl_posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
 	}
 	draw_forward_ray(game->rays, data);
 }
@@ -125,10 +125,15 @@ static void turn_player(void *param, t_key keydata)
 	t_game	*game;
 	t_data	*data;
 	float	rotation;
+	bool	fast;
 
 	game = (t_game *)param;
 	data = game->data;
-	rotation = (2 * PI / 360) * 20;	// Rotation in radians equivalent to 5 degrees
+	rotation = (2 * PI / 360) * 5;	// Rotation in radians equivalent to 5 degrees
+
+	fast = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
+	if (fast)
+		rotation *= 4;	 // Increase rotation speed when shift is pressed
 
 	if (keydata.key == MLX_KEY_LEFT)
 		data->cur_dir += rotation;

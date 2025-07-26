@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 19:43:49 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/26 16:24:26 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,10 +174,10 @@ typedef struct s_data
 	float	fov;			// Field of View in degrees, f for float
 	int		num_rays;		// No. of rays to cast within the FOV
 	char	ini_dir;		// initial player direction character (N, S, E, W), initialized to N
-	float	prev_dir;		// player direction in radians
-	float	cur_dir;		// player direction in radians
-	float	cosine;			// cos(cur_dir)
-	float	sine;			// sin(cur_dir)
+	double	prev_dir;		// player direction in radians
+	double	cur_dir;		// player direction in radians
+	double	cosine;			// cos(cur_dir)
+	double	sine;			// sin(cur_dir)
 
 	// Mini-map elements
 	int	 	mmp_w;
