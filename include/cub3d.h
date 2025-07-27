@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/26 16:24:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 21:02:25 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@
 
 // Player and Raycasting Constants
 # define PLAYER_DIA 5
-# define START_PX 100
-# define START_PY 100
+# define START_PX 500
+# define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
 # define NUM_RAYS 60
 
@@ -148,14 +148,14 @@ typedef struct s_game
 	// t_img		*gun3D;			// gun image to be used in 3D view
 	// int32_t		gun_inst_id;	// gun instance ID for 3D image
 
-	t_map		*map;			// pointer to map struct, also holds map image
-	t_player	*player;		// pointer to player struct for player position
 	t_txr 		*NO_texture;
 	t_txr 		*SO_texture;
 	t_txr 		*WE_texture;
 	t_txr 		*EA_texture;
 	t_color		floor_color;
 	t_color		ceiling_color;
+	t_map		*map;			// pointer to map struct, also holds map image
+	t_player	*player;		// pointer to player struct for player position
 	t_rays		*rays;
 } t_game;
 
@@ -226,7 +226,13 @@ typedef struct s_rays
 /*******     FUNCTIONS     ****************************************************/
 /******************************************************************************/
 
-// // spawn.c
+// src
+
+int			main(int argc, char **argv);
+void		game_start(t_game *game);
+void		init_events(void *param);
+
+// src/initialization
 
 t_game		*get_game(void);
 t_data		*get_data(void);
@@ -234,83 +240,51 @@ t_map		*get_map(void);
 t_player	*get_player(void);
 t_rays		*get_rays(void);
 
-// init_game.c
-
 void		init_game_elements(t_game *game, char *arg);
 
-// parser fns
+void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
+	char *prefix);
+void		identify_rgb(t_game *game, char *line, t_color *color);
+void		parse_line(t_game *game, char *line);
+int			validate_map_line(t_game *game, char *line);
 
+// src/parsing
 
-
-// start.c
-
-void		game_start(t_game *game);
-
-// draw.c
-
-void		draw_map(t_game *game);
-void	draw_player_direction(t_rays *rays, t_data *data);
-void	erase_previous_ray(t_rays *rays, t_data *data);
-void	draw_forward_ray(t_rays *rays, t_data *data);
-
-// renders.c
-
-void		render_map(void *param);
-
-// events.c
-
-void		init_events(void *param);
-
-// error.c
-
-void		exit_early(t_game *game, char *msg, int ret);
-
-// utils_valids.c
-
-bool 		is_valid(char c);
-bool 		is_valid_block(char c);
-bool 		is_player(char c);
-
-
-// interims/circles_improved.c
-void		place_player2D(t_game *game, int method);
-
-// draw_circle.c
-void		place_player2D_2(t_game *game, int method);
-
-// map_parser.c
+void		check_map(t_game *game);
 void		parse_game_data(t_game *game, char *map_name);
-
-// parsing_helper.c
-
 int			check_key_data_completion(t_game *game);
 void		pad_shorter_lines(t_game *game);
 char		**copy_map(char **original);
 bool		flood_fill(char **map, int x, int y);
 void		allocate_map_array(t_game *game, char *line);
 
-// check_map.c
+// src/drawing
 
-void		check_map(t_game *game);
+void		draw_map(t_game *game);
+void		draw_player_direction(t_rays *rays, t_data *data);
+void		erase_previous_ray(t_rays *rays, t_data *data);
+void		draw_forward_ray(t_rays *rays, t_data *data);
+void		place_player2D_2(t_game *game, int method);
 
-// handle_input.c
+// src/rendering
 
-void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
-			char *prefix);
-void		identify_rgb(t_game *game, char *line, t_color *color);
-void		parse_line(t_game *game, char *line);
-int			validate_map_line(t_game *game, char *line);
+void		render_map(void *param);
+
+// src/utils
+
+bool 		is_valid(char c);
+bool 		is_valid_block(char c);
+bool 		is_player(char c);
+void		exit_early(t_game *game, char *msg, int ret);
+
 
 /******************************************************************************/
 /*******    EXTRA FUNCTIONS     ***********************************************/
 /******************************************************************************/
 
-// src/temp_sources/parse_minimap.c
+// src/parsing/mini_parser
 
 void		parse_minimap(t_map *map);
-
-// src/temp_sources/print_map_utils.c
-
 void		map_array_printer(t_map *map, int flag);
 
 #endif

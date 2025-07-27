@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 16:56:52 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 20:32:31 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,18 @@ t_data	*get_data(void)
 	return (data);
 }
 
+// static void	initialize_map_data(t_data *data)
+// {
+// 	data->mmp_w = MAP_W;
+// 	data->mmp_h = MAP_H;
+// 	data->mmp_offx = MAP_OFFSET_X;
+// 	data->mmp_offy = MAP_OFFSET_Y;
+// 	data->mmp_scale = MAP_SCALE;
+// 	data->tile_size = TILE_SIZE;
+// 	data->tiles_x = MAP_W / TILE_SIZE;
+// 	data->tiles_y = MAP_H / TILE_SIZE;
+// }
+
 static void	initialize_map_data(t_data *data)
 {
 	data->mmp_w = MAP_W;
@@ -82,8 +94,8 @@ static void	initialize_map_data(t_data *data)
 	data->mmp_offy = MAP_OFFSET_Y;
 	data->mmp_scale = MAP_SCALE;
 	data->tile_size = TILE_SIZE;
-	data->tiles_x = MAP_W / TILE_SIZE;
-	data->tiles_y = MAP_H / TILE_SIZE;
+	data->tiles_x = 0;
+	data->tiles_y = 0;
 }
 
 // static void	initialize_map_data(t_data *data)

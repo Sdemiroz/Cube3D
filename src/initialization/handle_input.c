@@ -6,14 +6,16 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 16:56:40 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 20:29:42 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
-			char *prefix);
+// void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
+// 			char *prefix);
+void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix);
+
 void	identify_rgb(t_game *game, char *line, t_color *color);
 void	parse_line(t_game *game, char *line);
 int		validate_map_line(t_game *game, char *line);
@@ -33,7 +35,7 @@ int	validate_map_line(t_game *game, char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strchr("01NSEW ", line[i]))
+		if (!ft_strchr("01NSEW", line[i]) && !ft_isspace(line[i]))
 		{
 			free(line);
 			exit_early(game, "Error: Invalid character in map", 1);
@@ -96,7 +98,7 @@ static int	parse_rgb(char *rgb_str, t_color *color)
 	int		i;
 	int		value;
 
-	i = 0;
+	i = -1;
 	parts = ft_split(rgb_str, ',');
 	if (!parts)
 		return (0);
@@ -131,23 +133,58 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 	start = end;
 	while (line[end] && line[end] != '\n')
 		end++;
-	rgb_str = ft_malloc_global((end - start + 1) * sizeof(char));
+	rgb_str = ft_calloc((end - start + 1), sizeof(char));
 	if (!rgb_str)
 	{
 		free(line);
 		exit_early(game, "Error allocating RGB string", 1);
 	}
 	ft_strlcpy(rgb_str, line + start, end - start + 1);
+	printf("rgb = %s$$$\n", rgb_str);
+	
 	if (!parse_rgb(rgb_str, color))
 	{
 		free(line);
 		exit_early(game, "Error parsing RGB values", 1);
 	}
+	
+	printf("r = %d\n", color->r);
+	printf("g = %d\n", color->g);
+	printf("b = %d\n", color->b);
 	free(rgb_str);
 }
 
-void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
-		char *prefix)
+// void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
+// 		char *prefix)
+// {
+// 	int		start;
+// 	int		end;
+// 	char	*texture_path;
+
+// 	end = ft_strlen(prefix);
+// 	while (line[end] && ft_isspace(line[end]))
+// 		end++;
+// 	start = end;
+// 	while (line[end] && line[end] != '\n')
+// 		end++;
+// 	texture_path = ft_calloc(end - start + 1, sizeof(char));
+// 	if (!texture_path)
+// 	{
+// 		free(line);
+// 		exit_early(game, "Error, allocating texture path", 1);
+// 	}
+// 	ft_strlcpy(texture_path, line + start, end - start + 1);
+// 	// *img = mlx_load_png(texture_path);
+// 	// if (!(*img))
+// 	// {
+// 	// 	free(texture_path);
+// 	// 	free(line);
+// 	// 	exit_early(game, "Error loading texture", 1);
+// 	// }
+// 	free(texture_path);
+// }
+
+void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 {
 	int		start;
 	int		end;
@@ -166,12 +203,15 @@ void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
 		exit_early(game, "Error, allocating texture path", 1);
 	}
 	ft_strlcpy(texture_path, line + start, end - start + 1);
-	// *img = mlx_load_png(texture_path);
-	// if (!(*img))
+	
+	printf("texture = %s$$$\n", texture_path);
+	// *txr = mlx_load_png(texture_path);
+	// if (!(*txr))
 	// {
 	// 	free(texture_path);
 	// 	free(line);
 	// 	exit_early(game, "Error loading texture", 1);
 	// }
+	
 	free(texture_path);
 }

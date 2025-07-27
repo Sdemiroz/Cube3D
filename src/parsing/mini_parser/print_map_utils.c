@@ -95,7 +95,8 @@ static void	write_map_colorful(t_map *map)
 				write(1, "\033[0;34m", 7); // Reset to blue for walls
 			}
 			else
-				write(1, &map->map_array[i][j], 1);	// Printing empty spaces
+				write(1, " ", 1);	// Printing empty spaces
+				// write(1, &map->map_array[i][j], 1);	// Printing empty spaces
 		}
 		write(1, "\n", 1); // New line after each row
 	}

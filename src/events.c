@@ -143,7 +143,7 @@ static void turn_player(void *param, t_key keydata)
 	draw_player_direction(game->rays, data);
 }
 
-// Function to determine before a movement if the player has collided with a wall
+// // Function to determine before a movement if the player has collided with a wall
 // static bool	has_space_to_move(t_game *game, int new_x, int new_y)
 // {
 // 	t_data	*data;
@@ -151,17 +151,8 @@ static void turn_player(void *param, t_key keydata)
 // 	int		block_x;
 // 	int		block_y;
 
-// 	data = game->data;
-// 	map = game->map;
-// 	block_x = new_x / data->tile_size;
-// 	block_y = new_y / data->tile_size;
+	
 
-// 	if (block_x < 0 || block_x >= map->data->tiles_x ||
-// 			block_y < 0 || block_y >= map->data->tiles_y)
-// 		return (false); // Out of bounds
-
-// 	if (map->map_array[block_y][block_x] == '1')
-// 		return (true); // Collision with wall
 
 // 	return (false); // No collision
 // }

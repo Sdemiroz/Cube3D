@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:44:04 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 16:56:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 17:14:21 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,9 @@ static uint32_t blend_color(uint32_t color, float alpha)
 	// Reconstruct color with modified alpha
 	return (r << 24) | (g << 16) | (b << 8) | new_alpha;
 }
+
+// -------------------------------------------------------------------------- //
+
 
 /**
  * Integer-based circle with edge smoothing (BALANCED CHOICE)

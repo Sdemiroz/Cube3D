@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/27 16:59:54 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/27 17:48:14 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 
 A = initialization
 B = parsing
-B1 = $(B)/tmp_parsing
+B1 = $(B)/mini_parser
 C = drawing
 D = rendering
 E = utils

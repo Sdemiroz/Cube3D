@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 16:57:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 21:35:13 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,29 @@ static int	player_counter_check(t_game *game)
 	int	y;
 	int	player_count;
 
-	x = 0;
+	y = 0;
 	player_count = 0;
-	while (game->map->map_array[x])
+	while (game->map->map_array[y])
 	{
-		y = 0;
-		while (game->map->map_array[x][y])
+		x = 0;
+		while (game->map->map_array[y][x])
 		{
-			if (game->map->map_array[x][y] == 'N'
-				|| game->map->map_array[x][y] == 'E'
-				|| game->map->map_array[x][y] == 'S'
-				|| game->map->map_array[x][y] == 'W')
+			if (game->map->map_array[y][x] == 'N'
+				|| game->map->map_array[y][x] == 'E'
+				|| game->map->map_array[y][x] == 'S'
+				|| game->map->map_array[y][x] == 'W')
 			{
-				game->data->pl_posx = x;
-				game->data->pl_posy = y;
+				// game->data->pl_posx = x;
+				// game->data->pl_posy = y;
+				game->data->pl_posx = x * game->data->tile_size;
+				game->data->pl_posy = y * game->data->tile_size;
 				player_count++;
+				printf("x = %d\n", game->data->pl_posx);
+				printf("y = %d\n", game->data->pl_posy);
 			}
-			y++;
+			x++;
 		}
-		x++;
+		y++;
 	}
 	return(player_count);
 }
@@ -49,6 +53,8 @@ void	check_map(t_game *game)
 	int		x;
 	char	**dup_map;
 	bool	valid;
+	int		floodx;
+	int		floody;
 
 	x = player_counter_check(game);
 	if (x != 1)
@@ -56,9 +62,10 @@ void	check_map(t_game *game)
 	dup_map = copy_map(game->map->map_array);
 	if (!dup_map)
 		exit_early(game, "Error: failed to duplicate map\n", 1);
-	valid = flood_fill(dup_map,
-		game->data->pl_posx,
-		game->data->pl_posy);
+	floodx = game->data->pl_posx / game->data->tile_size;
+	floody = game->data->pl_posy / game->data->tile_size;
+	valid = flood_fill(dup_map, floodx, floody);
 	if (!valid)
 		exit_early(game, "Error: map is not surrounded by walls\n", 1);
+	printf("here here here\n");
 }

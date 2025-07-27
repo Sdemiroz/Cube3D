@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 16:56:46 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 17:49:33 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,6 @@ static void	init_game(t_game *game)
 		exit_early(game, "game_img3D: mlx_new_image", EXIT_FAILURE);
 }
 
-static void	init_minimap(t_game *game, char *path_to_map)
-{
-	t_data	*data;
-	t_map	*map;
-
-	data = game->data;
-	map = game->map;
-
-	map->data = data;
-	
-	map->fd = open(path_to_map, O_RDONLY);
-	if(map->fd < 0)
-		exit_early(game, "Error opening file", 1);
-	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
-	if (!map->image)
-		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
-
-	parse_minimap(map);
-	map_array_printer(map, 1);	// extra utility, to be removed later
-
-	map->game = game;
-	map->player = game->player;
-	map->rays = game->rays;
-}
-
 // static void	init_minimap(t_game *game, char *path_to_map)
 // {
 // 	t_data	*data;
@@ -95,18 +70,42 @@ static void	init_minimap(t_game *game, char *path_to_map)
 
 // 	map->data = data;
 	
-// 	parse_game_data(game, path_to_map);
-	
+// 	map->fd = open(path_to_map, O_RDONLY);
+// 	if(map->fd < 0)
+// 		exit_early(game, "Error opening file", 1);
 // 	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
 // 	if (!map->image)
 // 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
 
+// 	parse_minimap(map);
 // 	map_array_printer(map, 1);	// extra utility, to be removed later
 
 // 	map->game = game;
 // 	map->player = game->player;
 // 	map->rays = game->rays;
 // }
+
+static void	init_minimap(t_game *game, char *path_to_map)
+{
+	t_data	*data;
+	t_map	*map;
+
+	data = game->data;
+	map = game->map;
+	map->data = data;
+
+	parse_game_data(game, path_to_map);
+	
+	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
+	if (!map->image)
+		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
+
+	map_array_printer(map, 1);	// extra utility, to be removed later
+
+	map->game = game;
+	map->player = game->player;
+	map->rays = game->rays;
+}
 
 
 static void	init_player(t_game *game)

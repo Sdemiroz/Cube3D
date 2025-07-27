@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 16:56:27 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 21:39:59 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	draw_map(t_game *game)
 	draw_player_direction(game->rays, data);
 	draw_border(game->img3D, data->wind_w, data->wind_h, CYAN);
 	// draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-	draw_border2(game->player->blob2D, data->tile_size, data->tile_size, RED, 1);
+	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, RED, 1);
 	place_player2D_2(game, 1);
 }
 
@@ -70,10 +70,19 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 	j = -1;
 	while (++j < TILE_SIZE)
 	{
-		i = -1;
-		while (++i < TILE_SIZE)
-			mlx_put_pixel(img, x * TILE_SIZE + i, y * TILE_SIZE + j,
-					block_color);
+		if (j == TILE_SIZE - 1)
+			break ;
+		else
+		{
+			i = -1;
+			while (++i < TILE_SIZE)
+			{
+				if (i == TILE_SIZE - 1)
+					break ;
+				mlx_put_pixel(img, x * TILE_SIZE + i, y * TILE_SIZE + j,
+						block_color);
+			}
+		}
 	}
 }
 

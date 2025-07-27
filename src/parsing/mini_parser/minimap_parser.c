@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:00:15 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 16:57:04 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 21:16:09 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static void	write_to_map_array(t_map *map, char ***geo, char *nxtline)
 				geometry[i][j] = nxtline[j];
 				if (is_player(nxtline[j]))
 				{
+					printf("test\n");
 					map->data->pl_posx = j * map->data->tile_size;
 					map->data->pl_posy = i * map->data->tile_size;
 					assign_direction(map, nxtline[j]);

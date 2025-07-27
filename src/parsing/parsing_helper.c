@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:17:28 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 16:57:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 21:22:55 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	allocate_map_array(t_game *game, char *line)
 
 bool	flood_fill(char **map, int x, int y)
 {
-	if (x < 0 || y < 0 || !map[x] || y >= (int)ft_strlen(map[x]))
+	if (x < 0 || y < 0 || !map[y] || x >= (int)ft_strlen(map[y]))
 		return (false);
-	if (map[x][y] == ' ' || map[x][y] == '\0')
+	if (map[y][x] == ' ' || map[y][x] == '\0')
 		return (false);
-	if (map[x][y] == '1' || map[x][y] == 'X')
+	if (map[y][x] == '1' || map[y][x] == 'X')
 		return (true);
-	map[x][y] = 'X';
+	map[y][x] = 'X';
 	return (
 		flood_fill(map, x + 1, y) &&
 		flood_fill(map, x - 1, y) &&
@@ -108,11 +108,22 @@ void	pad_shorter_lines(t_game *game)
 
 int	check_key_data_completion(t_game *game)
 {
-	if (game->NO_texture && game->SO_texture && game->WE_texture
-		&& game->EA_texture)
-		{
-			if(game->ceiling_color.r && game->floor_color.r)
-				return (1);
-		}
+	// if (game->NO_texture)
+	// 	printf("NO = 1\n");
+	// if (game->SO_texture)
+	// 	printf("SO = 1\n");
+	// if (game->EA_texture)
+	// 	printf("EA = 1\n");
+	// if (game->WE_texture)
+	// 	printf("WE = 1\n");
+	// if (game->ceiling_color.r)
+	// 	printf("CR = 1\n");
+	// if (game->floor_color.r)
+	// 	printf("FR = 1\n");
+	
+	// if (game->NO_texture && game->SO_texture && game->WE_texture
+	// 		&& game->EA_texture && game->ceiling_color.r && game->floor_color.r)
+	if (game->ceiling_color.r && game->floor_color.r)
+		return (1);
 	return (0);
 }
