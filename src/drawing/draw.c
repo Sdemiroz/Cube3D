@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/24 21:11:35 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 16:56:27 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 void		draw_map(t_game *game);
 
@@ -24,37 +24,6 @@ static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 void	draw_player_direction(t_rays *rays, t_data *data);
 void	erase_previous_ray(t_rays *rays, t_data *data);
 void	draw_forward_ray(t_rays *rays, t_data *data);
-
-// void	draw_map(t_game *game)
-// {
-// 	char	*map_layer;
-// 	int		i;
-// 	int		j;
-
-// 	map_layer = get_next_line(game->map->fd);
-// 	if (!map_layer)
-// 		exit_early(game, "map_layer: gnl", EXIT_FAILURE);
-// 	i = -1;
-// 	j = 0;
-// 	while (map_layer)
-// 	{
-// 		i = -1;
-// 		while (*(map_layer + ++i))
-// 		{
-// 			if (*(map_layer + i) == '1')
-// 				place_block(game->map->image, i, j, STONE_GRAY);
-// 			else if (*(map_layer + i) == '0')
-// 				place_block(game->map->image, i, j, 0);
-// 		}
-// 		free(map_layer);
-// 		map_layer = get_next_line(game->map->fd);
-// 		j++;
-// 	}
-// 	draw_border(game->img3D, WIDTH, HEIGHT, CYAN);
-// 	draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-// 	draw_border2(game->player->blob2D, TILE_SIZE, TILE_SIZE, RED, 1);
-// 	place_player2D_2(game, 1);
-// }
 
 void	draw_map(t_game *game)
 {

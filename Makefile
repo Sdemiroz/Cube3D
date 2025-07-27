@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/25 19:42:37 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/27 16:59:54 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,17 +78,27 @@ ALL_FLAGS		:=	$(CFLAGS) $(LDFLAGS)
 ###############            SOURCES and DEPENDENCIES               ##############
 ################################################################################
 
+A = initialization
+B = parsing
+B1 = $(B)/tmp_parsing
+C = drawing
+D = rendering
+E = utils
+
+Z = __interims
+
 # Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
-SRCS	:=	main.c \
-			spawn.c start.c draw.c renders.c events.c string_utils.c \
-			draw_circle.c utils_valids.c\
-			error.c init_game.c \
-			check_map.c map_parser.c parsing_helper.c handle_input.c \
-			interims/circles_improved.c \
-			tmp_parsing/minimap_parser.c tmp_parsing/print_map_utils.c
+SRCS	:=	main.c start.c events.c \
+			$(A)/spawn.c $(A)/init_game.c $(A)/handle_input.c \
+			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
+			$(B1)/minimap_parser.c $(B1)/print_map_utils.c \
+			$(C)/draw_circle.c $(C)/draw.c \
+			$(D)/renders.c \
+			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
+			$(Z)/circles_improved.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

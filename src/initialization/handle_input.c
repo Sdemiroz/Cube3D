@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 22:20:55 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:56:40 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
 			char *prefix);
 void	identify_rgb(t_game *game, char *line, t_color *color);
 void	parse_line(t_game *game, char *line);
-int	validate_map_line(t_game *game, char *line);
+int		validate_map_line(t_game *game, char *line);
 
 static int	parse_rgb(char *rgb_str, t_color *color);
 

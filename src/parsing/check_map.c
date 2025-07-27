@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/25 19:44:28 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 16:57:15 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 void		check_map(t_game *game);
 static int	player_counter_check(t_game *game);

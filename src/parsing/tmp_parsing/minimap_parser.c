@@ -6,11 +6,11 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:00:15 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/23 20:41:20 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/27 16:57:04 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/cub3d.h"
+#include "../../../include/cub3d.h"
 
 void	parse_minimap(t_map *map);
 

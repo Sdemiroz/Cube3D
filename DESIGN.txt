@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/11 20:51:22 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/27 17:02:54 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,4 +18,5 @@
    This size will be used to create a 2D char pointer and initialize it accordingly
    which will be useful in controlling the bounds of the map and the movement of
    the player within it.
- - 
+ - The game seg-faults when the rendering goes out of bounds. This needs to be
+   checked and fixed.
