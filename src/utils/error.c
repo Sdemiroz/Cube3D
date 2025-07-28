@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 16:57:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/28 20:43:26 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	exit_early(t_game *game, char *msg, int ret);
 
 static void	clear_map(t_game *game, t_map *map);
 static void	clear_player(t_game *game, t_player *pl);
-static void	clear_rays(t_game *game, t_rays *rays);
 static void	clear_mlx(t_game *game);
 
 
@@ -27,14 +26,10 @@ void	exit_early(t_game *game, char *msg, int ret)
 	if (!game)
 		exit(ret);
 
-	// if (game->data)
-	// 	free(game->data);
 	if (game->mlx && game->map)
 		clear_map(game, game->map);
 	if (game->mlx && game->player)
 		clear_player(game, game->player);
-	if (game->mlx && game->rays)
-		clear_rays(game, game->rays);
 	if (game->mlx)
 		clear_mlx(game);
 
@@ -62,14 +57,10 @@ static void	clear_player(t_game *game, t_player *pl)
 {
 	if (pl->blob2D)
 		mlx_delete_image(game->mlx, pl->blob2D);
+	if (pl->view)
+		mlx_delete_image(game->mlx, pl->view);
 	// if (pl->gun3D)
 	// 	mlx_delete_image(game->mlx, pl->gun3D);	// to be used if an overlay of gun image is separately spawned and used
-}
-
-static void	clear_rays(t_game *game, t_rays *rays)
-{
-	if (rays->rays)
-		mlx_delete_image(game->mlx, rays->rays);
 }
 
 static void	clear_mlx(t_game *game)

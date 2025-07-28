@@ -28,7 +28,7 @@ void	init_events(void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
-	mlx_loop_hook(game->mlx, &render_map, param);
+	mlx_loop_hook(game->mlx, &init_graphics_rendering, param);
 	// mlx_scroll_hook(game->mlx, &upon_scroll, game);
 	mlx_key_hook(game->mlx, &upon_press, param);
 	mlx_close_hook(game->mlx, &upon_close, param);
@@ -96,7 +96,7 @@ static void	move_player(void *param, t_key keydata)
 	if (is_running)
 		move_step *= 5; // Increase step size when running
 
-	erase_previous_ray(game->rays, data);
+	erase_previous_ray(game->player, data);
 	if (keydata.key == MLX_KEY_W)
 	{
 		data->pl_posx += (int)rint(data->cosine * move_step);
@@ -117,7 +117,7 @@ static void	move_player(void *param, t_key keydata)
 		data->pl_posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
 		data->pl_posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
 	}
-	draw_forward_ray(game->rays, data);
+	draw_forward_ray(game->player, data);
 }
 
 static void turn_player(void *param, t_key keydata)
@@ -140,7 +140,7 @@ static void turn_player(void *param, t_key keydata)
 	else if (keydata.key == MLX_KEY_RIGHT)
 		data->cur_dir -= rotation;
 
-	draw_player_direction(game->rays, data);
+	draw_player_direction(game->player, data);
 }
 
 // // Function to determine before a movement if the player has collided with a wall

@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/27 22:19:16 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/28 03:12:20 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@
  - The check_key_data_completion() fn needs to be restored after texture initialization
  - Parser needs to check for other types of spaces in map
  - Parser needs to add extra padding for tabs
+ - The direction that the player is facing is not linked by the parser
 
 
 5. Optimizations

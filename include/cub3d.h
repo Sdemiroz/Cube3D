@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 21:02:25 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/28 20:34:17 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@
 # define PURPLE			0x8000FFFF
 # define BROWN			0x8B4513FF
 # define PINK			0xFF69B4FF
+
+// Different lava red shades
+# define LAVA_RED_BRIGHT	0xFF4500FF  // Orange-red lava (RGB: 255, 69, 0)
+# define LAVA_RED_DEEP		0xDC143CFF  // Crimson lava (RGB: 220, 20, 60)  
+# define LAVA_RED_CLASSIC	0xCF1020FF  // Classic lava red (RGB: 207, 16, 32)
+# define LAVA_RED_DARK		0xB22222FF  // Fire brick red (RGB: 178, 34, 34)
+# define LAVA_RED_MOLTEN	0xFF2400FF  // Scarlet lava (RGB: 255, 36, 0)
 
 // Environment Colors
 # define SKY_BLUE		0x87CEEBFF
@@ -141,22 +148,21 @@ typedef struct s_rays t_rays;
 typedef struct s_game
 {
 	t_data		*data;			// for dynamic scaling and dimensioning
+	
 	mlx_t		*mlx;			// for window and mlx context
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
-
 	// t_img		*gun3D;			// gun image to be used in 3D view
 	// int32_t		gun_inst_id;	// gun instance ID for 3D image
-
 	t_txr 		*NO_texture;
 	t_txr 		*SO_texture;
 	t_txr 		*WE_texture;
 	t_txr 		*EA_texture;
 	t_color		floor_color;
 	t_color		ceiling_color;
+	
 	t_map		*map;			// pointer to map struct, also holds map image
 	t_player	*player;		// pointer to player struct for player position
-	t_rays		*rays;
 } t_game;
 
 typedef struct s_data
@@ -193,33 +199,40 @@ typedef struct s_data
 typedef struct s_map
 {
 	t_data		*data;
+	
 	t_img		*image;			// pointer to the image of the 2D map
 	int			image_inst_id;	// instance ID for 2D map image
 	int			fd;				// file descriptor for map file
 	char		**map_array;	// 2D array of map data (strings)
-	t_game		*game;
+	
 	t_player	*player;		// pointer to player struct for convenience
-	t_rays		*rays;
+	t_game		*game;
 } t_map;
 
 typedef struct s_player
 {
 	t_data		*data;
+	
 	t_img		*blob2D;		// pointer to 2D player blob image
 	int32_t		blob_inst_id;	// instance ID for 2D player blob
-	t_game		*game;
+	t_img		*view;
+	int			view_inst_id;
+	t_rays		**rays;	// array of rays for raycasting
+	
 	t_map		*map;
-	t_rays		*rays;
+	t_game		*game;
 } t_player;
 
 typedef struct s_rays
 {
-	t_data		*data;
-	t_img		*rays;
-	int			rays_inst_id;
-	t_game		*game;
-	t_map		*map;
-	t_player	*player;
+	int			index;				// index of the current ray being processed
+	double		delta;		// angle of deviation +/- from the player's current direction
+	double		angle;				// absolute angle of the ray in radians
+	double		cosine;				// cosine of the angle
+	double		sine;				// sine of the angle
+	double		length;				// length of the distance traveled by the ray
+	int			hit_x;				// x coordinate of the hit point
+	int			hit_y;				// y coordinate of the hit point
 } t_rays;
 
 /******************************************************************************/
@@ -238,7 +251,7 @@ t_game		*get_game(void);
 t_data		*get_data(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
-t_rays		*get_rays(void);
+t_rays		**get_rays(void);
 
 void		init_game_elements(t_game *game, char *arg);
 
@@ -261,14 +274,14 @@ void		allocate_map_array(t_game *game, char *line);
 // src/drawing
 
 void		draw_map(t_game *game);
-void		draw_player_direction(t_rays *rays, t_data *data);
-void		erase_previous_ray(t_rays *rays, t_data *data);
-void		draw_forward_ray(t_rays *rays, t_data *data);
+void		draw_player_direction(t_player *pl, t_data *data);
+void		erase_previous_ray(t_player *pl, t_data *data);
+void		draw_forward_ray(t_player *pl, t_data *data);
 void		place_player2D_2(t_game *game, int method);
 
 // src/rendering
 
-void		render_map(void *param);
+void		init_graphics_rendering(void *param);
 
 // src/utils
 

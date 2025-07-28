@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 20:32:31 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/28 16:48:28 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_game		*get_game(void);
 t_data		*get_data(void);
 t_map		*get_map(void);
 t_player	*get_player(void);
-t_rays		*get_rays(void);
+t_rays		**get_rays(void);
 
 static void	initialize_map_data(t_data *data);
 
@@ -41,7 +41,6 @@ t_game	*get_game(void)
 
 			game->map = NULL;			// Initialize map pointer to NULL
 			game->player = NULL;		// Initialize player pointer to NULL
-			game->rays = NULL;
 		}
 	}
 	return (game);
@@ -126,7 +125,6 @@ t_map	*get_map(void)
 			map->map_array = NULL;
 			map->game = NULL;
 			map->player = NULL;
-			map->rays = NULL;
 		}
 	}
 	return (map);
@@ -152,21 +150,40 @@ t_player	*get_player(void)
 	return (player);
 }
 
-t_rays	*get_rays(void)
+/*
+Function that returns a pointer to an array of rays.
+  - Used to get the rays for raycasting in the game.
+  - Rays are initialized only once and reused throughout the game.
+  - The rays are stored in a static array, which is allocated on the first call.
+  - Returns a pointer to the array of rays.
+  - Each ray is initialized with its index and other default values.
+
+**Note:	Should only be called once the game and data structures are initialized
+		as it uses the get_data() to get data for its allocation.
+*/
+t_rays	**get_rays(void)
 {
-	static t_rays	*rays = NULL;
+	static t_rays	**rays = NULL;
+	int				i;
+	int				num_rays;
 
 	if (!rays)
 	{
-		rays = ft_malloc(sizeof(t_rays));
+		num_rays = get_data()->num_rays;
+		rays = ft_malloc(num_rays * sizeof(t_rays *));
 		if (rays)
 		{
-			rays->data = NULL;
-			rays->rays = NULL;
-			rays->rays_inst_id = -1;
-			rays->game = NULL;
-			rays->map = NULL;
-			rays->player = NULL;
+			i = -1;
+			while (++i < num_rays)
+			{
+				rays[i] = ft_malloc(sizeof(t_rays));
+				if (rays[i])
+				{
+					*rays[i] = (t_rays){
+						.index = i,
+					};
+				}
+			}
 		}
 	}
 	return (rays);

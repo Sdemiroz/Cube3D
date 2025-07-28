@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 17:49:33 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/28 21:10:15 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 void	init_game_elements(t_game *game, char *arg);
 
 static void	init_game(t_game *game);
+
 static void	init_minimap(t_game *game, char *path_to_map);
 static void	init_player(t_game *game);
-static void	init_rays(t_game *game);
+static void	init_rays(t_player *player, t_rays **rays);
+static void	init_deltas(t_rays *ray, int num_rays, int i);
+static void	init_angles(t_rays *ray, double cur_dir);
 
 
 void	init_game_elements(t_game *game, char *arg)
@@ -30,13 +33,9 @@ void	init_game_elements(t_game *game, char *arg)
 	game->player = get_player();
 	if (!game->player)
 		exit_early(game, "player malloc failed", EXIT_FAILURE);
-	game->rays = get_rays();
-	if (!game->rays)
-		exit_early(game, "rays malloc failed", EXIT_FAILURE);
 
 	init_minimap(game, arg);
 	init_player(game);
-	init_rays(game);
 }
 
 static void	init_game(t_game *game)
@@ -47,11 +46,12 @@ static void	init_game(t_game *game)
 		.img3D_inst_id = -1,
 		// .gun_inst_id = -1,
 	};
+	
 	data = get_data();
 	if (!data)
 		exit_early(game, "Scales malloc failed", EXIT_FAILURE);
-
 	game->data = data;
+
 	game->mlx = mlx_init(data->wind_w, data->wind_h, "Cub3D", true);
 	if (!game->mlx)
 		exit_early(game, "game_mlx: mlx_init", EXIT_FAILURE);
@@ -100,13 +100,11 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
 
-	map_array_printer(map, 1);	// extra utility, to be removed later
+	map_array_printer(map, 1);	// !! extra utility, to be removed later
 
 	map->game = game;
 	map->player = game->player;
-	map->rays = game->rays;
 }
-
 
 static void	init_player(t_game *game)
 {
@@ -120,27 +118,71 @@ static void	init_player(t_game *game)
 	pl->data = data;
 	pl->blob2D = mlx_new_image(game->mlx, data->tile_size, data->tile_size);
 	if (!pl->blob2D)
-		exit_early(game, "player_img: mlx_new_image failed", EXIT_FAILURE);
-	
+		exit_early(game, "blob_img: mlx_new_image failed", EXIT_FAILURE);
+	pl->view = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
+	if (!pl->view)
+		exit_early(game, "view_img: mlx_new_image failed", EXIT_FAILURE);
+
+	pl->rays = get_rays();
+	if (!pl->rays)
+		exit_early(game, "rays malloc failed", EXIT_FAILURE);
+	init_rays(pl, pl->rays);
+
 	pl->game = game;
 	pl->map = game->map;
-	pl->rays = game->rays;
 }
 
-static void	init_rays(t_game *game)
+static void	init_rays(t_player *pl, t_rays **rays)
 {
-	t_data	*data;
-	t_rays	*rays;
-
-	data = game->data;
-	rays = game->rays;
+	t_data		*data;
+	int			i;
+	int			num_rays;
+	double		cur_dir;
+	t_rays		*ray;
 	
-	rays->data = data;
-	rays->rays = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
-	if (!rays->rays)
-		exit_early(game, "rays_img: mlx_new_image failed", EXIT_FAILURE);
+	data = get_data();
+	num_rays = data->num_rays;
+	cur_dir = data->cur_dir;
+	i = 0;
+	while (++i < num_rays)
+	{
+		ray = rays[i];
+		init_deltas(ray, num_rays, i);	// Left rays -> -ve, Right rays -> +ve
+		init_angles(ray, data->cur_dir);
+		ray->cosine = cos(ray->angle);
+		ray->sine = sin(ray->angle);
+		ray->length = 5 * data->tile_size;	// Preliminary initialising value
+		ray->hit_x = -1;
+		ray->hit_y = -1;
+	}
+}
 
-	rays->game = game;
-	rays->map = game->map;
-	rays->player = game->player;
+static void	init_deltas(t_rays *ray, int num_rays, int i)
+{
+	if (num_rays % 2 == 0)
+	{
+		if (i < num_rays / 2)
+			ray->delta = (double)(i - (num_rays / 2));
+		else
+			ray->delta = (double)(i + 1 - (num_rays / 2));
+	}
+	else
+	{
+		if (i < num_rays / 2)
+			ray->delta = (double)(i - (num_rays / 2));
+		else if (i == num_rays / 2)
+			ray->delta = 0;
+		else if (i > num_rays / 2)
+			ray->delta = (double)(i - (num_rays / 2));
+	}	
+}
+
+static void	init_angles(t_rays *ray, double cur_dir)
+{
+	if (ray->delta < 0)
+		ray->angle = cur_dir - ray->delta;
+	else if (ray->delta == 0)
+		ray->angle = cur_dir;
+	else
+		ray->angle = cur_dir + 2 * PI + ray->delta;
 }
