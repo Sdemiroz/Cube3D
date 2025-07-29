@@ -6,7 +6,7 @@
 #    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/29 21:34:45 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/07/30 01:53:07 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,7 +98,7 @@ vpath %.c $(SRC_DIRS)
 SRCS	:=	main.c start.c events.c \
 			$(A)/spawn.c $(A)/init_game.c $(A)/handle_input.c \
 			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
-			$(B1)/minimap_parser.c \
+			$(B)/expand_tabs.c $(B1)/minimap_parser.c \
 			$(C)/draw_circle.c $(C)/draw.c \
 			$(D)/renders.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 02:42:07 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 23:19:23 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	validate_map_line(t_game *game, char *line)
 {
 	int	i;
 
-	if (line[0] == '\n')
+	if (empty_line(line))
 	{
 		free(line);
 		exit_early(game, "Error: Empty line in map", 1);
@@ -71,6 +71,8 @@ void	parse_line(t_game *game, char *line)
 	char	*trimmed;
 
 	trimmed = ft_strtrim(line, "\n");
+	if (trimmed)
+		trimmed = expand_tabs(trimmed);
 	if (!trimmed)
 	{
 		free(line);
@@ -140,7 +142,7 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 		exit_early(game, "Error allocating RGB string", 1);
 	}
 	ft_strlcpy(rgb_str, line + start, end - start + 1);
-	
+
 	if (!parse_rgb(rgb_str, color))
 	{
 		free(line);
@@ -205,6 +207,6 @@ void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 	// 	free(line);
 	// 	exit_early(game, "Error loading texture", 1);
 	// }
-	
+
 	free(texture_path);
 }

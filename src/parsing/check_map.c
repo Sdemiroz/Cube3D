@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:25:26 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 02:49:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 01:47:54 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,37 @@
 
 void		check_map(t_game *game);
 static int	player_counter_check(t_game *game);
+
+
+bool	empty_line(char *line)
+{
+	int	x;
+
+	x = 0;
+	while (line[x])
+	{
+		if (!ft_isspace(line[x]) && line[x] != '\n')
+			return (false);
+		x++;
+	}
+	return (true);
+}
+
+void	assign_direction(t_map *map, char player_dir)
+{
+	t_data	*data;
+
+	data = map->data;
+	data->ini_dir = player_dir;
+	if (player_dir == 'E')
+		data->cur_dir = 0; // 0 degrees in radians
+	else if (player_dir == 'N')
+		data->cur_dir = PI / 2; // 90 degrees in radians
+	else if (player_dir == 'W')
+		data->cur_dir = PI; // 180 degrees in radians
+	else if (player_dir == 'S')
+		data->cur_dir = -PI / 2; // 270 or -90 degrees in radians
+}
 
 static int	player_counter_check(t_game *game)
 {
@@ -33,15 +64,15 @@ static int	player_counter_check(t_game *game)
 				|| game->map->map_array[y][x] == 'S'
 				|| game->map->map_array[y][x] == 'W')
 			{
-				game->data->pl_posx = x * game->data->tile_size;
-				game->data->pl_posy = y * game->data->tile_size;
+				game->data->pl_arr_x = x;
+				game->data->pl_arr_y = y;
 				player_count++;
 			}
 			x++;
 		}
 		y++;
 	}
-	return(player_count);
+	return (player_count);
 }
 
 void	check_map(t_game *game)
@@ -54,7 +85,10 @@ void	check_map(t_game *game)
 
 	x = player_counter_check(game);
 	if (x != 1)
-		exit_early(game, "Error: map must contain exactly 1 player start position\n", 1);
+		exit_early(game,
+			"Error: map must contain exactly 1 player start position\n", 1);
+	game->data->pl_posx = game->data->pl_arr_x * game->data->tile_size;
+	game->data->pl_posy = game->data->pl_arr_y * game->data->tile_size;
 	dup_map = copy_map(game->map->map_array);
 	if (!dup_map)
 		exit_early(game, "Error: failed to duplicate map\n", 1);

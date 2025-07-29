@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 08:26:06 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 23:19:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 
 // Different lava red shades
 # define LAVA_RED_BRIGHT	0xFF4500FF  // Orange-red lava (RGB: 255, 69, 0)
-# define LAVA_RED_DEEP		0xDC143CFF  // Crimson lava (RGB: 220, 20, 60)  
+# define LAVA_RED_DEEP		0xDC143CFF  // Crimson lava (RGB: 220, 20, 60)
 # define LAVA_RED_CLASSIC	0xCF1020FF  // Classic lava red (RGB: 207, 16, 32)
 # define LAVA_RED_DARK		0xB22222FF  // Fire brick red (RGB: 178, 34, 34)
 # define LAVA_RED_MOLTEN	0xFF2400FF  // Scarlet lava (RGB: 255, 36, 0)
@@ -148,7 +148,7 @@ typedef struct s_colour
 typedef struct s_game
 {
 	t_data		*data;			// for dynamic scaling and dimensioning
-	
+
 	mlx_t		*mlx;			// for window and mlx context
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
@@ -160,7 +160,7 @@ typedef struct s_game
 	t_txr 		*EA_texture;
 	t_color		floor_color;
 	t_color		ceiling_color;
-	
+
 	t_map		*map;			// pointer to map struct, also holds map image
 	t_player	*player;		// pointer to player struct for player position
 } t_game;
@@ -173,6 +173,8 @@ typedef struct s_data
 
 	// Player elements
 	int	 	pl_dia;
+	int		pl_arr_x;
+	int		pl_arr_y;
 	int	 	pl_posx;
 	int	 	pl_posy;
 
@@ -199,12 +201,12 @@ typedef struct s_data
 typedef struct s_map
 {
 	t_data		*data;
-	
+
 	t_img		*image;			// pointer to the image of the 2D map
 	int			image_inst_id;	// instance ID for 2D map image
 	int			fd;				// file descriptor for map file
 	char		**map_array;	// 2D array of map data (strings)
-	
+
 	t_player	*player;		// pointer to player struct for convenience
 	t_game		*game;
 } t_map;
@@ -266,6 +268,9 @@ int			validate_map_line(t_game *game, char *line);
 // src/parsing
 
 void		check_map(t_game *game);
+void		assign_direction(t_map *map, char player_dir);
+char		*expand_tabs(char *line);
+bool		empty_line(char *line);
 void		parse_game_data(t_game *game, char *map_name);
 int			check_key_data_completion(t_game *game);
 void		pad_shorter_lines(t_game *game);
