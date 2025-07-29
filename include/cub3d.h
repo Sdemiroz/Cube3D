@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 18:17:14 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 21:46:40 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
 # define NUM_RAYS 60
-# define RAY_LEN_DEFAULT 8		// This number multiple of tile_size
+# define RAY_LEN_DEFAULT 2		// This number multiple of tile_size
 
 
 // Mini-Map Constants
@@ -232,12 +232,14 @@ typedef struct s_rays
 {
 	int			index;			// index of the current ray being processed
 	double		delta;			// angle of deviation +/- from the player's current direction
+	double		*prev_dir;
+	double		*cur_dir;
 	double		angle;			// absolute angle of the ray in radians
 	double		cosine;			// cosine of the angle
 	double		sine;			// sine of the angle
-	double		length;			// length of the distance traveled by the ray
 	int			*start_x;		// x coordinate of the starting point of the ray
 	int			*start_y;		// y coordinate of the starting point of the ray
+	double		length;			// length of the distance traveled by the ray
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
 } t_rays;
@@ -289,7 +291,8 @@ void		draw_forward_ray(t_player *pl, t_data *data);
 void		redraw_fov(t_player *pl, t_rays **rays);
 void		draw_ray(t_player * pl, t_rays *ray);
 void		erase_ray(t_player * pl, t_rays *ray);
-void		update_ray_attr(t_rays *ray, double cur_dir);
+void		update_ray_attr(t_rays *ray);
+void		update_ray_attr_all(t_rays **rays);
 
 void		erase_previous_fov(t_player *pl, t_rays **rays);
 void		draw_current_fov(t_player *pl, t_rays **rays);

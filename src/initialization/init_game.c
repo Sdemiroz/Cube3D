@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 17:59:19 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 21:03:56 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	init_minimap(t_game *game, char *path_to_map);
 static void	init_player(t_game *game);
 static void	init_rays(t_player *player, t_rays **rays);
 static void	init_ray_delta(t_rays *ray, int num_rays, int i);
-static void	init_ray_angle(t_rays *ray, double cur_dir);
+static void	init_ray_angle(t_rays *ray);
 
 static void update_game_data_after_parsing(t_data *data);
 
@@ -97,9 +97,12 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	map->data = data;
 
 	test_print_data();			// !! extra utility, to be removed later
+	
 	parse_game_data(game, path_to_map);
 	update_game_data_after_parsing(data);
+	
 	test_print_data();			// !! extra utility, to be removed later
+	
 	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
@@ -151,8 +154,10 @@ static void	init_rays(t_player *pl, t_rays **rays)
 	while (++i < num_rays)
 	{
 		ray = rays[i];
-		init_ray_delta(ray, num_rays, i);	// Left rays -> -ve, Right rays -> +ve
-		init_ray_angle(ray, data->cur_dir);
+		init_ray_delta(ray, num_rays, i);	// Left rays -> -ve delta, Right rays -> +ve delta
+		ray->prev_dir = &data->prev_dir;
+		ray->cur_dir = &data->cur_dir;
+		init_ray_angle(ray);	// Angles calculated as per normal convention used the in the program elsewhere
 		ray->cosine = cos(ray->angle);
 		ray->sine = sin(ray->angle);
 		ray->length = RAY_LEN_DEFAULT * data->tile_size;	// Preliminary initialising value
@@ -161,7 +166,6 @@ static void	init_rays(t_player *pl, t_rays **rays)
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}
-	test_print_rays('d');	// !! extra utility, to be removed later
 }
 
 static void	init_ray_delta(t_rays *ray, int num_rays, int i)
@@ -184,19 +188,24 @@ static void	init_ray_delta(t_rays *ray, int num_rays, int i)
 	}	
 }
 
-static void	init_ray_angle(t_rays *ray, double cur_dir)
+static void	init_ray_angle(t_rays *ray)
 {
-	double pi2;
+	double	ray_delta;
+	double	cur_dir;
+	double	pi2;
 	
+	ray_delta = ray->delta;
+	cur_dir = *ray->cur_dir;
 	pi2 = 2 * PI;
 	if (ray->delta < 0)
-		ray->angle = fmod(cur_dir - ray->delta, pi2);
-	else if (ray->delta == 0)
+		ray->angle = fmod(cur_dir - ray_delta, pi2);
+	else if (ray_delta == 0)
 		ray->angle = cur_dir;
 	else
-		ray->angle = fmod(cur_dir + pi2 - ray->delta, pi2);
+		ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
 }
 
+// Update function to update data fields not done by the parser
 static void update_game_data_after_parsing(t_data *data)
 {
 	data->cosine = cos(data->cur_dir);

@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/29 08:33:26 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/29 20:00:10 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,9 @@
  - Player blob movement within the map bounds has been added, but it is not precise.
    Particularly when player blob reaches near the wall, it overlaps the border in
    the bottom right and cannot go close enough in the opposite corner
+ - There is this issue for images in the player struct (both imgs), that when the
+   drawing goes out of bounds it tends to wrap around the image and continues to
+   be drawn on the other side
  - 
 
 
@@ -35,7 +38,9 @@
  - Add rays within the field of view by using draw lines or similar
  - Add collision detection so that player does not overlap with existing blocks
  - Figuring out how to use textures and initializing them in the game struct
- - 
+ - DDA algorithm for ray length calculation
+ - Engine to transform ray length to object size in the 3d view
+ - Engine to remove fish-eye effect while rendering 3d view
 
 
 4. Parsing issues

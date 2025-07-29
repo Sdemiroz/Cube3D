@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 18:32:29 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 21:28:58 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	draw_forward_ray(t_player *pl, t_data *data);
 void	redraw_fov(t_player *pl, t_rays **rays);
 void	draw_ray(t_player * pl, t_rays *ray);
 void	erase_ray(t_player * pl, t_rays *ray);
-void	update_ray_attr(t_rays *ray, double cur_dir);
+void	update_ray_attr(t_rays *ray);
+void	update_ray_attr_all(t_rays **rays);
 
 void	erase_previous_fov(t_player *pl, t_rays **rays);
 void	draw_current_fov(t_player *pl, t_rays **rays);
@@ -99,6 +100,7 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 		}
 	}
 }
+
 // static void	place_block(t_img *img, int x, int y, int block_color)
 // {
 // 	int		i;
@@ -257,23 +259,31 @@ void	redraw_fov(t_player *pl, t_rays **rays)
 	t_data	*data;
 	t_rays	*ray;
 	int		num_rays;
+	double	dir[2];
 	int		i;
+	bool	direction_changed;
 
 	data = get_data();
 	num_rays = data->num_rays;
-	printf("Seg_faulting here\n");
+	dir[0] = data->prev_dir;	// Assigning the previous direction to dir[0]
+	dir[1] = data->cur_dir; 	// Assigning the current direction to dir[1]
+	
+	direction_changed = (fabs(dir[0] - dir[1]) > 1e-9);
+	
 	i = -1;
 	while (++i < num_rays)
 	{
 		ray = rays[i];
-		if (!data || !pl || !rays || !ray)
-			printf("NULL pointer here\n");
-		if (data->prev_dir != data->cur_dir)
+		// if (dir[0] != dir[1])
+		if (direction_changed)
 		{
+			// printf("About to call erase ray\n");
 			erase_ray(pl, ray);
-			update_ray_attr(ray, data->cur_dir);
+			// printf("Called erase ray\n");
+			update_ray_attr(ray);
 		}
 		draw_ray(pl, ray);
+		// test_print_rays('d');
 	}
 }
 
@@ -293,7 +303,6 @@ void	draw_current_fov(t_player *pl, t_rays **rays)
 	while (++i < num_rays)
 		draw_ray(pl, rays[i]);
 }
-
 
 void	draw_ray(t_player * pl, t_rays *ray)
 {
@@ -342,17 +351,49 @@ void	erase_ray(t_player * pl, t_rays *ray)
 	}
 }
 
-void	update_ray_attr(t_rays *ray, double cur_dir)
+void	update_ray_attr(t_rays *ray)
 {
+	double	ray_delta;
+	double	cur_dir;
 	double pi2;
 
+	ray_delta = ray->delta;
+	cur_dir = *ray->cur_dir;
 	pi2 = 2 * PI;
-	if (ray->delta < 0)
-		ray->angle = fmod(cur_dir - ray->delta, pi2);
-	else if (ray->delta == 0)
+	if (ray_delta < 0)
+		ray->angle = fmod(cur_dir - ray_delta, pi2);
+	else if (ray_delta == 0)
 		ray->angle = cur_dir;
 	else
-		ray->angle = fmod(cur_dir + pi2 - ray->delta, pi2);
+		ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
 	ray->cosine = cos(ray->angle);
 	ray->sine = sin(ray->angle);
+}
+
+void	update_ray_attr_all(t_rays **rays)
+{
+	t_rays	*ray;
+	double	ray_delta;
+	double	cur_dir;
+	double	pi2;
+	int		i;
+	int		num_rays;
+	
+	cur_dir = *ray->cur_dir;
+	num_rays = get_data()->num_rays;
+	pi2 = 2 * PI;
+	i = -1;
+	while (++i < num_rays)
+	{
+		ray = rays[i];
+		ray_delta = ray->delta;
+		if (ray_delta < 0)
+			ray->angle = fmod(cur_dir - ray_delta, pi2);
+		else if (ray_delta == 0)
+			ray->angle = cur_dir;
+		else
+			ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
+		ray->cosine = cos(ray->angle);
+		ray->sine = sin(ray->angle);
+	}
 }
