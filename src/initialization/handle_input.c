@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/27 20:29:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 02:42:07 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,17 +140,12 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 		exit_early(game, "Error allocating RGB string", 1);
 	}
 	ft_strlcpy(rgb_str, line + start, end - start + 1);
-	printf("rgb = %s$$$\n", rgb_str);
 	
 	if (!parse_rgb(rgb_str, color))
 	{
 		free(line);
 		exit_early(game, "Error parsing RGB values", 1);
 	}
-	
-	printf("r = %d\n", color->r);
-	printf("g = %d\n", color->g);
-	printf("b = %d\n", color->b);
 	free(rgb_str);
 }
 
@@ -203,8 +198,6 @@ void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 		exit_early(game, "Error, allocating texture path", 1);
 	}
 	ft_strlcpy(texture_path, line + start, end - start + 1);
-	
-	printf("texture = %s$$$\n", texture_path);
 	// *txr = mlx_load_png(texture_path);
 	// if (!(*txr))
 	// {

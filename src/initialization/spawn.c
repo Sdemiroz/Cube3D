@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/28 16:48:28 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 08:15:58 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ t_data	*get_data(void)
 			data->ini_dir = 'N';
 			data->prev_dir = PI / 2;
 			data->cur_dir = PI / 2;
-			data->cosine = cos(data->cur_dir);
-			data->sine = sin(data->cur_dir);
+			data->cosine = cos(PI / 2);
+			data->sine = sin(PI / 2);
 			initialize_map_data(data);
 		}
 	}
@@ -142,6 +142,8 @@ t_player	*get_player(void)
 			player->data = NULL;
 			player->blob2D = NULL;
 			player->blob_inst_id = -1;
+			player->view = NULL;
+			player->view_inst_id = -1;
 			player->game = NULL;
 			player->map = NULL;
 			player->rays = NULL;
@@ -170,7 +172,7 @@ t_rays	**get_rays(void)
 	if (!rays)
 	{
 		num_rays = get_data()->num_rays;
-		rays = ft_malloc(num_rays * sizeof(t_rays *));
+		rays = ft_malloc((num_rays + 1) * sizeof(t_rays *));
 		if (rays)
 		{
 			i = -1;
@@ -185,6 +187,7 @@ t_rays	**get_rays(void)
 				}
 			}
 		}
+		rays[num_rays] = NULL;		// Null-terminate the array of rays
 	}
 	return (rays);
 }

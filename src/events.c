@@ -19,6 +19,7 @@ static void	upon_press(t_key keydata, void *param);
 static void	upon_close(void *param);
 
 static void	move_player(void *param, t_key keydata);
+static void	apply_movement(t_data *data, double move_step, t_key keydata);
 static void turn_player(void *param, t_key keydata);
 
 static bool	has_space_to_move(t_game *game, int new_x, int new_y);
@@ -97,27 +98,59 @@ static void	move_player(void *param, t_key keydata)
 		move_step *= 5; // Increase step size when running
 
 	erase_previous_ray(game->player, data);
+	apply_movement(data, move_step, keydata);
+	draw_forward_ray(game->player, data);
+}
+
+static void	apply_movement(t_data *data, double move_step, t_key keydata)
+{
+	int	posx;
+	int	posy;
+	int	boundx[2];
+	int	boundy[2];
+	
+	posx = data->pl_posx;
+	posy = data->pl_posy;
+
+	// boundx[0] = data->tile_size + data->mmp_offx;
+	// boundx[1] = boundx + data->mmp_offx - data->tile_size;
+	// boundy[0] = data->tile_size + data->mmp_offy;
+	// boundy[1] = boundy + data->mmp_offy - data->tile_size;
+	boundx[0] = data->tile_size;
+	boundx[1] = data->mmp_w - data->tile_size;
+	boundy[0] = data->tile_size;
+	boundy[1] = data->mmp_h - data->tile_size;
+
 	if (keydata.key == MLX_KEY_W)
 	{
-		data->pl_posx += (int)rint(data->cosine * move_step);
-		data->pl_posy -= (int)rint(data->sine * move_step);
+		posx += (int)rint(data->cosine * move_step);
+		posy -= (int)rint(data->sine * move_step);
 	}
 	if (keydata.key == MLX_KEY_S)
 	{
-		data->pl_posx -= (int)rint(data->cosine * move_step);
-		data->pl_posy += (int)rint(data->sine * move_step);
+		posx -= (int)rint(data->cosine * move_step);
+		posy += (int)rint(data->sine * move_step);
 	}
 	if (keydata.key == MLX_KEY_A)
 	{
-		data->pl_posx += (int)rint(cos(data->cur_dir + PI / 2) * move_step);
-		data->pl_posy -= (int)rint(sin(data->cur_dir + PI / 2) * move_step);
+		posx += (int)rint(cos(data->cur_dir + PI / 2) * move_step);
+		posy -= (int)rint(sin(data->cur_dir + PI / 2) * move_step);
 	}
 	if (keydata.key == MLX_KEY_D)
 	{
-		data->pl_posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
-		data->pl_posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
+		posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
+		posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
 	}
-	draw_forward_ray(game->player, data);
+	if (posx > boundx[0] && posx < boundx[1] &&
+			posy > boundy[0] && posy < boundy[1])
+	{
+		data->pl_posx = posx;
+		data->pl_posy = posy;
+	}
+	printf("boundx1 = %d\t", boundx[0]);
+	printf("boundx2 = %d\n", boundx[1]);
+	printf("boundy1 = %d\t", boundy[0]);
+	printf("boundy2 = %d\n", boundy[1]);
 }
 
 static void turn_player(void *param, t_key keydata)
@@ -142,17 +175,3 @@ static void turn_player(void *param, t_key keydata)
 
 	draw_player_direction(game->player, data);
 }
-
-// // Function to determine before a movement if the player has collided with a wall
-// static bool	has_space_to_move(t_game *game, int new_x, int new_y)
-// {
-// 	t_data	*data;
-// 	t_map	*map;
-// 	int		block_x;
-// 	int		block_y;
-
-	
-
-
-// 	return (false); // No collision
-// }

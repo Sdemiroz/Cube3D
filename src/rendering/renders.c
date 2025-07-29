@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/28 20:41:12 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 08:17:26 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ static void render_player_2dview(t_game *game, t_player *pl)
 	
 	if (pl->view_inst_id == -1)
 	{
+		printf("here it is\n");
+		
 		pl->view_inst_id = mlx_image_to_window(game->mlx, pl->view,
 			data->mmp_offx, data->mmp_offy);
 		if (pl->view_inst_id < 0)
-			exit_early(game, "rays_img: mlx_image_to_window", EXIT_FAILURE);
+			exit_early(game, "2Dview_img: mlx_image_to_window", EXIT_FAILURE);
 	}
 }

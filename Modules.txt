@@ -6,18 +6,12 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/28 03:12:20 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/29 08:33:26 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 1. Necessary coordinations between parsing and rendering - 
- - After parsing, the field in map struct -> width and height, must be initialized
-   using the maximum size of the map. This means the width and the height of the
-   the rectangle that is able to completely contain the whole map inside of it.
-   This size will be used to create a 2D char pointer and initialize it accordingly
-   which will be useful in controlling the bounds of the map and the movement of
-   the player within it.
  - 
 
 
@@ -28,6 +22,11 @@
    won't show for walking but does for running, by implementing fractional accumulation
  - Add the ability to hold more than one key at a time. eg. moving forward
    while turning
+ - Maybe the out of bounds check for player blob movement should be separate for
+   x and y to allow movement in one just the one dimension if it is possible
+ - Player blob movement within the map bounds has been added, but it is not precise.
+   Particularly when player blob reaches near the wall, it overlaps the border in
+   the bottom right and cannot go close enough in the opposite corner
  - 
 
 
@@ -36,17 +35,25 @@
  - Add rays within the field of view by using draw lines or similar
  - Add collision detection so that player does not overlap with existing blocks
  - Figuring out how to use textures and initializing them in the game struct
+ - 
 
 
 4. Parsing issues
  - The check_key_data_completion() fn needs to be restored after texture initialization
  - Parser needs to check for other types of spaces in map
- - Parser needs to add extra padding for tabs
+ - Parser needs to add extra padding for tabs and other types of spaces if necessary
  - The direction that the player is facing is not linked by the parser
+ - Color rgb's need to be checked (also if only uint8 is required)
+ - 
 
 
 5. Optimizations
  - Angle increment with turn keys are detected keeps increasing the angle of the
    current direction. This might be an issue while stress-testing. Remedy this by
    using the fmod() fn with 2*PI value.
+ - The player direction drawn at the moment should be executed as a pointer to
+   the struct rays and drawn in a similar way to the way other rays will be drawn,
+   using a single consistent function
  - 
+
+ 

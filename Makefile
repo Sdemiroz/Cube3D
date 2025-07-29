@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/28 21:21:12 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/29 02:46:53 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,8 @@ C = drawing
 D = rendering
 E = utils
 
-Z = __interims
+Z1 = __interims
+Z2 = __test_printers
 
 # Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
@@ -94,11 +95,12 @@ vpath %.c $(SRC_DIRS)
 SRCS	:=	main.c start.c events.c \
 			$(A)/spawn.c $(A)/init_game.c $(A)/handle_input.c \
 			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
-			$(B1)/minimap_parser.c $(B1)/print_map_utils.c \
+			$(B1)/minimap_parser.c \
 			$(C)/draw_circle.c $(C)/draw.c \
 			$(D)/renders.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
-			$(Z)/circles_improved.c
+			$(Z1)/circles_improved.c \
+			$(Z2)/test_prints.c $(Z2)/print_map_utils.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

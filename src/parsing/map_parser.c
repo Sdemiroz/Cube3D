@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/27 21:27:11 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 02:50:00 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	get_key_index(char *line);
 
 static int	get_key_index(char *line)
 {
-	printf("check = %s\n", line);
 	if (ft_strncmp(line, "NO ", 3) == 0)
 		return (NO_CHECK);
 	if (ft_strncmp(line, "SO ", 3) == 0)
@@ -49,10 +48,8 @@ static void	parse_key_data(t_game *game, char *line)
 	// if (checker[key] || key == -1)
 	if (key == -1 || checker[key])
 	{
-		printf("key = %d\n", key);
 		free(line);
-		// exit_early(game, "Error: Invalid identifier", 1);
-		exit_early(game, "Its here", 1);
+		exit_early(game, "Error: Invalid identifier", 1);
 	}
 	checker[key] = 1;
 	if (key == NO_CHECK)
@@ -120,6 +117,4 @@ void	parse_game_data(t_game *game, char *map_name)
 	close(game->map->fd);
 	pad_shorter_lines(game);
 	check_map(game);
-	printf("player x = %d", game->data->pl_posx);
-	printf("player y = %d", game->data->pl_posy);
 }

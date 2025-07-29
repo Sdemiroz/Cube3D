@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/28 20:34:17 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 08:26:06 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 5
+# define PLAYER_DIA 8
 # define START_PX 500
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
@@ -132,18 +132,18 @@ enum	e_current_state
 	PARSING_MAP
 };
 
+typedef struct s_game t_game;
+typedef struct s_data t_data;
+typedef struct s_map t_map;
+typedef struct s_player t_player;
+typedef struct s_rays t_rays;
+
 typedef struct s_colour
 {
 	unsigned int	r;
 	unsigned int	g;
 	unsigned int	b;
 }	t_color;
-
-typedef struct s_game t_game;
-typedef struct s_data t_data;
-typedef struct s_map t_map;
-typedef struct s_player t_player;
-typedef struct s_rays t_rays;
 
 typedef struct s_game
 {
@@ -212,27 +212,29 @@ typedef struct s_map
 typedef struct s_player
 {
 	t_data		*data;
-	
+
 	t_img		*blob2D;		// pointer to 2D player blob image
 	int32_t		blob_inst_id;	// instance ID for 2D player blob
 	t_img		*view;
 	int			view_inst_id;
-	t_rays		**rays;	// array of rays for raycasting
-	
+	t_rays		**rays;			// array of rays for raycasting
+
 	t_map		*map;
 	t_game		*game;
 } t_player;
 
 typedef struct s_rays
 {
-	int			index;				// index of the current ray being processed
-	double		delta;		// angle of deviation +/- from the player's current direction
-	double		angle;				// absolute angle of the ray in radians
-	double		cosine;				// cosine of the angle
-	double		sine;				// sine of the angle
-	double		length;				// length of the distance traveled by the ray
-	int			hit_x;				// x coordinate of the hit point
-	int			hit_y;				// y coordinate of the hit point
+	int			index;			// index of the current ray being processed
+	double		delta;			// angle of deviation +/- from the player's current direction
+	double		angle;			// absolute angle of the ray in radians
+	double		cosine;			// cosine of the angle
+	double		sine;			// sine of the angle
+	double		length;			// length of the distance traveled by the ray
+	int			start_x;		// x coordinate of the starting point of the ray
+	int			start_y;		// y coordinate of the starting point of the ray
+	int			hit_x;			// x coordinate of the hit point
+	int			hit_y;			// y coordinate of the hit point
 } t_rays;
 
 /******************************************************************************/
@@ -298,6 +300,10 @@ void		exit_early(t_game *game, char *msg, int ret);
 // src/parsing/mini_parser
 
 void		parse_minimap(t_map *map);
+
+// src/test_printers
+void		test_print_data();
+void		test_print_rays(char c);
 void		map_array_printer(t_map *map, int flag);
 
 #endif

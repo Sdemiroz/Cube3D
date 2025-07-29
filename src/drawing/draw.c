@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/28 20:58:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 08:27:08 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void		draw_map(t_game *game);
 static void	place_block(t_img *img, int i, int j, int block_color);
 static void	draw_border(t_img *img, int	width, int height, int thickness);
 
-// static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
-// static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
+static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
+static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
 // void	draw_player_direction(t_map *map);
 void	draw_player_direction(t_player *pl, t_data *data);
@@ -48,8 +48,9 @@ void	draw_map(t_game *game)
 	}
 	draw_player_direction(game->player, data);
 	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
-	// draw_border(game->map->image, MAP_W, MAP_H, SAND_YELLOW);
-	// draw_border(game->player->blob2D, data->tile_size, data->tile_size, 1);
+	draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
+	// draw_border2(game->map->image, data->mmp_w, data->mmp_h, SAND_YELLOW, 5);
+	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
 	place_player2D_2(game, 1);
 }
 
@@ -87,6 +88,26 @@ static void	place_block(t_img *img, int x, int y, int block_color)
 		}
 	}
 }
+// static void	place_block(t_img *img, int x, int y, int block_color)
+// {
+// 	int		i;
+// 	int		j;
+// 	t_data	*data;
+
+// 	if (!block_color)
+// 		return ;
+// 	data = get_data();
+// 	j = -1;
+// 	while (++j < data->tile_size)
+// 	{
+// 		i = -1;
+// 		while (++i < data->tile_size)
+// 		{
+// 			mlx_put_pixel(img, x * data->tile_size + i,
+// 					y * data->tile_size + j, block_color);
+// 		}
+// 	}
+// }
 
 static void	draw_border(t_img *img, int width, int height, int thickness)
 {
@@ -132,31 +153,31 @@ static void	place_block2(t_img *img, int x, int y, int block_color, int bls)
 	}
 }
 
-// static void	draw_border2(t_img *img, int width, int height, int color, int bls)
-// {
-// 	int i;
-// 	int	j;
-// 	int	block_x;
-// 	int	block_y;
+static void	draw_border2(t_img *img, int width, int height, int color, int bls)
+{
+	int i;
+	int	j;
+	int	block_x;
+	int	block_y;
 
-// 	i = -1;
-// 	j = -1;
-// 	block_x = width / bls;
-// 	block_y = height / bls;
-// 	while (++j < block_y)
-// 	{
-// 		i = -1;
-// 		if (j == 0 || j == (block_y - 1))
-// 			while (++i < block_x)
-// 				place_block2(img, i, j, color, bls);
-// 		else
-// 		{
-// 			while (++i < block_x)
-// 				if (i == 0 || i == (block_x - 1))
-// 					place_block2(img, i, j, color, bls);	
-// 		}
-// 	}
-// }
+	i = -1;
+	j = -1;
+	block_x = width / bls;
+	block_y = height / bls;
+	while (++j < block_y)
+	{
+		i = -1;
+		if (j == 0 || j == (block_y - 1))
+			while (++i < block_x)
+				place_block2(img, i, j, color, bls);
+		else
+		{
+			while (++i < block_x)
+				if (i == 0 || i == (block_x - 1))
+					place_block2(img, i, j, color, bls);	
+		}
+	}
+}
 
 /*
 Function to draw the player direction as a line extending from the center of
@@ -215,7 +236,7 @@ void	draw_forward_ray(t_player *pl, t_data *data)
 	}
 }
 
-// void	draw_ray(t_rays *rays, t_data *data, int ray_index, double dist)
+// static void	draw_ray(t_player * pl, t_rays *ray)
 // {
 // 	int		center_x;
 // 	int		center_y;
@@ -223,15 +244,13 @@ void	draw_forward_ray(t_player *pl, t_data *data)
 // 	int		ix;
 // 	int		iy;
 
-// 	data->sine = sin(data->cur_dir);
-// 	data->cosine = cos(data->cur_dir);
 // 	center_x = data->pl_posx + data->tile_size / 2;
 // 	center_y = data->pl_posy + data->tile_size / 2;
 // 	distance = 0;
 // 	while (distance++ < dist)
 // 	{
-// 		ix = center_x + (int)(distance * data->cosine);	// As for image coordinates, right is still plus positive and left is still negative
-// 		iy = center_y - (int)(distance * data->sine); // As for image coordinates, up is negative/decrement and down is positive/increment
+// 		ix = center_x + (int)(distance * ray->cosine);	// As for image coordinates, right is still plus positive and left is still negative
+// 		iy = center_y - (int)(distance * ray->sine); // As for image coordinates, up is negative/decrement and down is positive/increment
 // 		mlx_put_pixel(rays->rays, ix, iy, RED);
 // 	}
 // }
