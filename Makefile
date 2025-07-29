@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/29 02:46:53 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/29 21:34:45 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,8 +66,11 @@ ifeq ($(UNAME_S), Darwin)
 		MINILIBX	+=	-L/opt/homebrew/lib
 	endif
 else ifeq ($(UNAME_S), Linux) # Need to confirm these Linux flags for Cub3D
+# 	MINILIBX	:=	-lglfw -ldl -lX11 -lpthread -lXrandr -lXinerama -lXcursor -lXi -lXxf86vm
 	MINILIBX	:=	-lglfw -ldl
+
 endif
+
 
 # Linker flags (for libft.a, libmlx42.a and the math library)
 LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR)/build -lmlx42 $(MINILIBX) -lm
@@ -155,7 +158,7 @@ $(LIBFT):
 	@make -C $(LIB_DIR)
 
 $(NAME): $(MLX) $(OBJS)
-	@$(CC) $(ALL_FLAGS) $(LIBFT) $(MLX) $(OBJS) -o $(NAME)
+	@$(CC) $(OBJS) $(ALL_FLAGS) $(LIBFT) $(MLX) -o $(NAME)
 	@if [ "$(debug)" = "yes" ]; then \
 		echo "$(GREEN)$(BOLD)Compilation successful for debugging$(NC)"; \
 	else \
