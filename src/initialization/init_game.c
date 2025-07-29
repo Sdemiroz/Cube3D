@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 08:26:28 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 17:59:19 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static void	init_game(t_game *game);
 static void	init_minimap(t_game *game, char *path_to_map);
 static void	init_player(t_game *game);
 static void	init_rays(t_player *player, t_rays **rays);
-static void	init_deltas(t_rays *ray, int num_rays, int i);
-static void	init_angles(t_rays *ray, double cur_dir);
+static void	init_ray_delta(t_rays *ray, int num_rays, int i);
+static void	init_ray_angle(t_rays *ray, double cur_dir);
+
 static void update_game_data_after_parsing(t_data *data);
 
 
@@ -150,18 +151,20 @@ static void	init_rays(t_player *pl, t_rays **rays)
 	while (++i < num_rays)
 	{
 		ray = rays[i];
-		init_deltas(ray, num_rays, i);	// Left rays -> -ve, Right rays -> +ve
-		init_angles(ray, data->cur_dir);
+		init_ray_delta(ray, num_rays, i);	// Left rays -> -ve, Right rays -> +ve
+		init_ray_angle(ray, data->cur_dir);
 		ray->cosine = cos(ray->angle);
 		ray->sine = sin(ray->angle);
-		ray->length = 5 * data->tile_size;	// Preliminary initialising value
+		ray->length = RAY_LEN_DEFAULT * data->tile_size;	// Preliminary initialising value
+		ray->start_x = &data->pl_center_x;
+		ray->start_y = &data->pl_center_y;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}
 	test_print_rays('d');	// !! extra utility, to be removed later
 }
 
-static void	init_deltas(t_rays *ray, int num_rays, int i)
+static void	init_ray_delta(t_rays *ray, int num_rays, int i)
 {
 	if (num_rays % 2 == 0)
 	{
@@ -181,16 +184,17 @@ static void	init_deltas(t_rays *ray, int num_rays, int i)
 	}	
 }
 
-static void	init_angles(t_rays *ray, double cur_dir)
+static void	init_ray_angle(t_rays *ray, double cur_dir)
 {
-	double pi2 = 2 * PI;
+	double pi2;
 	
+	pi2 = 2 * PI;
 	if (ray->delta < 0)
 		ray->angle = fmod(cur_dir - ray->delta, pi2);
 	else if (ray->delta == 0)
 		ray->angle = cur_dir;
 	else
-		ray->angle = fmod(cur_dir + 2 * PI - ray->delta, pi2);
+		ray->angle = fmod(cur_dir + pi2 - ray->delta, pi2);
 }
 
 static void update_game_data_after_parsing(t_data *data)
@@ -199,4 +203,6 @@ static void update_game_data_after_parsing(t_data *data)
 	data->sine = sin(data->cur_dir);
 	data->mmp_w = data->tiles_x * data->tile_size;
 	data->mmp_h = data->tiles_y * data->tile_size;
+	data->pl_center_x = data->pl_posx + data->tile_size / 2;
+	data->pl_center_y = data->pl_posy + data->tile_size / 2;
 }

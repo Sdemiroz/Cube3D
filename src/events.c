@@ -85,21 +85,25 @@ static void	upon_close(void *param)
 
 static void	move_player(void *param, t_key keydata)
 {
-	t_game	*game;
-	t_data	*data;
+	t_game		*game;
+	t_data		*data;
+	t_player	*pl;
 	double	move_step;
 	bool	is_running;
 
 	game = (t_game *)param;
 	data = game->data;
+	pl = game->player;
 	move_step = 3; // Define a step size for movement
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
 		move_step *= 5; // Increase step size when running
 
-	erase_previous_ray(game->player, data);
+	erase_previous_fov(pl, pl->rays);
+	erase_previous_ray(pl, data);
 	apply_movement(data, move_step, keydata);
-	draw_forward_ray(game->player, data);
+	draw_current_fov(pl, pl->rays);
+	draw_forward_ray(pl, data);
 }
 
 static void	apply_movement(t_data *data, double move_step, t_key keydata)
@@ -112,10 +116,6 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 	posx = data->pl_posx;
 	posy = data->pl_posy;
 
-	// boundx[0] = data->tile_size + data->mmp_offx;
-	// boundx[1] = boundx + data->mmp_offx - data->tile_size;
-	// boundy[0] = data->tile_size + data->mmp_offy;
-	// boundy[1] = boundy + data->mmp_offy - data->tile_size;
 	boundx[0] = data->tile_size;
 	boundx[1] = data->mmp_w - data->tile_size;
 	boundy[0] = data->tile_size;
@@ -146,23 +146,26 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 	{
 		data->pl_posx = posx;
 		data->pl_posy = posy;
+		data->pl_center_x = posx + data->tile_size / 2;
+		data->pl_center_y = posy + data->tile_size / 2;
 	}
-	printf("boundx1 = %d\t", boundx[0]);
-	printf("boundx2 = %d\n", boundx[1]);
-	printf("boundy1 = %d\t", boundy[0]);
-	printf("boundy2 = %d\n", boundy[1]);
+	// printf("boundx1 = %d\t", boundx[0]);
+	// printf("boundx2 = %d\n", boundx[1]);
+	// printf("boundy1 = %d\t", boundy[0]);
+	// printf("boundy2 = %d\n", boundy[1]);
 }
 
 static void turn_player(void *param, t_key keydata)
 {
-	t_game	*game;
-	t_data	*data;
+	t_game		*game;
+	t_data		*data;
+	t_player	*pl;
 	float	rotation;
 	bool	fast;
 
 	game = (t_game *)param;
 	data = game->data;
-	rotation = (2 * PI / 360) * 5;	// Rotation in radians equivalent to 5 degrees
+	rotation = PI / 36;	// Rotation in radians equivalent to 5 degrees
 
 	fast = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (fast)
@@ -174,4 +177,5 @@ static void turn_player(void *param, t_key keydata)
 		data->cur_dir -= rotation;
 
 	draw_player_direction(game->player, data);
+	// redraw_fov(pl, pl->rays);
 }

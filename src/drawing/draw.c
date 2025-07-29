@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 08:27:08 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 18:32:29 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,24 @@ void	draw_player_direction(t_player *pl, t_data *data);
 void	erase_previous_ray(t_player *pl, t_data *data);
 void	draw_forward_ray(t_player *pl, t_data *data);
 
+void	redraw_fov(t_player *pl, t_rays **rays);
+void	draw_ray(t_player * pl, t_rays *ray);
+void	erase_ray(t_player * pl, t_rays *ray);
+void	update_ray_attr(t_rays *ray, double cur_dir);
+
+void	erase_previous_fov(t_player *pl, t_rays **rays);
+void	draw_current_fov(t_player *pl, t_rays **rays);
+
 void	draw_map(t_game *game)
 {
-	t_data	*data;
-	char	**map;
-	int		i;
-	int		j;
+	t_data		*data;
+	t_player	*pl;
+	char		**map;
+	int			i;
+	int			j;
 
 	data = game->data;
+	pl = game->player;
 	map = game->map->map_array;
 	i = -1;
 	while (map[++i])
@@ -46,12 +56,13 @@ void	draw_map(t_game *game)
 				place_block(game->map->image, i, j, 0);
 		}
 	}
-	draw_player_direction(game->player, data);
 	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
-	draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
+	// draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
 	// draw_border2(game->map->image, data->mmp_w, data->mmp_h, SAND_YELLOW, 5);
 	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
+	draw_current_fov(pl, pl->rays);
 	place_player2D_2(game, 1);
+	draw_player_direction(game->player, data);
 }
 
 /*
@@ -204,8 +215,8 @@ void	erase_previous_ray(t_player *pl, t_data *data)
 	int		ix;
 	int		iy;
 
-	center_x = data->pl_posx + data->tile_size / 2;
-	center_y = data->pl_posy + data->tile_size / 2;
+	center_x = data->pl_center_x;
+	center_y = data->pl_center_y;
 	distance = 0;
 	while (distance++ < 8)
 	{
@@ -225,8 +236,8 @@ void	draw_forward_ray(t_player *pl, t_data *data)
 
 	data->sine = sin(data->cur_dir);
 	data->cosine = cos(data->cur_dir);
-	center_x = data->pl_posx + data->tile_size / 2;
-	center_y = data->pl_posy + data->tile_size / 2;
+	center_x = data->pl_center_x;
+	center_y = data->pl_center_y;
 	distance = 0;
 	while (distance++ < 8)
 	{
@@ -236,21 +247,112 @@ void	draw_forward_ray(t_player *pl, t_data *data)
 	}
 }
 
-// static void	draw_ray(t_player * pl, t_rays *ray)
-// {
-// 	int		center_x;
-// 	int		center_y;
-// 	double	distance;
-// 	int		ix;
-// 	int		iy;
+/*
+Function to erase and redraw the whole fov
+	- for a streamlined erasure and redrawing of all fov rays in a single loop
+	- called from turn_player
+*/
+void	redraw_fov(t_player *pl, t_rays **rays)
+{
+	t_data	*data;
+	t_rays	*ray;
+	int		num_rays;
+	int		i;
 
-// 	center_x = data->pl_posx + data->tile_size / 2;
-// 	center_y = data->pl_posy + data->tile_size / 2;
-// 	distance = 0;
-// 	while (distance++ < dist)
-// 	{
-// 		ix = center_x + (int)(distance * ray->cosine);	// As for image coordinates, right is still plus positive and left is still negative
-// 		iy = center_y - (int)(distance * ray->sine); // As for image coordinates, up is negative/decrement and down is positive/increment
-// 		mlx_put_pixel(rays->rays, ix, iy, RED);
-// 	}
-// }
+	data = get_data();
+	num_rays = data->num_rays;
+	printf("Seg_faulting here\n");
+	i = -1;
+	while (++i < num_rays)
+	{
+		ray = rays[i];
+		if (!data || !pl || !rays || !ray)
+			printf("NULL pointer here\n");
+		if (data->prev_dir != data->cur_dir)
+		{
+			erase_ray(pl, ray);
+			update_ray_attr(ray, data->cur_dir);
+		}
+		draw_ray(pl, ray);
+	}
+}
+
+/*
+Function to draw the whole fov rays
+	- Utilizes draw_ray in a loop to achieve this
+*/
+void	draw_current_fov(t_player *pl, t_rays **rays)
+{
+	t_data	*data;
+	int		num_rays;
+	int		i;
+	
+	data = get_data();
+	num_rays = data->num_rays;
+	i = -1;
+	while (++i < num_rays)
+		draw_ray(pl, rays[i]);
+}
+
+
+void	draw_ray(t_player * pl, t_rays *ray)
+{
+	int	i;
+	int	ix;
+	int	iy;
+
+	i = -1;
+	while (++i < ray->length)
+	{
+		ix = *ray->start_x + (int)(i * ray->cosine);
+		iy = *ray->start_y - (int)(i * ray->sine);
+		mlx_put_pixel(pl->view, ix, iy, DEBUG_GREEN2);
+	}
+}
+
+/*
+Function to erase the whole fov rays previously drawn
+	- Utilizes erase_ray in a loop to achieve this
+*/
+void	erase_previous_fov(t_player *pl, t_rays **rays)
+{
+	t_data	*data;
+	int		num_rays;
+	int		i;
+	
+	data = get_data();
+	num_rays = data->num_rays;
+	i = -1;
+	while (++i < num_rays)
+		erase_ray(pl, rays[i]);
+}
+
+void	erase_ray(t_player * pl, t_rays *ray)
+{
+	int	i;
+	int	ix;
+	int	iy;
+
+	i = -1;
+	while (++i < ray->length)
+	{
+		ix = *ray->start_x + (int)(i * ray->cosine);
+		iy = *ray->start_y - (int)(i * ray->sine);
+		mlx_put_pixel(pl->view, ix, iy, RESET);
+	}
+}
+
+void	update_ray_attr(t_rays *ray, double cur_dir)
+{
+	double pi2;
+
+	pi2 = 2 * PI;
+	if (ray->delta < 0)
+		ray->angle = fmod(cur_dir - ray->delta, pi2);
+	else if (ray->delta == 0)
+		ray->angle = cur_dir;
+	else
+		ray->angle = fmod(cur_dir + pi2 - ray->delta, pi2);
+	ray->cosine = cos(ray->angle);
+	ray->sine = sin(ray->angle);
+}

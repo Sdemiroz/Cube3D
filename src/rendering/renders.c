@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 08:17:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 18:14:43 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	init_graphics_rendering(void *param)
 
 	render_3dview(game);
 	render_minimap(game, map);
-	render_player_blob(game, pl);
 	render_player_2dview(game, pl);
+	render_player_blob(game, pl);
 }
 
 static void render_3dview(t_game *game)
@@ -91,8 +91,6 @@ static void render_player_2dview(t_game *game, t_player *pl)
 	
 	if (pl->view_inst_id == -1)
 	{
-		printf("here it is\n");
-		
 		pl->view_inst_id = mlx_image_to_window(game->mlx, pl->view,
 			data->mmp_offx, data->mmp_offy);
 		if (pl->view_inst_id < 0)

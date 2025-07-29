@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 08:15:58 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 17:47:00 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ t_data	*get_data(void)
 			data->pl_dia = PLAYER_DIA;
 			data->pl_posx = START_PX;
 			data->pl_posy = START_PY;
+			data->pl_center_x = START_PX + TILE_SIZE / 2;
+			data->pl_center_y = START_PY + TILE_SIZE / 2;
 			data->fov = FOV;
 			data->num_rays = NUM_RAYS;
 			data->ini_dir = 'N';

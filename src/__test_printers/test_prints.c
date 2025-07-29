@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 02:20:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 06:50:58 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/29 17:52:30 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	test_print_rays(char c)
 			printf("  Cosine: %.4f\n", rays[i]->cosine);
 			printf("  Sine: %.4f\n", rays[i]->sine);
 			printf("  Length: %.4f\n", rays[i]->length);
+			printf("  Start X: %d\n", *rays[i]->start_x);
+			printf("  Start Y: %d\n", *rays[i]->start_y);
 			printf("  Hit X: %d\n", rays[i]->hit_x);
 			printf("  Hit Y: %d\n", rays[i]->hit_y);
 		}
@@ -88,6 +90,8 @@ void	test_print_rays(char c)
 			printf("  Cosine: %.4f\n", rays[i]->cosine);
 			printf("  Sine: %.4f\n", rays[i]->sine);
 			printf("  Length: %.4f\n", rays[i]->length);
+			printf("  Start X: %d\n", *rays[i]->start_x);
+			printf("  Start Y: %d\n", *rays[i]->start_y);
 			printf("  Hit X: %d\n", rays[i]->hit_x);
 			printf("  Hit Y: %d\n", rays[i]->hit_y);
 		}
