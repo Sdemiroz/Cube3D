@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 21:03:56 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 19:57:27 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	
 	test_print_data();			// !! extra utility, to be removed later
 	
-	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
+	// map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
+	map->image = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
 
@@ -197,12 +198,19 @@ static void	init_ray_angle(t_rays *ray)
 	ray_delta = ray->delta;
 	cur_dir = *ray->cur_dir;
 	pi2 = 2 * PI;
-	if (ray->delta < 0)
-		ray->angle = fmod(cur_dir - ray_delta, pi2);
-	else if (ray_delta == 0)
-		ray->angle = cur_dir;
-	else
-		ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
+	ray->angle = cur_dir - ray_delta;
+
+	if (ray->angle < 0)
+		ray->angle += pi2; // Normalize to [0, 2*PI]
+	else if (ray->angle >= pi2)
+		ray->angle -= pi2; // Normalize to [0, 2*PI]
+	
+	// if (ray->delta < 0)
+	// 	ray->angle = fmod(cur_dir - ray_delta, pi2);
+	// else if (ray_delta == 0)
+	// 	ray->angle = cur_dir;
+	// else
+	// 	ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
 }
 
 // Update function to update data fields not done by the parser

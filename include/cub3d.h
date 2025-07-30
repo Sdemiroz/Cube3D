@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 21:46:40 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 19:20:29 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
 # define NUM_RAYS 60
-# define RAY_LEN_DEFAULT 2		// This number multiple of tile_size
+# define RAY_LEN_DEFAULT 6		// This number multiple of tile_size
 
 
 // Mini-Map Constants
@@ -239,9 +239,9 @@ typedef struct s_rays
 	double		sine;			// sine of the angle
 	int			*start_x;		// x coordinate of the starting point of the ray
 	int			*start_y;		// y coordinate of the starting point of the ray
-	double		length;			// length of the distance traveled by the ray
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
+	double		length;			// length of the distance traveled by the ray
 } t_rays;
 
 /******************************************************************************/
@@ -282,7 +282,8 @@ void		allocate_map_array(t_game *game, char *line);
 // src/drawing
 
 void		draw_map(t_game *game);
-void		place_player2D_2(t_game *game, int method);
+
+void		place_player2D_2(t_game *game);
 
 void		draw_player_direction(t_player *pl, t_data *data);
 void		erase_previous_ray(t_player *pl, t_data *data);
@@ -290,11 +291,11 @@ void		draw_forward_ray(t_player *pl, t_data *data);
 
 void		redraw_fov(t_player *pl, t_rays **rays);
 void		draw_ray(t_player * pl, t_rays *ray);
-void		erase_ray(t_player * pl, t_rays *ray);
 void		update_ray_attr(t_rays *ray);
-void		update_ray_attr_all(t_rays **rays);
+void		erase_ray(t_player * pl, t_rays *ray);
 
 void		erase_previous_fov(t_player *pl, t_rays **rays);
+void		update_ray_attr_all(t_rays **rays);
 void		draw_current_fov(t_player *pl, t_rays **rays);
 
 // src/rendering

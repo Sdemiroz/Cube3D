@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 02:20:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 17:52:30 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 00:53:34 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,16 @@ void	test_print_rays(char c)
 		{
 			printf("Ray %d:\n", i);
 			printf("  Delta: %.4f\n", rays[i]->delta);
+			printf("  Prev Dir: %.4f\n", *rays[i]->prev_dir);
+			printf("  Cur Dir: %.4f\n", *rays[i]->cur_dir);
 			printf("  Angle: %.4f\n", rays[i]->angle);
 			printf("  Cosine: %.4f\n", rays[i]->cosine);
 			printf("  Sine: %.4f\n", rays[i]->sine);
-			printf("  Length: %.4f\n", rays[i]->length);
 			printf("  Start X: %d\n", *rays[i]->start_x);
 			printf("  Start Y: %d\n", *rays[i]->start_y);
 			printf("  Hit X: %d\n", rays[i]->hit_x);
 			printf("  Hit Y: %d\n", rays[i]->hit_y);
+			printf("  Length: %.4f\n", rays[i]->length);
 		}
 	}
 	else if (c == 'd') // print angles in degrees
@@ -86,14 +88,16 @@ void	test_print_rays(char c)
 		{
 			printf("Ray %d:\n", i);
 			printf("  Delta: %.4f\n", rays[i]->delta * (180 / PI));
-			printf("  Angle: %.4f\n", rays[i]->angle * (180 / PI));
+			printf("  Prev Dir: %.4f\n", *rays[i]->prev_dir * (180 / PI));
+			printf("  Cur Dir: %.4f\n", *rays[i]->cur_dir * (180 / PI));
+			printf("  Angle: \033[0;31m%.4f\n\033[0m", rays[i]->angle * (180 / PI));
 			printf("  Cosine: %.4f\n", rays[i]->cosine);
 			printf("  Sine: %.4f\n", rays[i]->sine);
-			printf("  Length: %.4f\n", rays[i]->length);
 			printf("  Start X: %d\n", *rays[i]->start_x);
 			printf("  Start Y: %d\n", *rays[i]->start_y);
 			printf("  Hit X: %d\n", rays[i]->hit_x);
 			printf("  Hit Y: %d\n", rays[i]->hit_y);
+			printf("  Length: %.4f\n", rays[i]->length);
 		}
 	}
 	else

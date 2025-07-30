@@ -88,8 +88,8 @@ static void	move_player(void *param, t_key keydata)
 	t_game		*game;
 	t_data		*data;
 	t_player	*pl;
-	double	move_step;
-	bool	is_running;
+	double		move_step;
+	bool		is_running;
 
 	game = (t_game *)param;
 	data = game->data;
@@ -160,7 +160,7 @@ static void turn_player(void *param, t_key keydata)
 	t_game		*game;
 	t_data		*data;
 	t_player	*pl;
-	float		rotation;
+	double		rotation;
 	bool		fast;
 
 	game = (t_game *)param;
@@ -172,19 +172,25 @@ static void turn_player(void *param, t_key keydata)
 	if (fast)
 		rotation *= 4;	 // Increase rotation speed when shift is pressed
 
-	// if (keydata.key == MLX_KEY_LEFT)
-	// 	data->cur_dir += rotation;
-	// else if (keydata.key == MLX_KEY_RIGHT)
-	// 	data->cur_dir -= rotation;
+	// data->prev_dir = data->cur_dir;
 	if (keydata.key == MLX_KEY_LEFT)
 		data->cur_dir += rotation;
 	else if (keydata.key == MLX_KEY_RIGHT)
 		data->cur_dir -= rotation;
 
-	data->cur_dir = fmod((data->cur_dir + 2 * PI), 2 * PI);
+	if (data->cur_dir < 0)
+		data->cur_dir += 2 * PI; // Normalize to [0, 2*PI]
+	else if (data->cur_dir >= 2 * PI)
+		data->cur_dir -= 2 * PI; // Normalize to [0, 2*PI]
+	
 	// redraw_fov(pl, pl->rays);
+	
 	erase_previous_fov(pl, pl->rays);
 	update_ray_attr_all(pl->rays);
 	draw_current_fov(pl, pl->rays);
+	
 	draw_player_direction(game->player, data);
+	
+	// test_print_rays('d');
+	// test_print_data();
 }

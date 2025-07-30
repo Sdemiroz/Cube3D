@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/29 20:00:10 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/30 20:08:28 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,11 @@
  - The player direction drawn at the moment should be executed as a pointer to
    the struct rays and drawn in a similar way to the way other rays will be drawn,
    using a single consistent function
+ - The boundary variables in the move_player() fn from events.c can be created as
+   additional fields to avoid extra calculations in every loop step. Since the
+   bounds as their current state are made up of other fields in the data struct
+   that don't change, precalculating them can save a good amount of processing
+   overhead as it builds up from the events listening at 60 fps or so.
  - 
 
  
