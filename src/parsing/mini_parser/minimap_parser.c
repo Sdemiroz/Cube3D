@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap_parser.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 20:00:15 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 21:36:25 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 20:40:20 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	parse_minimap(t_map *map);
 
 static void	write_to_map_array(t_map *map, char ***geo, char *nxtline);
-static void	assign_direction(t_map *map, char player_dir);
+// static void	assign_direction(t_map *map, char player_dir);
 
 
 void	parse_minimap(t_map *map)
@@ -49,7 +49,7 @@ static void	write_to_map_array(t_map *map, char ***geo, char *nxtline)
 	int		i;
 	int		j;
 	char	**geometry;
-	
+
 	geometry = *geo;
 	i = -1;
 	while (++i < map->data->tiles_y)
@@ -65,7 +65,7 @@ static void	write_to_map_array(t_map *map, char ***geo, char *nxtline)
 					printf("test\n");
 					map->data->pl_posx = j * map->data->tile_size;
 					map->data->pl_posy = i * map->data->tile_size;
-					assign_direction(map, nxtline[j]);
+					// assign_direction(map, nxtline[j]);
 				}
 			}
 		}
@@ -77,7 +77,7 @@ static void	write_to_map_array(t_map *map, char ***geo, char *nxtline)
 static void	assign_direction(t_map *map, char player_dir)
 {
 	t_data	*data;
-	
+
 	data = map->data;
 	data->ini_dir = player_dir;
 	if (player_dir == 'E')

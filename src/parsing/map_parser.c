@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 02:50:00 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/07/30 01:55:03 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void	check_file_type(t_game *game, char *map_name);
 static void	read_and_parse_map(t_game *game);
 static void	parse_key_data(t_game *game, char *line);
 static int	get_key_index(char *line);
-
 
 static int	get_key_index(char *line)
 {
@@ -39,10 +38,10 @@ static int	get_key_index(char *line)
 
 static void	parse_key_data(t_game *game, char *line)
 {
-	static int checker[KEY_COUNT];
-	int key;
+	static int	checker[KEY_COUNT];
+	int			key;
 
-	if (line[0] == '\n')
+	if (empty_line(line))
 		return ;
 	key = get_key_index(line);
 	// if (checker[key] || key == -1)
@@ -66,7 +65,7 @@ static void	parse_key_data(t_game *game, char *line)
 		identify_rgb(game, line, &(game->ceiling_color));
 }
 
-static void		read_and_parse_map(t_game *game)
+static void	read_and_parse_map(t_game *game)
 {
 	int		cur_state;
 	char	*cur_line;
@@ -81,9 +80,9 @@ static void		read_and_parse_map(t_game *game)
 		{
 			parse_key_data(game, cur_line);
 			if (check_key_data_completion(game))
-					cur_state = WAITING_FOR_MAP;
+				cur_state = WAITING_FOR_MAP;
 		}
-		else if (cur_state == WAITING_FOR_MAP && cur_line[0] == '\n')
+		else if (cur_state == WAITING_FOR_MAP && empty_line(cur_line))
 			;
 		else
 		{
@@ -95,7 +94,7 @@ static void		read_and_parse_map(t_game *game)
 	}
 }
 
-static void		check_file_type(t_game *game, char *map_name)
+static void	check_file_type(t_game *game, char *map_name)
 {
 	char	*str;
 
@@ -110,11 +109,12 @@ void	parse_game_data(t_game *game, char *map_name)
 {
 	check_file_type(game, map_name);
 	game->map->fd = open(map_name, O_RDONLY);
-	if(game->map->fd < 0)
+	if (game->map->fd < 0)
 		exit_early(game, "Error opening file", 1);
 	read_and_parse_map(game);
 	gc_add_local(game->map->map_array);
 	close(game->map->fd);
 	pad_shorter_lines(game);
 	check_map(game);
+	assign_direction(game->map, game->map->map_array[game->data->pl_arr_y][game->data->pl_arr_x]);
 }

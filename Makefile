@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 19:13:54 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/30 20:37:29 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,8 +66,11 @@ ifeq ($(UNAME_S), Darwin)
 		MINILIBX	+=	-L/opt/homebrew/lib
 	endif
 else ifeq ($(UNAME_S), Linux) # Need to confirm these Linux flags for Cub3D
+# 	MINILIBX	:=	-lglfw -ldl -lX11 -lpthread -lXrandr -lXinerama -lXcursor -lXi -lXxf86vm
 	MINILIBX	:=	-lglfw -ldl
+
 endif
+
 
 # Linker flags (for libft.a, libmlx42.a and the math library)
 LDFLAGS			:=	-L$(LIB_DIR) -lft -L$(MLX_DIR)/build -lmlx42 $(MINILIBX) -lm
@@ -95,7 +98,7 @@ vpath %.c $(SRC_DIRS)
 SRCS	:=	main.c start.c events.c \
 			$(A)/spawn.c $(A)/init_game.c $(A)/handle_input.c \
 			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
-			$(B1)/minimap_parser.c \
+			$(B)/expand_tabs.c $(B1)/minimap_parser.c \
 			$(C)/draw_circle.c $(C)/draw.c $(C)/rays.c \
 			$(D)/renders.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
@@ -155,7 +158,7 @@ $(LIBFT):
 	@make -C $(LIB_DIR)
 
 $(NAME): $(MLX) $(OBJS)
-	@$(CC) $(ALL_FLAGS) $(LIBFT) $(MLX) $(OBJS) -o $(NAME)
+	@$(CC) $(OBJS) $(ALL_FLAGS) $(LIBFT) $(MLX) -o $(NAME)
 	@if [ "$(debug)" = "yes" ]; then \
 		echo "$(GREEN)$(BOLD)Compilation successful for debugging$(NC)"; \
 	else \
