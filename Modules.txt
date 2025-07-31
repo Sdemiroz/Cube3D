@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Modules.txt                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 20:08:28 by pamatya          ###   ########.fr        #
+#    Updated: 2025/07/31 22:40:17 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-1. Necessary coordinations between parsing and rendering - 
- - 
+1. Necessary coordinations between parsing and rendering -
+ -
 
 
 2. Gameplay elements
@@ -30,7 +30,7 @@
  - There is this issue for images in the player struct (both imgs), that when the
    drawing goes out of bounds it tends to wrap around the image and continues to
    be drawn on the other side
- - 
+ -
 
 
 3. Project progress and game elements
@@ -45,11 +45,11 @@
 
 4. Parsing issues
  - The check_key_data_completion() fn needs to be restored after texture initialization
- - Parser needs to check for other types of spaces in map
- - Parser needs to add extra padding for tabs and other types of spaces if necessary
- - The direction that the player is facing is not linked by the parser
+ ! Parser needs to check for other types of spaces in map
+ ! Parser needs to add extra padding for tabs and other types of spaces if necessary
+ ! The direction that the player is facing is not linked by the parser
  - Color rgb's need to be checked (also if only uint8 is required)
- - 
+ -
 
 
 5. Optimizations
@@ -64,6 +64,4 @@
    bounds as their current state are made up of other fields in the data struct
    that don't change, precalculating them can save a good amount of processing
    overhead as it builds up from the events listening at 60 fps or so.
- - 
-
- 
+ -
