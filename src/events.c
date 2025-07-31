@@ -18,9 +18,9 @@ static void	upon_press(t_key keydata, void *param);
 // static void	upon_scroll(double xdelta, double ydelta, void *param);
 static void	upon_close(void *param);
 
-static void	move_player(void *param, t_key keydata);
+static void	move_player(t_game *game, t_key keydata);
 static void	apply_movement(t_data *data, double move_step, t_key keydata);
-static void turn_player(void *param, t_key keydata);
+static void turn_player(t_game *game, t_key keydata);
 
 static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
@@ -50,12 +50,12 @@ static void	upon_press(t_key keydata, void *param)
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
 			(keydata.key == MLX_KEY_D &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
-		move_player(param, keydata);
+		move_player(game, keydata);
 	else if ((keydata.key == MLX_KEY_LEFT &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 			|| (keydata.key == MLX_KEY_RIGHT &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
-		turn_player(param, keydata);
+		turn_player(game, keydata);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -83,15 +83,13 @@ static void	upon_close(void *param)
 	exit_early(game, NULL, EXIT_SUCCESS);
 }
 
-static void	move_player(void *param, t_key keydata)
+static void	move_player(t_game *game, t_key keydata)
 {
-	t_game		*game;
 	t_data		*data;
 	t_player	*pl;
 	double		move_step;
 	bool		is_running;
 
-	game = (t_game *)param;
 	data = game->data;
 	pl = game->player;
 	move_step = 3; // Define a step size for movement
@@ -155,15 +153,13 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 	// printf("boundy2 = %d\n", boundy[1]);
 }
 
-static void turn_player(void *param, t_key keydata)
+static void turn_player(t_game *game, t_key keydata)
 {
-	t_game		*game;
 	t_data		*data;
 	t_player	*pl;
 	double		rotation;
 	bool		fast;
 
-	game = (t_game *)param;
 	data = game->data;
 	pl = game->player;
 	rotation = PI / 36;	// Rotation in radians equivalent to 5 degrees
