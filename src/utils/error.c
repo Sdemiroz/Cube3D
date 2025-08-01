@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/01 03:42:41 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/01 05:28:24 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ static void	clear_mlx(t_game *game)
 
 	if (game->mlx)	// still experimental
 	{
-		// if (game->background)
-		// 	mlx_delete_image(game->mlx, game->background);
+		if (game->background)
+			mlx_delete_image(game->mlx, game->background);
 		if (game->img3D)
 			mlx_delete_image(game->mlx, game->img3D);
 		mlx_close_window(game->mlx);	// close a window if it is open to free the resources, mlx instance stays allocated
