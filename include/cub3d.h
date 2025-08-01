@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 23:19:07 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/01 03:42:41 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ typedef struct s_game
 	t_data		*data;			// for dynamic scaling and dimensioning
 
 	mlx_t		*mlx;			// for window and mlx context
+	// t_img		*background;	// background image with ceiling and floor colors
+	// int32_t		background_inst_id;	// instance ID for background image
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
 	// t_img		*gun3D;			// gun image to be used in 3D view
@@ -258,6 +260,7 @@ t_player	*get_player(void);
 t_rays		**get_rays(void);
 
 void		init_game_elements(t_game *game, char *arg);
+// void		init_background(t_game *game);
 
 void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
 	char *prefix);
