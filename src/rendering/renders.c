@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 18:14:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/01 18:14:03 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void		init_graphics_rendering(void *param);
 
-static void render_3dview(t_game *game);
-static void render_minimap(t_game *game, t_map *map);
+static void inline render_3dview(t_game *game);
+static void inline render_minimap(t_game *game, t_map *map);
 static void	render_player_blob(t_game *game, t_player *pl);
-static void render_player_2dview(t_game *game, t_player *pl);
+static void inline render_player_2dview(t_game *game, t_player *pl);
 
 void	init_graphics_rendering(void *param)
 {
@@ -36,7 +36,7 @@ void	init_graphics_rendering(void *param)
 	render_player_blob(game, pl);
 }
 
-static void render_3dview(t_game *game)
+static void inline render_3dview(t_game *game)
 {
 	if (game->img3D_inst_id == -1)
 	{
@@ -47,7 +47,7 @@ static void render_3dview(t_game *game)
 	}
 }
 
-static void render_minimap(t_game *game, t_map *map)
+static void inline render_minimap(t_game *game, t_map *map)
 {
 	t_data	*data;
 
@@ -83,7 +83,7 @@ static void	render_player_blob(t_game *game, t_player *pl)
 	}
 }
 
-static void render_player_2dview(t_game *game, t_player *pl)
+static void inline render_player_2dview(t_game *game, t_player *pl)
 {
 	t_data	*data;
 

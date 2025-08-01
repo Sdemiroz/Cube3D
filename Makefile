@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
+#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 20:37:29 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/08/01 17:46:03 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

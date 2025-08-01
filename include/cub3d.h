@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/30 20:40:03 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/01 20:43:41 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@
 # define START_PX 500
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
-# define NUM_RAYS 60
+# define NUM_RAYS 61
 # define RAY_LEN_DEFAULT 6		// This number multiple of tile_size
 
 
@@ -201,6 +201,7 @@ typedef struct s_data
 	int	 	tile_size;		// size of each tile/block in the overview map
 	int		tiles_x;
 	int		tiles_y;
+	bool	fov_toggle;
 } t_data;
 
 typedef struct s_map
@@ -286,13 +287,13 @@ void		allocate_map_array(t_game *game, char *line);
 
 // src/drawing
 
-void		draw_map(t_game *game);
+void		start_drawing(t_game *game);
 
 void		place_player2D_2(t_game *game);
 
 void		draw_player_direction(t_player *pl, t_data *data);
-void		erase_previous_ray(t_player *pl, t_data *data);
-void		draw_forward_ray(t_player *pl, t_data *data);
+void		erase_prev_direction(t_player *pl, t_data *data);
+void		draw_cur_direction(t_player *pl, t_data *data);
 
 void		redraw_fov(t_player *pl, t_rays **rays);
 void		draw_ray(t_player * pl, t_rays *ray);

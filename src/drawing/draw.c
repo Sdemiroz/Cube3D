@@ -6,13 +6,15 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/30 19:17:07 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/01 20:47:51 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void		draw_map(t_game *game);
+void		start_drawing(t_game *game);
+
+static void	draw_minimap(t_game *game, char **map);
 
 static void	place_block(t_img *img, int i, int j, int block_color);
 static void	draw_border(t_img *img, int	width, int height, int thickness);
@@ -20,7 +22,7 @@ static void	draw_border(t_img *img, int	width, int height, int thickness);
 static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
 static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
-void	draw_map(t_game *game)
+void	start_drawing(t_game *game)
 {
 	t_data		*data;
 	t_player	*pl;
@@ -31,6 +33,35 @@ void	draw_map(t_game *game)
 	data = game->data;
 	pl = game->player;
 	map = game->map->map_array;
+	// i = -1;
+	// while (map[++i])
+	// {
+	// 	j = -1;
+	// 	while (map[i][++j])
+	// 	{
+	// 		if (map[i][j] == '1')
+	// 			place_block(game->map->image, j, i, STONE_GRAY);
+	// 		else if (map[i][j] == '0' || is_valid(map[i][j]))
+	// 			place_block(game->map->image, i, j, 0);
+	// 	}
+	// }
+	draw_minimap(game, map);
+	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
+	// draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
+	// draw_border2(game->map->image, data->mmp_w, data->mmp_h, SAND_YELLOW, 5);
+	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
+	draw_current_fov(pl, pl->rays);
+	place_player2D_2(game);
+	draw_player_direction(game->player, data);
+}
+
+static void	draw_minimap(t_game *game, char **map)
+{
+	t_data		*data;
+	int			i;
+	int			j;
+
+	data = game->data;
 	i = -1;
 	while (map[++i])
 	{
@@ -43,13 +74,6 @@ void	draw_map(t_game *game)
 				place_block(game->map->image, i, j, 0);
 		}
 	}
-	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
-	// draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
-	// draw_border2(game->map->image, data->mmp_w, data->mmp_h, SAND_YELLOW, 5);
-	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
-	draw_current_fov(pl, pl->rays);
-	place_player2D_2(game);
-	draw_player_direction(game->player, data);
 }
 
 /*

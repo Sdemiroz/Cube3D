@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/29 17:47:00 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/01 20:04:21 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static void	initialize_map_data(t_data *data)
 	data->tile_size = TILE_SIZE;
 	data->tiles_x = 0;
 	data->tiles_y = 0;
+	data->fov_toggle = true;
 }
 
 // static void	initialize_map_data(t_data *data)

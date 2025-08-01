@@ -22,6 +22,8 @@ static void	move_player(t_game *game, t_key keydata);
 static void	apply_movement(t_data *data, double move_step, t_key keydata);
 static void turn_player(t_game *game, t_key keydata);
 
+static void	toggle_fov(t_game *game, t_key keydata);
+
 static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
 void	init_events(void *param)
@@ -56,6 +58,8 @@ static void	upon_press(t_key keydata, void *param)
 			|| (keydata.key == MLX_KEY_RIGHT &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
 		turn_player(game, keydata);
+	else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
+		toggle_fov(game, keydata);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -97,11 +101,11 @@ static void	move_player(t_game *game, t_key keydata)
 	if (is_running)
 		move_step *= 5; // Increase step size when running
 
-	erase_previous_ray(pl, data);
+	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
 	apply_movement(data, move_step, keydata);
 	draw_current_fov(pl, pl->rays);
-	draw_forward_ray(pl, data);
+	draw_cur_direction(pl, data);
 }
 
 static void	apply_movement(t_data *data, double move_step, t_key keydata)
@@ -168,7 +172,7 @@ static void turn_player(t_game *game, t_key keydata)
 	if (fast)
 		rotation *= 4;	 // Increase rotation speed when shift is pressed
 
-	// data->prev_dir = data->cur_dir;
+	data->prev_dir = data->cur_dir;
 	if (keydata.key == MLX_KEY_LEFT)
 		data->cur_dir += rotation;
 	else if (keydata.key == MLX_KEY_RIGHT)
@@ -184,9 +188,31 @@ static void turn_player(t_game *game, t_key keydata)
 	erase_previous_fov(pl, pl->rays);
 	update_ray_attr_all(pl->rays);
 	draw_current_fov(pl, pl->rays);
-	
+
 	draw_player_direction(game->player, data);
-	
 	// test_print_rays('d');
 	// test_print_data();
+}
+
+static void	toggle_fov(t_game *game, t_key keydata)
+{
+	t_data		*data;
+	t_player	*pl;
+	t_rays		**rays;
+
+	data = game->data;
+	pl = game->player;
+	rays = pl->rays;
+	if (data->fov_toggle == true)
+	{
+		erase_previous_fov(pl, rays);
+		data->fov_toggle = false;
+	}
+	else if (data->fov_toggle == false)
+	{
+		data->fov_toggle = true;
+		draw_current_fov(pl, rays);
+	}
+	// Redraw direction line to restore any pixels erased by FOV toggle
+	draw_cur_direction(pl, data);
 }

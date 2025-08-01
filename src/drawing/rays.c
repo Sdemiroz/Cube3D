@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_single.c                                       :+:      :+:    :+:   */
+/*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:51:11 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/30 19:13:16 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/01 20:31:02 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 // void	draw_player_direction(t_map *map);
 void	draw_player_direction(t_player *pl, t_data *data);
-void	erase_previous_ray(t_player *pl, t_data *data);
-void	draw_forward_ray(t_player *pl, t_data *data);
+void	erase_prev_direction(t_player *pl, t_data *data);
+void	draw_cur_direction(t_player *pl, t_data *data);
 
 void	erase_ray(t_player * pl, t_rays *ray);
 void	update_ray_attr(t_rays *ray);
@@ -33,12 +33,12 @@ void	draw_player_direction(t_player *pl, t_data *data)
 
 	view = pl->view;
 	if (data->prev_dir != data->cur_dir)
-		erase_previous_ray(pl, data);
+		erase_prev_direction(pl, data);
 	// data->prev_dir = data->cur_dir;
-	draw_forward_ray(pl, data);
+	draw_cur_direction(pl, data);
 }
 
-void	erase_previous_ray(t_player *pl, t_data *data)
+void	erase_prev_direction(t_player *pl, t_data *data)
 {
 	int		center_x;
 	int		center_y;
@@ -57,7 +57,7 @@ void	erase_previous_ray(t_player *pl, t_data *data)
 	}
 }
 
-void	draw_forward_ray(t_player *pl, t_data *data)
+void	draw_cur_direction(t_player *pl, t_data *data)
 {
 	int		center_x;
 	int		center_y;
@@ -167,6 +167,8 @@ void	erase_previous_fov(t_player *pl, t_rays **rays)
 	int		num_rays;
 	int		i;
 	
+	if (pl->data->fov_toggle == false)
+		return ;
 	num_rays = pl->data->num_rays;
 	i = -1;
 	while (++i < num_rays)
@@ -182,6 +184,8 @@ void	draw_current_fov(t_player *pl, t_rays **rays)
 	int		num_rays;
 	int		i;
 	
+	if (pl->data->fov_toggle == false)
+		return ;
 	num_rays = pl->data->num_rays;
 	i = -1;
 	while (++i < num_rays)
