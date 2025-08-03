@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/29 23:19:23 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/01 06:19:33 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,13 +200,13 @@ void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 		exit_early(game, "Error, allocating texture path", 1);
 	}
 	ft_strlcpy(texture_path, line + start, end - start + 1);
-	// *txr = mlx_load_png(texture_path);
-	// if (!(*txr))
-	// {
-	// 	free(texture_path);
-	// 	free(line);
-	// 	exit_early(game, "Error loading texture", 1);
-	// }
+	*txr = mlx_load_png(texture_path);
+	if (!(*txr))
+	{
+		free(texture_path);
+		free(line);
+		exit_early(game, "Error loading texture", 1);
+	}
 
 	free(texture_path);
 }

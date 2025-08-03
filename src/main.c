@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/01 05:30:45 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/01 06:34:09 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,3 +30,4 @@ int	main(int argc, char **argv)
 	gc_free_all();
     return(0);
 }
+
