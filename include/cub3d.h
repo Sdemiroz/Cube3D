@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/02 04:44:45 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/04 03:45:23 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,6 @@ t_player	*get_player(void);
 t_rays		**get_rays(void);
 
 void		init_game_elements(t_game *game, char *arg);
-// void		init_background(t_game *game);
 
 void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
 	char *prefix);
@@ -293,9 +292,8 @@ void		place_player2D_2(t_game *game, int method);
 // src/rendering
 
 void		init_graphics_rendering(void *param);
-// TODO: Add these function declarations when implementing 3D rendering:
-// void		render_3d_walls(t_game *game);
-// uint32_t	get_pixel_from_texture(mlx_texture_t *texture, int x, int y);
+void		render_3d_walls(t_game *game);
+uint32_t	get_pixel_from_texture(mlx_texture_t *texture, int x, int y);
 
 // src/utils
 

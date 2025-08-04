@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/01 05:30:54 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/04 03:17:47 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,9 +187,9 @@ void	init_background(t_game *game)
 		while(x < game->data->wind_w)
 		{
 			if (y < game->data->wind_h / 2)
-				mlx_put_pixel(game->background, x, y, floor);
-			else
 				mlx_put_pixel(game->background, x, y, ceiling);
+			else
+				mlx_put_pixel(game->background, x, y, floor);
 			x++;
 		}
 		y++;
