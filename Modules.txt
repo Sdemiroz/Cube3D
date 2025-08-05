@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Modules.txt                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
+#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/08/01 20:25:06 by pamatya          ###   ########.fr        #
+#    Updated: 2025/08/05 20:28:48 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-** Current tasks: <To specify who is currently taking on which issue so as not to repeat the task or miscoordination 
+** Current tasks: <To specify who is currently taking on which issue so as not to repeat the task or miscoordination
 
 Samed:  ...
 
@@ -22,7 +22,7 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
 
 1. Necessary coordinations between parsing and rendering -
  -
- 
+
 ********************************************************************************
 
 2. Gameplay elements
@@ -38,7 +38,7 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    Particularly when player blob reaches near the wall, it overlaps the border in
    the bottom right and cannot go close enough in the opposite corner
  -
- 
+
 ********************************************************************************
 
 3. Project progress and game elements
@@ -50,16 +50,16 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
  - Engine to transform ray length to object size in the 3d view
  - Engine to remove fish-eye effect while rendering 3d view
  - Impelemt scaling of minimap (probably using data->scale variable)
- - 
+ -
 
 ********************************************************************************
 
 4. Parsing issues
- - The check_key_data_completion() fn needs to be restored after texture initialization
+ ! The check_key_data_completion() fn needs to be restored after texture initialization
  ! Parser needs to check for other types of spaces in map
  ! Parser needs to add extra padding for tabs and other types of spaces if necessary
  ! The direction that the player is facing is not linked by the parser
- - Color rgb's need to be checked (also if only uint8 is required)
+ ! Color rgb's need to be checked (also if only uint8 is required)
  -
 
 ********************************************************************************
@@ -87,10 +87,10 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    be drawn on the other side
  - FOV toggle was added for easy debugging, but the keypress seems to be not registered,
    or some other issue is causing this toggle to fail
- - Without the bounds check in its current state (not collision detection), the 
+ - Without the bounds check in its current state (not collision detection), the
    movement of cur_direction ray (draw_cu_direction() fn) is able to travel out
    of the bounds of the minimap area
- - 
+ -
 
 ********************************************************************************
 
