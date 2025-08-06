@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/30 20:40:03 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:00:00 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ typedef struct s_game
 	t_data		*data;			// for dynamic scaling and dimensioning
 
 	mlx_t		*mlx;			// for window and mlx context
+	t_img		*background;	// background image with ceiling and floor colors
+	int32_t		background_inst_id;	// instance ID for background image
 	t_img		*img3D;			// for ray-casted 3D image to be put on the window
 	int32_t		img3D_inst_id;	// instance ID for 3D image
 	// t_img		*gun3D;			// gun image to be used in 3D view
@@ -270,6 +272,7 @@ void		assign_textures(t_game *game, t_txr **txr, char *line, char *prfx);
 void		identify_rgb(t_game *game, char *line, t_color *color);
 void		parse_line(t_game *game, char *line);
 int			validate_map_line(t_game *game, char *line);
+void		init_background(t_game *game);
 
 // src/parsing
 
@@ -306,6 +309,8 @@ void		draw_current_fov(t_player *pl, t_rays **rays);
 // src/rendering
 
 void		init_graphics_rendering(void *param);
+void		render_3d_walls(t_game *game);
+uint32_t	get_pixel_from_texture(mlx_texture_t *texture, int x, int y);
 
 // src/utils
 

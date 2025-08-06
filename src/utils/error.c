@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/28 20:43:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/01 05:28:24 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	exit_early(t_game *game, char *msg, int ret)
 static void	clear_map(t_game *game, t_map *map)
 {
 	int	i;
-	
+
 	if (map->image)
 		mlx_delete_image(game->mlx, map->image);
 	if (!(map->fd < 0))
@@ -66,7 +66,7 @@ static void	clear_player(t_game *game, t_player *pl)
 static void	clear_mlx(t_game *game)
 {
 	// int	x;
-	
+
 	// x = 0;
 	// if (game->walls)
 	// {
@@ -80,6 +80,8 @@ static void	clear_mlx(t_game *game)
 
 	if (game->mlx)	// still experimental
 	{
+		if (game->background)
+			mlx_delete_image(game->mlx, game->background);
 		if (game->img3D)
 			mlx_delete_image(game->mlx, game->img3D);
 		mlx_close_window(game->mlx);	// close a window if it is open to free the resources, mlx instance stays allocated

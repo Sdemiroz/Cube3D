@@ -6,7 +6,7 @@
 #    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 20:37:29 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/08/06 12:00:00 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,7 @@ SRCS	:=	main.c start.c events.c \
 			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
 			$(B)/expand_tabs.c $(B1)/minimap_parser.c \
 			$(C)/draw_circle.c $(C)/draw.c $(C)/rays.c \
-			$(D)/renders.c \
+			$(D)/renders.c $(D)/3d.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
 			$(Z1)/circles_improved.c \
 			$(Z2)/test_prints.c $(Z2)/print_map_utils.c

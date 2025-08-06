@@ -3,89 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/30 19:57:27 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 12:00:00 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	init_game_elements(t_game *game, char *arg);
+void		init_game_elements(t_game *game, char *arg);
 
 static void	init_game(t_game *game);
 
 static void	init_minimap(t_game *game, char *path_to_map);
 static void	init_player(t_game *game);
 static void	init_rays(t_player *player, t_rays **rays);
-static void	init_ray_delta(t_rays *ray, int num_rays, int i);
-static void	init_ray_angle(t_rays *ray);
-
-static void update_game_data_after_parsing(t_data *data);
-
+static void	init_deltas(t_rays *ray, int num_rays, int i);
+static void	init_angles(t_rays *ray, double cur_dir);
+static void	update_game_data_after_parsing(t_data *data);
 
 void	init_game_elements(t_game *game, char *arg)
 {
 	init_game(game);
-
 	game->map = get_map();
 	if (!game->map)
 		exit_early(game, "map: struct malloc failed", EXIT_FAILURE);
 	game->player = get_player();
 	if (!game->player)
 		exit_early(game, "player malloc failed", EXIT_FAILURE);
-
 	init_minimap(game, arg);
 	init_player(game);
 }
 
 static void	init_game(t_game *game)
-{	
+{
 	t_data	*data;
 
 	*game = (t_game){
-		.img3D_inst_id = -1,
+		.background_inst_id = -1, .img3D_inst_id = -1,
 		// .gun_inst_id = -1,
 	};
-	
 	data = get_data();
 	if (!data)
 		exit_early(game, "Scales malloc failed", EXIT_FAILURE);
 	game->data = data;
-
 	game->mlx = mlx_init(data->wind_w, data->wind_h, "Cub3D", true);
 	if (!game->mlx)
 		exit_early(game, "game_mlx: mlx_init", EXIT_FAILURE);
+	game->background = mlx_new_image(game->mlx, data->wind_w, data->wind_h);
+	if (!game->background)
+		exit_early(game, "background_img: mlx_new_image", EXIT_FAILURE);
 	game->img3D = mlx_new_image(game->mlx, data->wind_w, data->wind_h);
 	if (!game->img3D)
 		exit_early(game, "game_img3D: mlx_new_image", EXIT_FAILURE);
 }
-
-// static void	init_minimap(t_game *game, char *path_to_map)
-// {
-// 	t_data	*data;
-// 	t_map	*map;
-
-// 	data = game->data;
-// 	map = game->map;
-
-// 	map->data = data;
-	
-// 	map->fd = open(path_to_map, O_RDONLY);
-// 	if(map->fd < 0)
-// 		exit_early(game, "Error opening file", 1);
-// 	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
-// 	if (!map->image)
-// 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
-
-// 	parse_minimap(map);
-// 	map_array_printer(map, 1);	// extra utility, to be removed later
-
-// 	map->game = game;
-// 	map->player = game->player;
-// 	map->rays = game->rays;
-// }
 
 static void	init_minimap(t_game *game, char *path_to_map)
 {
@@ -95,21 +67,17 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	data = game->data;
 	map = game->map;
 	map->data = data;
-
-	test_print_data();			// !! extra utility, to be removed later
-	
+	test_print_data(); // !! extra utility, to be removed later
 	parse_game_data(game, path_to_map);
 	update_game_data_after_parsing(data);
-	
-	test_print_data();			// !! extra utility, to be removed later
-	
-	// map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
-	map->image = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
+	init_background(game);
+	// Initialize background after parsing (when colors are available)
+	test_print_data(); // !! extra utility, to be removed later
+	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size,
+			data->mmp_h * data->tile_size);
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
-
-	map_array_printer(map, 1);	// !! extra utility, to be removed later
-
+	map_array_printer(map, 1); // !! extra utility, to be removed later
 	map->game = game;
 	map->player = game->player;
 }
@@ -121,8 +89,6 @@ static void	init_player(t_game *game)
 
 	data = game->data;
 	pl = game->player;
-
-
 	pl->data = data;
 	pl->blob2D = mlx_new_image(game->mlx, data->tile_size, data->tile_size);
 	if (!pl->blob2D)
@@ -130,24 +96,22 @@ static void	init_player(t_game *game)
 	pl->view = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
 	if (!pl->view)
 		exit_early(game, "view_img: mlx_new_image failed", EXIT_FAILURE);
-		
 	pl->rays = get_rays();
 	if (!pl->rays)
 		exit_early(game, "rays malloc failed", EXIT_FAILURE);
 	init_rays(pl, pl->rays);
-
 	pl->game = game;
 	pl->map = game->map;
 }
 
 static void	init_rays(t_player *pl, t_rays **rays)
 {
-	t_data		*data;
-	int			i;
-	int			num_rays;
-	double		cur_dir;
-	t_rays		*ray;
-	
+	t_data	*data;
+	int		i;
+	int		num_rays;
+	double	cur_dir;
+	t_rays	*ray;
+
 	data = get_data();
 	num_rays = data->num_rays;
 	cur_dir = data->cur_dir;
@@ -155,21 +119,22 @@ static void	init_rays(t_player *pl, t_rays **rays)
 	while (++i < num_rays)
 	{
 		ray = rays[i];
-		init_ray_delta(ray, num_rays, i);	// Left rays -> -ve delta, Right rays -> +ve delta
+		init_deltas(ray, num_rays, i); // Left rays -> -ve, Right rays -> +ve
 		ray->prev_dir = &data->prev_dir;
 		ray->cur_dir = &data->cur_dir;
-		init_ray_angle(ray);	// Angles calculated as per normal convention used the in the program elsewhere
+		init_angles(ray, data->cur_dir);
 		ray->cosine = cos(ray->angle);
 		ray->sine = sin(ray->angle);
-		ray->length = RAY_LEN_DEFAULT * data->tile_size;	// Preliminary initialising value
+		ray->length = RAY_LEN_DEFAULT * data->tile_size; // Preliminary initialising value
 		ray->start_x = &data->pl_center_x;
 		ray->start_y = &data->pl_center_y;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}
+	test_print_rays('d'); // !! extra utility, to be removed later
 }
 
-static void	init_ray_delta(t_rays *ray, int num_rays, int i)
+static void	init_deltas(t_rays *ray, int num_rays, int i)
 {
 	if (num_rays % 2 == 0)
 	{
@@ -186,35 +151,23 @@ static void	init_ray_delta(t_rays *ray, int num_rays, int i)
 			ray->delta = 0;
 		else if (i > num_rays / 2)
 			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
-	}	
+	}
 }
 
-static void	init_ray_angle(t_rays *ray)
+static void	init_angles(t_rays *ray, double cur_dir)
 {
-	double	ray_delta;
-	double	cur_dir;
 	double	pi2;
-	
-	ray_delta = ray->delta;
-	cur_dir = *ray->cur_dir;
-	pi2 = 2 * PI;
-	ray->angle = cur_dir - ray_delta;
 
-	if (ray->angle < 0)
-		ray->angle += pi2; // Normalize to [0, 2*PI]
-	else if (ray->angle >= pi2)
-		ray->angle -= pi2; // Normalize to [0, 2*PI]
-	
-	// if (ray->delta < 0)
-	// 	ray->angle = fmod(cur_dir - ray_delta, pi2);
-	// else if (ray_delta == 0)
-	// 	ray->angle = cur_dir;
-	// else
-	// 	ray->angle = fmod(cur_dir + pi2 - ray_delta, pi2);
+	pi2 = 2 * PI;
+	if (ray->delta < 0)
+		ray->angle = fmod(cur_dir - ray->delta, pi2);
+	else if (ray->delta == 0)
+		ray->angle = cur_dir;
+	else
+		ray->angle = fmod(cur_dir + 2 * PI - ray->delta, pi2);
 }
 
-// Update function to update data fields not done by the parser
-static void update_game_data_after_parsing(t_data *data)
+static void	update_game_data_after_parsing(t_data *data)
 {
 	data->cosine = cos(data->cur_dir);
 	data->sine = sin(data->cur_dir);
@@ -222,4 +175,29 @@ static void update_game_data_after_parsing(t_data *data)
 	data->mmp_h = data->tiles_y * data->tile_size;
 	data->pl_center_x = data->pl_posx + data->tile_size / 2;
 	data->pl_center_y = data->pl_posy + data->tile_size / 2;
+}
+
+void	init_background(t_game *game)
+{
+	int			x;
+	int			y;
+	uint32_t	ceiling;
+	uint32_t	floor;
+
+	y = 0;
+	ceiling = (game->ceiling_color.r << 24) | (game->ceiling_color.g << 16) | (game->ceiling_color.b << 8) | 0xFF;
+	floor = (game->floor_color.r << 24) | (game->floor_color.g << 16) | (game->floor_color.b << 8) | 0xFF;
+	while(y < game->data->wind_h)
+	{
+		x = 0;
+		while(x < game->data->wind_w)
+		{
+			if (y < game->data->wind_h / 2)
+				mlx_put_pixel(game->background, x, y, ceiling);
+			else
+				mlx_put_pixel(game->background, x, y, floor);
+			x++;
+		}
+		y++;
+	}
 }
