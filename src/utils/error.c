@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:08:00 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/07/28 20:43:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:30:34 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	exit_early(t_game *game, char *msg, int ret)
 
 static void	clear_map(t_game *game, t_map *map)
 {
-	int	i;
+	// int	i;
 	
 	if (map->image)
 		mlx_delete_image(game->mlx, map->image);

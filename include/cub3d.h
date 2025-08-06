@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/01 20:43:41 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 21:19:52 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 8
+# define PLAYER_DIA 3
 # define START_PX 500
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
@@ -102,7 +102,7 @@
 
 
 // Mini-Map Constants
-# define TILE_SIZE 15
+# define TILE_SIZE 9
 # define MAP_W 600
 # define MAP_H 210
 # define MAP_OFFSET_X 25
@@ -212,6 +212,7 @@ typedef struct s_map
 	int			image_inst_id;	// instance ID for 2D map image
 	int			fd;				// file descriptor for map file
 	char		**map_array;	// 2D array of map data (strings)
+	char		**img_array;	// 2D array of image data (strings)
 
 	t_player	*player;		// pointer to player struct for convenience
 	t_game		*game;
@@ -272,6 +273,11 @@ void		identify_rgb(t_game *game, char *line, t_color *color);
 void		parse_line(t_game *game, char *line);
 int			validate_map_line(t_game *game, char *line);
 
+void		init_rays(t_rays **rays);
+
+void		create_image_array(t_map *map, t_data *data);
+
+
 // src/parsing
 
 void		check_map(t_game *game);
@@ -308,6 +314,11 @@ void		draw_current_fov(t_player *pl, t_rays **rays);
 
 void		init_graphics_rendering(void *param);
 
+// src/coordinates
+
+void		to_map_xy(int *map_xy, int img_x, int img_y);
+void		to_img_xy(int *img_xy, int map_x, int map_y);
+
 // src/utils
 
 bool 		is_valid(char c);
@@ -328,5 +339,6 @@ void		parse_minimap(t_map *map);
 void		test_print_data();
 void		test_print_rays(char c);
 void		map_array_printer(t_map *map, int flag);
+void		write_img_array(int xmax, int ymax);
 
 #endif

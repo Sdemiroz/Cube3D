@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/01 20:47:51 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:27:02 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,19 @@ static void	draw_minimap(t_game *game, char **map);
 static void	place_block(t_img *img, int i, int j, int block_color);
 static void	draw_border(t_img *img, int	width, int height, int thickness);
 
-static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
-static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
+// static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
+// static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
 void	start_drawing(t_game *game)
 {
 	t_data		*data;
 	t_player	*pl;
 	char		**map;
-	int			i;
-	int			j;
 
 	data = game->data;
 	pl = game->player;
 	map = game->map->map_array;
-	// i = -1;
-	// while (map[++i])
-	// {
-	// 	j = -1;
-	// 	while (map[i][++j])
-	// 	{
-	// 		if (map[i][j] == '1')
-	// 			place_block(game->map->image, j, i, STONE_GRAY);
-	// 		else if (map[i][j] == '0' || is_valid(map[i][j]))
-	// 			place_block(game->map->image, i, j, 0);
-	// 	}
-	// }
+
 	draw_minimap(game, map);
 	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
 	// draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
@@ -57,11 +44,9 @@ void	start_drawing(t_game *game)
 
 static void	draw_minimap(t_game *game, char **map)
 {
-	t_data		*data;
 	int			i;
 	int			j;
 
-	data = game->data;
 	i = -1;
 	while (map[++i])
 	{
@@ -158,46 +143,46 @@ static void	draw_border(t_img *img, int width, int height, int thickness)
 	}
 }
 
-// bls = TILE_SIZE 
-static void	place_block2(t_img *img, int x, int y, int block_color, int bls)
-{
-	int		i;
-	int		j;
+// // bls = TILE_SIZE 
+// static void	place_block2(t_img *img, int x, int y, int block_color, int bls)
+// {
+// 	int		i;
+// 	int		j;
 
-	if (!block_color)
-		return ;
-	j = -1;
-	while (++j < bls)
-	{
-		i = -1;
-		while (++i < bls)
-			mlx_put_pixel(img, x * bls + i, y * bls + j,
-					block_color);
-	}
-}
+// 	if (!block_color)
+// 		return ;
+// 	j = -1;
+// 	while (++j < bls)
+// 	{
+// 		i = -1;
+// 		while (++i < bls)
+// 			mlx_put_pixel(img, x * bls + i, y * bls + j,
+// 					block_color);
+// 	}
+// }
 
-static void	draw_border2(t_img *img, int width, int height, int color, int bls)
-{
-	int i;
-	int	j;
-	int	block_x;
-	int	block_y;
+// static void	draw_border2(t_img *img, int width, int height, int color, int bls)
+// {
+// 	int i;
+// 	int	j;
+// 	int	block_x;
+// 	int	block_y;
 
-	i = -1;
-	j = -1;
-	block_x = width / bls;
-	block_y = height / bls;
-	while (++j < block_y)
-	{
-		i = -1;
-		if (j == 0 || j == (block_y - 1))
-			while (++i < block_x)
-				place_block2(img, i, j, color, bls);
-		else
-		{
-			while (++i < block_x)
-				if (i == 0 || i == (block_x - 1))
-					place_block2(img, i, j, color, bls);	
-		}
-	}
-}
+// 	i = -1;
+// 	j = -1;
+// 	block_x = width / bls;
+// 	block_y = height / bls;
+// 	while (++j < block_y)
+// 	{
+// 		i = -1;
+// 		if (j == 0 || j == (block_y - 1))
+// 			while (++i < block_x)
+// 				place_block2(img, i, j, color, bls);
+// 		else
+// 		{
+// 			while (++i < block_x)
+// 				if (i == 0 || i == (block_x - 1))
+// 					place_block2(img, i, j, color, bls);	
+// 		}
+// 	}
+// }

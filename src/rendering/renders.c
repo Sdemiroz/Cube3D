@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 21:50:08 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/01 18:14:03 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 20:37:40 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	init_graphics_rendering(void *param)
 	t_game		*game;
 	t_map		*map;
 	t_player	*pl;
-	t_rays		*rays;
 
 	game = (t_game *)param;
 	map = game->map;

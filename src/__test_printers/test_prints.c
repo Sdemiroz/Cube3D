@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 02:20:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/30 00:53:34 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 20:08:31 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,12 @@ void	test_print_rays(char c)
 	}
 	else
 		printf("Invalid argument for test_print_rays. Use 'r' for radians or 'd' for degrees.\n");
+}
+
+void	test_print_bounds(int *boundx, int *boundy)
+{
+	printf("boundx1 = %d\t", boundx[0]);
+	printf("boundx2 = %d\n", boundx[1]);
+	printf("boundy1 = %d\t", boundy[0]);
+	printf("boundy2 = %d\n", boundy[1]);
 }

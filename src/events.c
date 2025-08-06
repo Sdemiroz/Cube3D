@@ -22,9 +22,9 @@ static void	move_player(t_game *game, t_key keydata);
 static void	apply_movement(t_data *data, double move_step, t_key keydata);
 static void turn_player(t_game *game, t_key keydata);
 
-static void	toggle_fov(t_game *game, t_key keydata);
+static void	toggle_fov(t_game *game);
 
-static bool	has_space_to_move(t_game *game, int new_x, int new_y);
+// static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
 void	init_events(void *param)
 {
@@ -59,7 +59,7 @@ static void	upon_press(t_key keydata, void *param)
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
 		turn_player(game, keydata);
 	else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
-		toggle_fov(game, keydata);
+		toggle_fov(game);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -128,33 +128,45 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 		posx += (int)rint(data->cosine * move_step);
 		posy -= (int)rint(data->sine * move_step);
 	}
-	if (keydata.key == MLX_KEY_S)
+	else if (keydata.key == MLX_KEY_S)
 	{
 		posx -= (int)rint(data->cosine * move_step);
 		posy += (int)rint(data->sine * move_step);
 	}
-	if (keydata.key == MLX_KEY_A)
+	else if (keydata.key == MLX_KEY_A)
 	{
 		posx += (int)rint(cos(data->cur_dir + PI / 2) * move_step);
 		posy -= (int)rint(sin(data->cur_dir + PI / 2) * move_step);
 	}
-	if (keydata.key == MLX_KEY_D)
+	else if (keydata.key == MLX_KEY_D)
 	{
 		posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
 		posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
 	}
-	if (posx > boundx[0] && posx < boundx[1] &&
-			posy > boundy[0] && posy < boundy[1])
+
+	// Original block to allow movement only when movement in both x and y are possible
+	// if (posx > boundx[0] && posx < boundx[1] &&
+	// 		posy > boundy[0] && posy < boundy[1])
+	// {
+	// 	data->pl_posx = posx;
+	// 	data->pl_posy = posy;
+	// 	data->pl_center_x = posx + data->tile_size / 2;
+	// 	data->pl_center_y = posy + data->tile_size / 2;
+	// }
+	
+	// Changed to have allow movement in atleast one direction when possible
+	if (posx > boundx[0] && posx < boundx[1])
 	{
 		data->pl_posx = posx;
-		data->pl_posy = posy;
 		data->pl_center_x = posx + data->tile_size / 2;
+	}
+	if (posy > boundy[0] && posy < boundy[1])
+	{
+		data->pl_posy = posy;
 		data->pl_center_y = posy + data->tile_size / 2;
 	}
-	// printf("boundx1 = %d\t", boundx[0]);
-	// printf("boundx2 = %d\n", boundx[1]);
-	// printf("boundy1 = %d\t", boundy[0]);
-	// printf("boundy2 = %d\n", boundy[1]);
+
+	// test_print_bounds(boundx, boundy);
 }
 
 static void turn_player(t_game *game, t_key keydata)
@@ -166,11 +178,10 @@ static void turn_player(t_game *game, t_key keydata)
 
 	data = game->data;
 	pl = game->player;
-	rotation = PI / 36;	// Rotation in radians equivalent to 5 degrees
-
-	fast = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
+	rotation = PI / 36;				// Rotation in radians equivalent to 5 degrees
+	fast = (keydata.modifier & MLX_SHIFT);			// Check if shift is pressed
 	if (fast)
-		rotation *= 4;	 // Increase rotation speed when shift is pressed
+		rotation *= 4;	 		// Increase rotation speed when shift is pressed
 
 	data->prev_dir = data->cur_dir;
 	if (keydata.key == MLX_KEY_LEFT)
@@ -179,22 +190,17 @@ static void turn_player(t_game *game, t_key keydata)
 		data->cur_dir -= rotation;
 
 	if (data->cur_dir < 0)
-		data->cur_dir += 2 * PI; // Normalize to [0, 2*PI]
+		data->cur_dir += 2 * PI; 						// Normalize to [0, 2*PI]
 	else if (data->cur_dir >= 2 * PI)
-		data->cur_dir -= 2 * PI; // Normalize to [0, 2*PI]
-	
-	// redraw_fov(pl, pl->rays);
-	
+		data->cur_dir -= 2 * PI;						// Normalize to [0, 2*PI]
+
 	erase_previous_fov(pl, pl->rays);
 	update_ray_attr_all(pl->rays);
 	draw_current_fov(pl, pl->rays);
-
 	draw_player_direction(game->player, data);
-	// test_print_rays('d');
-	// test_print_data();
 }
 
-static void	toggle_fov(t_game *game, t_key keydata)
+static void	toggle_fov(t_game *game)
 {
 	t_data		*data;
 	t_player	*pl;

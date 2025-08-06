@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:51:11 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/01 20:31:02 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:29:21 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ not redrawing the whole blob image.
 */
 void	draw_player_direction(t_player *pl, t_data *data)
 {
-	t_img	*view;
-
-	view = pl->view;
 	if (data->prev_dir != data->cur_dir)
 		erase_prev_direction(pl, data);
 	// data->prev_dir = data->cur_dir;
@@ -136,9 +133,9 @@ void	update_ray_attr(t_rays *ray)
 	pi2 = 2 * PI;
 	ray->angle = *ray->cur_dir - ray->delta;
 	if (ray->angle < 0)
-		ray->angle += 2 * PI; // Normalize to [0, 2*PI]
-	else if (ray->angle >= 2 * PI)
-		ray->angle -= 2 * PI; // Normalize to [0, 2*PI]
+		ray->angle += pi2; // Normalize to [0, 2*PI]
+	else if (ray->angle >= pi2)
+		ray->angle -= pi2; // Normalize to [0, 2*PI]
 	ray->cosine = cos(ray->angle);
 	ray->sine = sin(ray->angle);
 }
@@ -195,14 +192,14 @@ void	draw_current_fov(t_player *pl, t_rays **rays)
 void	update_ray_attr_all(t_rays **rays)
 {
 	t_rays	*ray;
-	double	pi2;
+	// double	pi2;
 	int		i;
 	int		num_rays;
-	double	factor;
+	// double	factor;
 	
 	num_rays = get_data()->num_rays;
-	pi2 = 2 * PI;
-	factor = (180 / PI);
+	// pi2 = 2 * PI;
+	// factor = (180 / PI);
 	i = -1;
 	// while (++i < num_rays)
 	// {
