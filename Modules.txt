@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: Invalid date        by                   #+#    #+#              #
-#    Updated: 2025/08/07 13:24:52 by pamatya          ###   ########.fr        #
+#    Updated: 2025/08/07 14:10:04 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,6 +92,14 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    This may be further optimized by deciding between choosing to calculate the
    tile_size using the mmp_w or mmp_h depending on their value and criticality with
    respect to space alloted for displaying minimap in either dimensions.
+ - Remove the Compound literal initialization method (spawn_new.c) before submitting
+   because even it is possibly C99 (possibly forbidden) standard initialization 
+   method and also it might be interpreted differently by the compiler on a different
+   system (linux).
+ - In makefile, add a condition in target "all" to check if MLX42 library is already
+   present, if not then it should be build first with "make sub_init". This is for
+   the first time the repo will be cloned by the evaluator.
+ - 
 
 ********************************************************************************
 
