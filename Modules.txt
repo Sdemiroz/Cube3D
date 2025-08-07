@@ -6,7 +6,7 @@
 #    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 01:57:19 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/07/30 20:40:49 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,4 +55,3 @@
    the struct rays and drawn in a similar way to the way other rays will be drawn,
    using a single consistent function
  -
-

@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/04 03:17:47 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/06 06:06:38 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	parse_game_data(game, path_to_map);
 	update_game_data_after_parsing(data);
 	init_background(game);
-		// Initialize background after parsing (when colors are available)
-	test_print_data();     // !! extra utility, to be removed later
+	// Initialize background after parsing (when colors are available)
+	test_print_data(); // !! extra utility, to be removed later
 	map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size,
 			data->mmp_h * data->tile_size);
 	if (!map->image)
@@ -120,10 +120,14 @@ static void	init_rays(t_player *pl, t_rays **rays)
 	{
 		ray = rays[i];
 		init_deltas(ray, num_rays, i); // Left rays -> -ve, Right rays -> +ve
+		ray->prev_dir = &data->prev_dir;
+		ray->cur_dir = &data->cur_dir;
 		init_angles(ray, data->cur_dir);
 		ray->cosine = cos(ray->angle);
 		ray->sine = sin(ray->angle);
-		ray->length = 5 * data->tile_size; // Preliminary initialising value
+		ray->length = RAY_LEN_DEFAULT * data->tile_size; // Preliminary initialising value
+		ray->start_x = &data->pl_center_x;
+		ray->start_y = &data->pl_center_y;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}
@@ -169,6 +173,8 @@ static void	update_game_data_after_parsing(t_data *data)
 	data->sine = sin(data->cur_dir);
 	data->mmp_w = data->tiles_x * data->tile_size;
 	data->mmp_h = data->tiles_y * data->tile_size;
+	data->pl_center_x = data->pl_posx + data->tile_size / 2;
+	data->pl_center_y = data->pl_posy + data->tile_size / 2;
 }
 
 void	init_background(t_game *game)

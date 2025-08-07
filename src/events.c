@@ -18,9 +18,9 @@ static void	upon_press(t_key keydata, void *param);
 // static void	upon_scroll(double xdelta, double ydelta, void *param);
 static void	upon_close(void *param);
 
-static void	move_player(void *param, t_key keydata);
+static void	move_player(t_game *game, t_key keydata);
 static void	apply_movement(t_data *data, double move_step, t_key keydata);
-static void turn_player(void *param, t_key keydata);
+static void turn_player(t_game *game, t_key keydata);
 
 static bool	has_space_to_move(t_game *game, int new_x, int new_y);
 
@@ -50,12 +50,12 @@ static void	upon_press(t_key keydata, void *param)
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
 			(keydata.key == MLX_KEY_D &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
-		move_player(param, keydata);
+		move_player(game, keydata);
 	else if ((keydata.key == MLX_KEY_LEFT &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 			|| (keydata.key == MLX_KEY_RIGHT &&
 			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
-		turn_player(param, keydata);
+		turn_player(game, keydata);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -83,23 +83,25 @@ static void	upon_close(void *param)
 	exit_early(game, NULL, EXIT_SUCCESS);
 }
 
-static void	move_player(void *param, t_key keydata)
+static void	move_player(t_game *game, t_key keydata)
 {
-	t_game	*game;
-	t_data	*data;
-	double	move_step;
-	bool	is_running;
+	t_data		*data;
+	t_player	*pl;
+	double		move_step;
+	bool		is_running;
 
-	game = (t_game *)param;
 	data = game->data;
+	pl = game->player;
 	move_step = 3; // Define a step size for movement
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
 		move_step *= 5; // Increase step size when running
 
-	erase_previous_ray(game->player, data);
+	erase_previous_ray(pl, data);
+	erase_previous_fov(pl, pl->rays);
 	apply_movement(data, move_step, keydata);
-	draw_forward_ray(game->player, data);
+	draw_current_fov(pl, pl->rays);
+	draw_forward_ray(pl, data);
 }
 
 static void	apply_movement(t_data *data, double move_step, t_key keydata)
@@ -112,10 +114,6 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 	posx = data->pl_posx;
 	posy = data->pl_posy;
 
-	// boundx[0] = data->tile_size + data->mmp_offx;
-	// boundx[1] = boundx + data->mmp_offx - data->tile_size;
-	// boundy[0] = data->tile_size + data->mmp_offy;
-	// boundy[1] = boundy + data->mmp_offy - data->tile_size;
 	boundx[0] = data->tile_size;
 	boundx[1] = data->mmp_w - data->tile_size;
 	boundy[0] = data->tile_size;
@@ -146,32 +144,49 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 	{
 		data->pl_posx = posx;
 		data->pl_posy = posy;
+		data->pl_center_x = posx + data->tile_size / 2;
+		data->pl_center_y = posy + data->tile_size / 2;
 	}
-	printf("boundx1 = %d\t", boundx[0]);
-	printf("boundx2 = %d\n", boundx[1]);
-	printf("boundy1 = %d\t", boundy[0]);
-	printf("boundy2 = %d\n", boundy[1]);
+	// printf("boundx1 = %d\t", boundx[0]);
+	// printf("boundx2 = %d\n", boundx[1]);
+	// printf("boundy1 = %d\t", boundy[0]);
+	// printf("boundy2 = %d\n", boundy[1]);
 }
 
-static void turn_player(void *param, t_key keydata)
+static void turn_player(t_game *game, t_key keydata)
 {
-	t_game	*game;
-	t_data	*data;
-	float	rotation;
-	bool	fast;
+	t_data		*data;
+	t_player	*pl;
+	double		rotation;
+	bool		fast;
 
-	game = (t_game *)param;
 	data = game->data;
-	rotation = (2 * PI / 360) * 5;	// Rotation in radians equivalent to 5 degrees
+	pl = game->player;
+	rotation = PI / 36;	// Rotation in radians equivalent to 5 degrees
 
 	fast = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (fast)
 		rotation *= 4;	 // Increase rotation speed when shift is pressed
 
+	// data->prev_dir = data->cur_dir;
 	if (keydata.key == MLX_KEY_LEFT)
 		data->cur_dir += rotation;
 	else if (keydata.key == MLX_KEY_RIGHT)
 		data->cur_dir -= rotation;
 
+	if (data->cur_dir < 0)
+		data->cur_dir += 2 * PI; // Normalize to [0, 2*PI]
+	else if (data->cur_dir >= 2 * PI)
+		data->cur_dir -= 2 * PI; // Normalize to [0, 2*PI]
+	
+	// redraw_fov(pl, pl->rays);
+	
+	erase_previous_fov(pl, pl->rays);
+	update_ray_attr_all(pl->rays);
+	draw_current_fov(pl, pl->rays);
+	
 	draw_player_direction(game->player, data);
+	
+	// test_print_rays('d');
+	// test_print_data();
 }

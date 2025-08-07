@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/04 03:45:23 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/06 06:06:38 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@
 // Debug Colors
 # define DEBUG_RED		0xFF000080  // Semi-transparent red
 # define DEBUG_GREEN	0x00FF0080  // Semi-transparent green
+# define DEBUG_GREEN2	0x00FF0040  // Semi-transparent green
 # define DEBUG_BLUE		0x0000FF80  // Semi-transparent blue
 
 /******************************************************************************/
@@ -97,6 +98,8 @@
 # define START_PY 500
 # define FOV 60.0f				// Field of View in degrees, f for float
 # define NUM_RAYS 60
+# define RAY_LEN_DEFAULT 6		// This number multiple of tile_size
+
 
 // Mini-Map Constants
 # define TILE_SIZE 15
@@ -179,6 +182,8 @@ typedef struct s_data
 	int		pl_arr_y;
 	int	 	pl_posx;
 	int	 	pl_posy;
+	int		pl_center_x;
+	int		pl_center_y;
 
 	// Ray casting elements
 	float	fov;			// Field of View in degrees, f for float
@@ -231,14 +236,16 @@ typedef struct s_rays
 {
 	int			index;			// index of the current ray being processed
 	double		delta;			// angle of deviation +/- from the player's current direction
+	double		*prev_dir;
+	double		*cur_dir;
 	double		angle;			// absolute angle of the ray in radians
 	double		cosine;			// cosine of the angle
 	double		sine;			// sine of the angle
-	double		length;			// length of the distance traveled by the ray
-	int			start_x;		// x coordinate of the starting point of the ray
-	int			start_y;		// y coordinate of the starting point of the ray
+	int			*start_x;		// x coordinate of the starting point of the ray
+	int			*start_y;		// y coordinate of the starting point of the ray
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
+	double		length;			// length of the distance traveled by the ray
 } t_rays;
 
 /******************************************************************************/
@@ -261,8 +268,7 @@ t_rays		**get_rays(void);
 
 void		init_game_elements(t_game *game, char *arg);
 
-void		assign_textures(t_game *game, mlx_texture_t **img, char *line,
-	char *prefix);
+void		assign_textures(t_game *game, t_txr **txr, char *line, char *prfx);
 void		identify_rgb(t_game *game, char *line, t_color *color);
 void		parse_line(t_game *game, char *line);
 int			validate_map_line(t_game *game, char *line);
@@ -284,10 +290,21 @@ void		allocate_map_array(t_game *game, char *line);
 // src/drawing
 
 void		draw_map(t_game *game);
+
+void		place_player2D_2(t_game *game);
+
 void		draw_player_direction(t_player *pl, t_data *data);
 void		erase_previous_ray(t_player *pl, t_data *data);
 void		draw_forward_ray(t_player *pl, t_data *data);
-void		place_player2D_2(t_game *game, int method);
+
+void		redraw_fov(t_player *pl, t_rays **rays);
+void		draw_ray(t_player * pl, t_rays *ray);
+void		update_ray_attr(t_rays *ray);
+void		erase_ray(t_player * pl, t_rays *ray);
+
+void		erase_previous_fov(t_player *pl, t_rays **rays);
+void		update_ray_attr_all(t_rays **rays);
+void		draw_current_fov(t_player *pl, t_rays **rays);
 
 // src/rendering
 
