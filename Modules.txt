@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Modules.txt                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
+#    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/08/05 20:28:48 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/08/07 12:50:21 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,12 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    bounds as their current state are made up of other fields in the data struct
    that don't change, precalculating them can save a good amount of processing
    overhead as it builds up from the events listening at 60 fps or so.
- -
+ - An easy way for scaling can be achieved by simply dynamically calculating tile_size,
+   which is already linked to most places in the program.
+   tile_size = mmp_w / <fixed maximum dimension to allow for minimap>
+   This may be further optimized by deciding between choosing to calculate the
+   tile_size using the mmp_w or mmp_h depending on their value and criticality with
+   respect to space alloted for displaying minimap in either dimensions.
 
 ********************************************************************************
 
