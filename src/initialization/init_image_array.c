@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:56:54 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/06 20:58:06 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/07 14:48:15 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	create_image_array(t_map *map, t_data *data);
 
-static void	morph_map_to_img(t_map *map, t_data *data);
+static void	morph_map_to_img(char **map, char **img, int hop, t_data *data);
 static void	write_char_block(char **image, int x, int y, char c);
 
 
@@ -40,84 +40,77 @@ void	create_image_array(t_map *map, t_data *data)
 	}
 	img_array[i] = NULL; // Null-terminate the array of strings
 	map->img_array = img_array;
-	morph_map_to_img(map, data);
+	morph_map_to_img(map->map_array, img_array, data->tile_size, data);
 }
 
-// // Function to fill a block of tile_size in the image_array with a provided char
-// static void	place_char_block_in_img(char **img, int x, int y, char c)
+// static void	morph_map_to_img(char **map, char **img, int hop, t_data *data)
 // {
-// 	int	i;
-// 	int	j;
+// 	// int		img_xy[2];		// To replace image coordinate iterators
+// 	// int		map_xy[2];		// To replace map coordinate iterators
+// 	// int		map_xy_max[2];	// To replace map coordinate limits
+// 	char	c;
 
-// 	i = -1;
-// 	while (++i < TILE_SIZE)
+// 	// image coordinate iterators
+// 	int		x;
+// 	int		y;
+	
+// 	// map-coordinates iterators
+// 	int		i;
+// 	int		j;
+	
+// 	// map coordinate limits
+// 	int		map_xmax;
+// 	int		map_ymax;
+	
+// 	// map-coordinate limits init
+// 	map_xmax = data->tiles_x;
+// 	map_ymax = data->tiles_y;
+	
+// 	j = -1;
+// 	y = 0;
+// 	while (++j < map_ymax)
 // 	{
-// 		j = -1;
-// 		while (++j < TILE_SIZE)
+// 		i = -1;
+// 		x = 0;
+// 		while (++i < map_xmax)
 // 		{
-// 			img[y * TILE_SIZE + i][x * TILE_SIZE + j] = c;
+// 			c = map[j][i];
+// 			if (is_player(c))
+// 				c = '0';
+// 			write_char_block(img, x, y, c);
+// 			x += hop;
 // 		}
+// 		y += hop;
 // 	}
 // }
 
-// // Function to morph the map array into an image array by placing blocks of characters for each char found in the map using place_char_block_in_img
-// static void	morph_map_to_img(t_map *map, int tiles[2])
-// {
-// 	int	x;
-// 	int	y;
-
-// 	y = -1;
-// 	while (++y < tiles[1])
-// 	{
-// 		x = -1;
-// 		while (++x < tiles[0])
-// 		{
-// 			place_char_block_in_img(map->img_array, x, y, map->map_array[y][x]);
-// 		}
-// 	}
-// }
-
-static void	morph_map_to_img(t_map *map, t_data *data)
+static void	morph_map_to_img(char **map, char **img, int hop, t_data *data)
 {
-	char	**img_array;
-	char	**map_array;
-	int		hop;
-	
-	int		x;
-	int		y;
-	
-	int		i;
-	int		j;
-	int		tiles_x;
-	int		tiles_y;
-
+	int		img_xy[2];		// Image coordinate iterators
+	int		map_xy[2];		// Map coordinate iterators
+	int		map_xy_max[2];	// Map coordinate limits
 	char	c;
+	
+	// map-coordinate limits init
+	map_xy_max[0] = data->tiles_x;
+	map_xy_max[1] = data->tiles_y;
 
-	img_array = map->img_array;
-	map_array = map->map_array;
-	hop = data->tile_size;
-	
-	// map-coordinates
-	tiles_x = data->tiles_x;
-	tiles_y = data->tiles_y;
-	
-	j = -1;
-	y = 0;
-	while (++j < tiles_y)
+	map_xy[1] = -1;
+	img_xy[1] = 0;
+	while (++map_xy[1] < map_xy_max[1])
 	{
-		i = -1;
-		x = 0;
-		while (++i < tiles_x)
+		map_xy[0] = -1;
+		img_xy[0] = 0;
+		while (++map_xy[0] < map_xy_max[0])
 		{
-			c = map_array[j][i];
+			c = map[map_xy[1]][map_xy[0]];
 			if (is_player(c))
 				c = '0';
-			write_char_block(img_array, x, y, c);
-			x += hop;
+			write_char_block(img, img_xy[0], img_xy[1], c);
+			img_xy[0] += hop;
 		}
-		y += hop;
+		img_xy[1] += hop;
 	}
-	printf("ALL IS WELL\n");
 }
 
 static void	write_char_block(char **img, int x, int y, char c)
@@ -141,29 +134,3 @@ static void	write_char_block(char **img, int x, int y, char c)
 		y++;
 	}
 }
-
-// static void	write_char_block(char **img, int x, int y, char c)
-// {
-// 	int		tile_size;
-// 	int		x_limit;
-// 	int		y_limit;
-// 	int		cur_x;
-// 	int		cur_y;
-// 	t_data	*data;
-
-// 	data = get_data();
-// 	tile_size = data->tile_size;
-// 	y_limit = y + tile_size;
-// 	cur_y = y;
-// 	while (cur_y < y_limit && cur_y < data->mmp_h)
-// 	{
-// 		x_limit = x + tile_size;
-// 		cur_x = x;
-// 		while (cur_x < x_limit && cur_x < data->mmp_w)
-// 		{
-// 			img[cur_y][cur_x] = c;
-// 			cur_x++;
-// 		}
-// 		cur_y++;
-// 	}
-// }

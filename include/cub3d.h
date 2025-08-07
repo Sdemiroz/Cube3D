@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/06 21:19:52 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/07 13:20:32 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@
 
 
 // Mini-Map Constants
-# define TILE_SIZE 9
-# define MAP_W 600
-# define MAP_H 210
+# define TILE_SIZE 5
+# define MMP_W 600
+# define MMP_H 210
 # define MAP_OFFSET_X 25
 # define MAP_OFFSET_Y 25
 # define MAP_SCALE 1.0f			// Scale for the minimap
