@@ -5,10 +5,11 @@
 #                                                     +:+ +:+         +:+      #
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/08/07 12:50:21 by pamatya          ###   ########.fr        #
+#    Created: Invalid date        by                   #+#    #+#              #
+#    Updated: 2025/08/07 13:04:51 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 ** Current tasks: <To specify who is currently taking on which issue so as not to repeat the task or miscoordination
 
@@ -60,14 +61,20 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
  ! Parser needs to add extra padding for tabs and other types of spaces if necessary
  ! The direction that the player is facing is not linked by the parser
  ! Color rgb's need to be checked (also if only uint8 is required)
- -
+ - There is an issue while parsing maps that contain tabs in the map-character-region.
+   Since, at the moment the tab is simply programmed to be replaced with 4 spaces,
+   issues arise when tab is combined with space, or even when tab is present in
+   such a way that the map characters are not offset exactly 4 spaces by the tab
+   (since it can represent any where between 1 to 4 spaces). This is distorting
+   the map layout - run with map8.cub for a demonstration of this problem.
 
 ********************************************************************************
 
 5. Optimizations
- - Angle increment with turn keys are detected keeps increasing the angle of the
+ ! Angle increment with turn keys are detected keeps increasing the angle of the
    current direction. This might be an issue while stress-testing. Remedy this by
-   using the fmod() fn with 2*PI value.
+   using the fmod() fn with 2*PI value. -> Remedied using simplified normalization
+   with 2PI value (not fmod() fn)
  - The player direction drawn at the moment should be executed as a pointer to
    the struct rays and drawn in a similar way to the way other rays will be drawn,
    using a single consistent function

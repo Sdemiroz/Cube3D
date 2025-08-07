@@ -9,3 +9,4 @@ lib/
 *.a
 *.out
 cub3d
+src/
