@@ -120,12 +120,18 @@ void	erase_ray(t_player * pl, t_rays *ray)
 	int	ix;
 	int	iy;
 
+	if (!ray || !ray->start_x || !ray->start_y || !pl->view)
+		return;
+	
 	i = -1;
 	while (++i < ray->length)
 	{
 		ix = *ray->start_x + (int)(i * ray->cosine);
 		iy = *ray->start_y - (int)(i * ray->sine);
-		mlx_put_pixel(pl->view, ix, iy, RESET);
+		
+		// Bounds checking to prevent segfault
+		if (ix >= 0 && ix < (int)pl->view->width && iy >= 0 && iy < (int)pl->view->height)
+			mlx_put_pixel(pl->view, ix, iy, RESET);
 	}
 }
 
@@ -149,12 +155,18 @@ void	draw_ray(t_player * pl, t_rays *ray)
 	int	ix;
 	int	iy;
 
+	if (!ray || !ray->start_x || !ray->start_y || !pl->view)
+		return;
+	
 	i = -1;
 	while (++i < ray->length)
 	{
 		ix = *ray->start_x + (int)(i * ray->cosine);
 		iy = *ray->start_y - (int)(i * ray->sine);
-		mlx_put_pixel(pl->view, ix, iy, DEBUG_GREEN2);
+		
+		// Bounds checking to prevent segfault
+		if (ix >= 0 && ix < (int)pl->view->width && iy >= 0 && iy < (int)pl->view->height)
+			mlx_put_pixel(pl->view, ix, iy, DEBUG_GREEN2);
 	}
 }
 
@@ -182,10 +194,16 @@ void	draw_current_fov(t_player *pl, t_rays **rays)
 	int		num_rays;
 	int		i;
 	
+	if (!pl || !rays || !pl->data)
+		return;
+	
 	num_rays = pl->data->num_rays;
 	i = -1;
 	while (++i < num_rays)
-		draw_ray(pl, rays[i]);
+	{
+		if (rays[i]) // Check if ray exists
+			draw_ray(pl, rays[i]);
+	}
 }
 
 void	update_ray_attr_all(t_rays **rays)
