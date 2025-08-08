@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: Invalid date        by                   #+#    #+#              #
-#    Updated: 2025/08/07 14:10:04 by pamatya          ###   ########.fr        #
+#    Updated: 2025/08/08 15:16:53 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,9 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    such a way that the map characters are not offset exactly 4 spaces by the tab
    (since it can represent any where between 1 to 4 spaces). This is distorting
    the map layout - run with map8.cub for a demonstration of this problem.
+   --> Possible solution: use the index of the tab character itself and apply
+       modulo division to find out how many characters tab should represent. This
+       method is not perfect though for cases when a single line has multiple tabs.
 
 ********************************************************************************
 
