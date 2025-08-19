@@ -1,0 +1,16 @@
+NO ./textures/theme_02/east.png
+SO ./textures/theme_02/north.png
+WE ./textures/theme_02/south.png        
+EA ./textures/theme_02/west.png
+
+F 255,0,255
+C 0,255,255
+
+            111111111111111
+             1000000000001
+              10000000001
+               100000001
+                1000001
+                 1N001
+                  101
+                   1

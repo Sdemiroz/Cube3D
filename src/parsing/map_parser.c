@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/07/30 01:55:03 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/19 05:19:22 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void	parse_key_data(t_game *game, char *line)
 	if (empty_line(line))
 		return ;
 	key = get_key_index(line);
-	// if (checker[key] || key == -1)
 	if (key == -1 || checker[key])
 	{
 		free(line);
@@ -107,6 +106,7 @@ static void	check_file_type(t_game *game, char *map_name)
 
 void	parse_game_data(t_game *game, char *map_name)
 {
+	printf("DEBUG: Opening map file: '%s'\n", map_name);
 	check_file_type(game, map_name);
 	game->map->fd = open(map_name, O_RDONLY);
 	if (game->map->fd < 0)
