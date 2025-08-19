@@ -6,14 +6,15 @@
 #    By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/11 20:46:08 by pamatya           #+#    #+#              #
-#    Updated: 2025/07/30 20:40:49 by sdemiroz         ###   ########.fr        #
+#    Updated: 2025/08/07 22:57:40 by sdemiroz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-1. Necessary coordinations between parsing and rendering -
+1. Urgent coordination points between project partners -
  -
 
+********************************************************************************
 
 2. Gameplay elements
  - The game seg-faults when the rendering goes out of bounds. This needs to be
@@ -29,29 +30,85 @@
    the bottom right and cannot go close enough in the opposite corner
  -
 
+********************************************************************************
 
 3. Project progress and game elements
  - Integrate and make runnable with the current parser instead of the mini-parser
  - Add rays within the field of view by using draw lines or similar
  - Add collision detection so that player does not overlap with existing blocks
  - Figuring out how to use textures and initializing them in the game struct
+ - DDA algorithm for ray length calculation
+ - Engine to transform ray length to object size in the 3d view
+ - Engine to remove fish-eye effect while rendering 3d view
+ - Impelemt scaling of minimap (probably using data->scale variable)
+ - Minimap player movement is not scaled with map size: this results in very
+   fast movement when map is big and the elements are scaled down to fit the
+   availed area for the minimap, and vice versa.
  -
 
+********************************************************************************
 
 4. Parsing issues
- - The check_key_data_completion() fn needs to be restored after texture initialization
- !- Parser needs to check for other types of spaces in map
- !- Parser needs to add extra padding for tabs and other types of spaces if necessary
- !- The direction that the player is facing is not linked by the parser
- - Color rgb's need to be checked (also if only uint8 is required)
- -
+ ! The check_key_data_completion() fn needs to be restored after texture initialization
+ ! Parser needs to check for other types of spaces in map
+ ! Parser needs to add extra padding for tabs and other types of spaces if necessary
+ ! The direction that the player is facing is not linked by the parser
+ ! Color rgb's need to be checked (also if only uint8 is required)
+ - There is an issue while parsing maps that contain tabs in the map-character-region.
+   Since, at the moment the tab is simply programmed to be replaced with 4 spaces,
+   issues arise when tab is combined with space, or even when tab is present in
+   such a way that the map characters are not offset exactly 4 spaces by the tab
+   (since it can represent any where between 1 to 4 spaces). This is distorting
+   the map layout - run with map8.cub for a demonstration of this problem.
 
+********************************************************************************
 
 5. Optimizations
- - Angle increment with turn keys are detected keeps increasing the angle of the
+ ! Angle increment with turn keys are detected keeps increasing the angle of the
    current direction. This might be an issue while stress-testing. Remedy this by
-   using the fmod() fn with 2*PI value.
+   using the fmod() fn with 2*PI value. -> Remedied using simplified normalization
+   with 2PI value (not fmod() fn)
  - The player direction drawn at the moment should be executed as a pointer to
    the struct rays and drawn in a similar way to the way other rays will be drawn,
    using a single consistent function
+ - The boundary variables in the move_player() fn from events.c can be created as
+   additional fields to avoid extra calculations in every loop step. Since the
+   bounds as their current state are made up of other fields in the data struct
+   that don't change, precalculating them can save a good amount of processing
+   overhead as it builds up from the events listening at 60 fps or so.
+ - An easy way for scaling can be achieved by simply dynamically calculating tile_size,
+   which is already linked to most places in the program.
+   tile_size = mmp_w / <fixed maximum dimension to allow for minimap>
+   This may be further optimized by deciding between choosing to calculate the
+   tile_size using the mmp_w or mmp_h depending on their value and criticality with
+   respect to space alloted for displaying minimap in either dimensions.
+ - Remove the Compound literal initialization method (spawn_new.c) before submitting
+   because even it is possibly C99 (possibly forbidden) standard initialization
+   method and also it might be interpreted differently by the compiler on a different
+   system (linux).
+ - In makefile, add a condition in target "all" to check if MLX42 library is already
+   present, if not then it should be build first with "make sub_init". This is for
+   the first time the repo will be cloned by the evaluator.
  -
+
+********************************************************************************
+
+6. Mysteries to solve:
+ - Drawing current direction still works when the previous direction is not updated
+ - There is this issue for images in the player struct (both imgs), that when the
+   drawing goes out of bounds it tends to wrap around the image and continues to
+   be drawn on the other side
+ - FOV toggle was added for easy debugging, but the keypress seems to be not registered,
+   or some other issue is causing this toggle to fail
+ - Without the bounds check in its current state (not collision detection), the
+   movement of cur_direction ray (draw_cu_direction() fn) is able to travel out
+   of the bounds of the minimap area
+ -
+
+********************************************************************************
+
+** Legend:
+! - Completed task
+
+
+********************************************************************************
