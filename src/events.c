@@ -19,12 +19,14 @@ static void	upon_press(t_key keydata, void *param);
 static void	upon_close(void *param);
 
 static void	move_player(t_game *game, t_key keydata);
-static void	apply_movement(t_data *data, double move_step, t_key keydata);
+static int	apply_movement(t_data *data, double move_step, t_key keydata);
 static void turn_player(t_game *game, t_key keydata);
 
 static void	toggle_fov(t_game *game);
 
-// static bool	has_space_to_move(t_game *game, int new_x, int new_y);
+// Debugging functions
+static void	move_view(t_game *game, t_key keydata);
+
 
 void	init_events(void *param)
 {
@@ -60,6 +62,15 @@ static void	upon_press(t_key keydata, void *param)
 		turn_player(game, keydata);
 	else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 		toggle_fov(game);
+	else if (((keydata.key == MLX_KEY_I) &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_K &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_J &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)) ||
+			(keydata.key == MLX_KEY_L &&
+			(keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)))
+		move_view(game, keydata);
 	// else if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
 	// 	reset_bounds(game);
 }
@@ -96,32 +107,40 @@ static void	move_player(t_game *game, t_key keydata)
 
 	data = game->data;
 	pl = game->player;
-	move_step = 3; // Define a step size for movement
+	move_step = 2; // Define a step size for movement
 	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
 	if (is_running)
 		move_step *= 5; // Increase step size when running
 
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
-	apply_movement(data, move_step, keydata);
+	if (apply_movement(data, move_step, keydata))
+		cast_rays(pl->map, pl->rays, data);
 	draw_current_fov(pl, pl->rays);
 	draw_cur_direction(pl, data);
 }
 
-static void	apply_movement(t_data *data, double move_step, t_key keydata)
+static int	apply_movement(t_data *data, double move_step, t_key keydata)
 {
 	int	posx;
 	int	posy;
 	int	boundx[2];
 	int	boundy[2];
+	int	center_x;
+	int	center_y;
+	int	tile_size;
+	int	ret;
+
+	ret = 0;
 	
 	posx = data->pl_posx;
 	posy = data->pl_posy;
+	tile_size = data->tile_size;
 
-	boundx[0] = data->tile_size;
-	boundx[1] = data->mmp_w - data->tile_size;
-	boundy[0] = data->tile_size;
-	boundy[1] = data->mmp_h - data->tile_size;
+	boundx[0] = tile_size;
+	boundx[1] = data->mmp_w - tile_size;
+	boundy[0] = tile_size;
+	boundy[1] = data->mmp_h - tile_size;
 
 	if (keydata.key == MLX_KEY_W)
 	{
@@ -143,30 +162,66 @@ static void	apply_movement(t_data *data, double move_step, t_key keydata)
 		posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
 		posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
 	}
+	center_x = posx + tile_size / 2;
+	center_y = posy + tile_size / 2;
 
-	// Original block to allow movement only when movement in both x and y are possible
+	// // Original block to allow movement only when movement in both x and y are possible
 	// if (posx > boundx[0] && posx < boundx[1] &&
 	// 		posy > boundy[0] && posy < boundy[1])
 	// {
 	// 	data->pl_posx = posx;
 	// 	data->pl_posy = posy;
-	// 	data->pl_center_x = posx + data->tile_size / 2;
-	// 	data->pl_center_y = posy + data->tile_size / 2;
+	// 	data->pl_center_x = posx + tile_size / 2;
+	// 	data->pl_center_y = posy + tile_size / 2;
 	// }
 	
-	// Changed to have allow movement in atleast one direction when possible
-	if (posx > boundx[0] && posx < boundx[1])
+	// // Changed to allow movement in atleast one direction when possible
+	// if (posx > boundx[0] && posx < boundx[1])
+	// {
+	// 	data->pl_posx = posx;
+	// 	data->pl_center_x = posx + tile_size / 2;
+	// }
+	// if (posy > boundy[0] && posy < boundy[1])
+	// {
+	// 	data->pl_posy = posy;
+	// 	data->pl_center_y = posy + tile_size / 2;
+	// }
+
+	// With new collision detection function, with bounds check
+	// if (posx >= boundx[0] && posx < boundx[1]
+	// 			&& posy >= boundy[0] && posy < boundy[1])
+	// {
+	// 	if (!wall_in_the_way_hori(get_map(), center_x, center_y))
+	// 	{
+	// 		data->pl_posx = posx;
+	// 		data->pl_center_x = posx + tile_size / 2;
+	// 	}
+	// 	if (!wall_in_the_way_vert(get_map(), center_x, center_y))
+	// 	{
+	// 		data->pl_posy = posy;
+	// 		data->pl_center_y = posy + tile_size / 2;
+	// 	}
+	// 	ret = 1;
+	// 	printf("Return value set to 1, with new posx = %d\tand new posy = %d\n", posx, posy);
+	// }
+
+	// With new collision detection function, but without bounds check
+	if (!wall_in_the_way_hori(get_map(), center_x, center_y))
 	{
 		data->pl_posx = posx;
-		data->pl_center_x = posx + data->tile_size / 2;
+		data->pl_center_x = posx + tile_size / 2;
+		ret = 1;
 	}
-	if (posy > boundy[0] && posy < boundy[1])
+	if (!wall_in_the_way_vert(get_map(), center_x, center_y))
 	{
 		data->pl_posy = posy;
-		data->pl_center_y = posy + data->tile_size / 2;
+		data->pl_center_y = posy + tile_size / 2;
+		ret = 1;
 	}
 
 	// test_print_bounds(boundx, boundy);
+
+	return (ret);
 }
 
 static void turn_player(t_game *game, t_key keydata)
@@ -194,10 +249,12 @@ static void turn_player(t_game *game, t_key keydata)
 	else if (data->cur_dir >= 2 * PI)
 		data->cur_dir -= 2 * PI;						// Normalize to [0, 2*PI]
 
+	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
 	update_ray_attr_all(pl->rays);
 	draw_current_fov(pl, pl->rays);
-	draw_player_direction(game->player, data);
+	draw_cur_direction(pl, data);
+	// draw_player_direction(game->player, data);
 }
 
 static void	toggle_fov(t_game *game)
@@ -221,4 +278,34 @@ static void	toggle_fov(t_game *game)
 	}
 	// Redraw direction line to restore any pixels erased by FOV toggle
 	draw_cur_direction(pl, data);
+}
+
+static void	move_view(t_game *game, t_key keydata)
+{
+	t_data	*data;
+	int		move_step;
+	bool	is_running;
+	int		view_posx;
+	int		view_posy;
+
+	data = game->data;
+	move_step = 2; // Define a step size for movement
+	is_running = (keydata.modifier & MLX_SHIFT); // Check if shift is pressed
+	if (is_running)
+		move_step *= 5; // Increase step size when running
+
+	view_posx = data->debug_offset_x;
+	view_posy = data->debug_offset_y;
+
+	if (keydata.key == MLX_KEY_I)
+		view_posy -= move_step;
+	else if (keydata.key == MLX_KEY_K)
+		view_posy += move_step;	
+	else if (keydata.key == MLX_KEY_J)
+		view_posx -= move_step;
+	else if (keydata.key == MLX_KEY_L)
+		view_posx += move_step;
+
+	data->debug_offset_x = view_posx;
+	data->debug_offset_y = view_posy;
 }

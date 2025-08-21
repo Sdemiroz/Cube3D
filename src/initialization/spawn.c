@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/07 14:02:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/13 22:25:36 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ static void	initialize_map_data(t_data *data)
 	data->tiles_x = 0;
 	data->tiles_y = 0;
 	data->fov_toggle = true;
+
+	// Debugging elements
+	data->debug_offset_x = 0;	// offset for debugging view
+	data->debug_offset_y = 0;	// offset for debugging view
 }
 
 t_map	*get_map(void)
@@ -103,6 +107,10 @@ t_map	*get_map(void)
 			map->img_array = NULL;
 			map->game = NULL;
 			map->player = NULL;
+
+			// test elements
+			map->test = NULL;
+			map->test_inst_id = -1;
 		}
 	}
 	return (map);

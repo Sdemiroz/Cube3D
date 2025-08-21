@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/06 21:03:39 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/13 19:35:39 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,37 @@ static void	init_minimap(t_game *game, char *path_to_map)
 	parse_game_data(game, path_to_map);
 	update_game_data_after_parsing(data);
 	create_image_array(map, data);
-	
+
 	// test_print_data();			// !! extra utility, to be removed later
-	
+
 	// map->image = mlx_new_image(game->mlx, data->mmp_w * data->tile_size, data->mmp_h * data->tile_size);
 	map->image = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
 	if (!map->image)
 		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
 
+	// test elements ----
+	map->test = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
+	if (!map->test)
+		exit_early(game, "map_img: mlx_new_image failed", EXIT_FAILURE);
+
 	printf("%d	x	%d\n", data->mmp_w, data->mmp_h);	
 	map_array_printer(map, 1);	// !! extra utility, to be removed later
-	write_img_array(0, 0);
-		
+	// write_img_array(0, 0);
+	// ------------------
+
 	map->game = game;
 	map->player = game->player;
+}
+
+// Update function to update data fields not done by the parser
+static void update_game_data_after_parsing(t_data *data)
+{
+	data->cosine = cos(data->cur_dir);
+	data->sine = sin(data->cur_dir);
+	data->mmp_w = data->tiles_x * data->tile_size;
+	data->mmp_h = data->tiles_y * data->tile_size;
+	data->pl_center_x = data->pl_posx + data->tile_size / 2;
+	data->pl_center_y = data->pl_posy + data->tile_size / 2;
 }
 
 static void	init_player(t_game *game)
@@ -102,23 +119,11 @@ static void	init_player(t_game *game)
 	pl->view = mlx_new_image(game->mlx, data->mmp_w, data->mmp_h);
 	if (!pl->view)
 		exit_early(game, "view_img: mlx_new_image failed", EXIT_FAILURE);
-		
+
 	pl->rays = get_rays();
 	if (!pl->rays)
 		exit_early(game, "rays malloc failed", EXIT_FAILURE);
 	init_rays(pl->rays);
-
 	pl->game = game;
 	pl->map = game->map;
-}
-
-// Update function to update data fields not done by the parser
-static void update_game_data_after_parsing(t_data *data)
-{
-	data->cosine = cos(data->cur_dir);
-	data->sine = sin(data->cur_dir);
-	data->mmp_w = data->tiles_x * data->tile_size;
-	data->mmp_h = data->tiles_y * data->tile_size;
-	data->pl_center_x = data->pl_posx + data->tile_size / 2;
-	data->pl_center_y = data->pl_posy + data->tile_size / 2;
 }

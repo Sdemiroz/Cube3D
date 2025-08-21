@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/06 17:27:02 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/18 18:20:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 void		start_drawing(t_game *game);
 
 static void	draw_minimap(t_game *game, char **map);
-
-static void	place_block(t_img *img, int i, int j, int block_color);
 static void	draw_border(t_img *img, int	width, int height, int thickness);
+static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
-// static void	place_block2(t_img *img, int i, int j, int block_color, int bls);
-// static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
 void	start_drawing(t_game *game)
 {
@@ -34,88 +31,38 @@ void	start_drawing(t_game *game)
 
 	draw_minimap(game, map);
 	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
-	// draw_border(game->map->image, data->mmp_w, data->mmp_h, data->tile_size);
-	// draw_border2(game->map->image, data->mmp_w, data->mmp_h, SAND_YELLOW, 5);
-	// draw_border2(game->player->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
+	
+	cast_rays(pl->map, pl->rays, data);
+	
+	// test image
+	// draw_test_image();
+	
 	draw_current_fov(pl, pl->rays);
+	
 	place_player2D_2(game);
+	// draw_border2(pl->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
+	
 	draw_player_direction(game->player, data);
 }
 
 static void	draw_minimap(t_game *game, char **map)
 {
-	int			i;
-	int			j;
+	int	i;
+	int	j;
 
-	i = -1;
-	while (map[++i])
-	{
-		j = -1;
-		while (map[i][++j])
-		{
-			if (map[i][j] == '1')
-				place_block(game->map->image, j, i, STONE_GRAY);
-			else if (map[i][j] == '0' || is_valid(map[i][j]))
-				place_block(game->map->image, i, j, 0);
-		}
-	}
-}
-
-/*
-Function to place a block/tile of size as defined in the HEADER as TILE_SIZE
-  - if block color is provided as 0, then block_color will be white
-  - x and y are the starting coordinates (from upper left corner) of blocks in a
-  	tiled world representing the whole block of several pixels TILE_SIZE in 
-	width and height
-*/
-static void	place_block(t_img *img, int x, int y, int block_color)
-{
-	int		i;
-	int		j;
-	t_data	*data;
-
-	if (!block_color)
-		return ;
-	data = get_data();
 	j = -1;
-	while (++j < data->tile_size)
+	while (map[++j])
 	{
-		if (j == data->tile_size - 1)
-			break ;
-		else
+		i = -1;
+		while (map[j][++i])
 		{
-			i = -1;
-			while (++i < data->tile_size)
-			{
-				if (i == data->tile_size - 1)
-					break ;
-				mlx_put_pixel(img, x * data->tile_size + i,
-						y * data->tile_size + j, block_color);
-			}
+			if (map[j][i] == '1')
+				place_lined_block(game->map->image, i, j, STONE_GRAY);
+			else if (map[j][i] == '0' || is_valid(map[j][i]))
+				place_lined_block(game->map->image, i, j, DARK_GRAY);
 		}
 	}
 }
-
-// static void	place_block(t_img *img, int x, int y, int block_color)
-// {
-// 	int		i;
-// 	int		j;
-// 	t_data	*data;
-
-// 	if (!block_color)
-// 		return ;
-// 	data = get_data();
-// 	j = -1;
-// 	while (++j < data->tile_size)
-// 	{
-// 		i = -1;
-// 		while (++i < data->tile_size)
-// 		{
-// 			mlx_put_pixel(img, x * data->tile_size + i,
-// 					y * data->tile_size + j, block_color);
-// 		}
-// 	}
-// }
 
 static void	draw_border(t_img *img, int width, int height, int thickness)
 {
@@ -124,10 +71,9 @@ static void	draw_border(t_img *img, int width, int height, int thickness)
 	int	block_x;
 	int	block_y;
 
-	i = -1;
-	j = -1;
 	block_x = width / thickness;
 	block_y = height / thickness;
+	j = -1;
 	while (++j < block_y)
 	{
 		i = -1;
@@ -143,46 +89,28 @@ static void	draw_border(t_img *img, int width, int height, int thickness)
 	}
 }
 
-// // bls = TILE_SIZE 
-// static void	place_block2(t_img *img, int x, int y, int block_color, int bls)
-// {
-// 	int		i;
-// 	int		j;
+static void	draw_border2(t_img *img, int width, int height, int color, int bls)
+{
+	int i;
+	int	j;
+	int	block_x;
+	int	block_y;
 
-// 	if (!block_color)
-// 		return ;
-// 	j = -1;
-// 	while (++j < bls)
-// 	{
-// 		i = -1;
-// 		while (++i < bls)
-// 			mlx_put_pixel(img, x * bls + i, y * bls + j,
-// 					block_color);
-// 	}
-// }
-
-// static void	draw_border2(t_img *img, int width, int height, int color, int bls)
-// {
-// 	int i;
-// 	int	j;
-// 	int	block_x;
-// 	int	block_y;
-
-// 	i = -1;
-// 	j = -1;
-// 	block_x = width / bls;
-// 	block_y = height / bls;
-// 	while (++j < block_y)
-// 	{
-// 		i = -1;
-// 		if (j == 0 || j == (block_y - 1))
-// 			while (++i < block_x)
-// 				place_block2(img, i, j, color, bls);
-// 		else
-// 		{
-// 			while (++i < block_x)
-// 				if (i == 0 || i == (block_x - 1))
-// 					place_block2(img, i, j, color, bls);	
-// 		}
-// 	}
-// }
+	i = -1;
+	j = -1;
+	block_x = width / bls;
+	block_y = height / bls;
+	while (++j < block_y)
+	{
+		i = -1;
+		if (j == 0 || j == (block_y - 1))
+			while (++i < block_x)
+				place_block2(img, i, j, color, bls);
+		else
+		{
+			while (++i < block_x)
+				if (i == 0 || i == (block_x - 1))
+					place_block2(img, i, j, color, bls);	
+		}
+	}
+}

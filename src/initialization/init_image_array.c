@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:56:54 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/07 14:48:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/07 15:23:39 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,47 +42,6 @@ void	create_image_array(t_map *map, t_data *data)
 	map->img_array = img_array;
 	morph_map_to_img(map->map_array, img_array, data->tile_size, data);
 }
-
-// static void	morph_map_to_img(char **map, char **img, int hop, t_data *data)
-// {
-// 	// int		img_xy[2];		// To replace image coordinate iterators
-// 	// int		map_xy[2];		// To replace map coordinate iterators
-// 	// int		map_xy_max[2];	// To replace map coordinate limits
-// 	char	c;
-
-// 	// image coordinate iterators
-// 	int		x;
-// 	int		y;
-	
-// 	// map-coordinates iterators
-// 	int		i;
-// 	int		j;
-	
-// 	// map coordinate limits
-// 	int		map_xmax;
-// 	int		map_ymax;
-	
-// 	// map-coordinate limits init
-// 	map_xmax = data->tiles_x;
-// 	map_ymax = data->tiles_y;
-	
-// 	j = -1;
-// 	y = 0;
-// 	while (++j < map_ymax)
-// 	{
-// 		i = -1;
-// 		x = 0;
-// 		while (++i < map_xmax)
-// 		{
-// 			c = map[j][i];
-// 			if (is_player(c))
-// 				c = '0';
-// 			write_char_block(img, x, y, c);
-// 			x += hop;
-// 		}
-// 		y += hop;
-// 	}
-// }
 
 static void	morph_map_to_img(char **map, char **img, int hop, t_data *data)
 {

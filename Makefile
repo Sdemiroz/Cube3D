@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/08/06 18:09:16 by pamatya          ###   ########.fr        #
+#    Updated: 2025/08/15 16:50:57 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ C = drawing
 D = rendering
 E = utils
 F = coordinates
+G = ray_casting
 
 Z1 = __interims
 Z2 = __test_printers
@@ -101,12 +102,13 @@ SRCS	:=	main.c start.c events.c \
 			$(A)/init_rays.c $(A)/init_image_array.c \
 			$(B)/check_map.c $(B)/map_parser.c $(B)/parsing_helper.c \
 			$(B)/expand_tabs.c $(B1)/minimap_parser.c \
-			$(C)/draw_circle.c $(C)/draw.c $(C)/rays.c \
+			$(C)/draw_circle.c $(C)/draw.c $(C)/blocks.c $(C)/rays.c \
 			$(D)/renders.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
-			$(F)/transform.c \
+			$(F)/collisions.c $(F)/transform.c \
+			$(G)/ray_caster.c \
 			$(Z1)/circles_improved.c \
-			$(Z2)/test_prints.c $(Z2)/print_map_utils.c
+			$(Z2)/test_prints.c $(Z2)/print_map_utils.c $(Z2)/draw_test_image.c
 
 OBJS	:=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
 DEPS	:=	$(OBJS:%.o=%.d)

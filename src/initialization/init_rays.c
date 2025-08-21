@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 18:07:21 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/06 18:08:38 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/15 12:33:29 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init_rays(t_rays **rays)
 	while (++i < num_rays)
 	{
 		ray = rays[i];
+		ray->index = i;
 		init_ray_delta(ray, num_rays, i);	// Left rays -> -ve delta, Right rays -> +ve delta
 		ray->prev_dir = &data->prev_dir;
 		ray->cur_dir = &data->cur_dir;
@@ -39,31 +40,47 @@ void	init_rays(t_rays **rays)
 		ray->cosine = cos(ray->angle);
 		ray->sine = sin(ray->angle);
 		ray->length = RAY_LEN_DEFAULT * data->tile_size;	// Preliminary initialising value
-		ray->start_x = &data->pl_center_x;
-		ray->start_y = &data->pl_center_y;
+		ray->center_x = &data->pl_center_x;
+		ray->center_y = &data->pl_center_y;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}
 }
 
+// // Rays are distributed with an equal 1 degree delta across the FOV
+// static void	init_ray_delta(t_rays *ray, int num_rays, int i)
+// {
+// 	if (num_rays % 2 == 0)
+// 	{
+// 		if (i < num_rays / 2)
+// 			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
+// 		else
+// 			ray->delta = ((double)(i + 1 - (num_rays / 2))) * PI / 180;
+// 	}
+// 	else
+// 	{
+// 		if (i < num_rays / 2)
+// 			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
+// 		else if (i == num_rays / 2)
+// 			ray->delta = 0;
+// 		else if (i > num_rays / 2)
+// 			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
+// 	}	
+// }
+
+// Rays are distributed equidistantly across the FOV
 static void	init_ray_delta(t_rays *ray, int num_rays, int i)
 {
-	if (num_rays % 2 == 0)
-	{
-		if (i < num_rays / 2)
-			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
-		else
-			ray->delta = ((double)(i + 1 - (num_rays / 2))) * PI / 180;
-	}
-	else
-	{
-		if (i < num_rays / 2)
-			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
-		else if (i == num_rays / 2)
-			ray->delta = 0;
-		else if (i > num_rays / 2)
-			ray->delta = ((double)(i - (num_rays / 2))) * PI / 180;
-	}	
+	t_data	*data;
+	double	equi_delta;
+	double	fov;
+	int		fov2;
+	
+	data = get_data();
+	fov = data->fov;
+	fov2 = (int)fov / 2;
+	equi_delta = fov / (double)(num_rays - 1);
+	ray->delta = ((i * equi_delta - (double)fov2)) * PI / 180;
 }
 
 static void	init_ray_angle(t_rays *ray)
