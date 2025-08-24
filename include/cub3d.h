@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/06 06:06:38 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/08/24 14:09:17 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@
 
 // Debug Colors
 # define DEBUG_RED		0xFF000080  // Semi-transparent red
+# define TEST_IMG_RED	0xFF000020  // Semi-transparent red
 # define DEBUG_GREEN	0x00FF0080  // Semi-transparent green
 # define DEBUG_GREEN2	0x00FF0040  // Semi-transparent green
 # define DEBUG_BLUE		0x0000FF80  // Semi-transparent blue
@@ -93,20 +94,20 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 8
+# define PLAYER_DIA 20
 # define START_PX 500
 # define START_PY 500
-# define FOV 60.0f				// Field of View in degrees, f for float
-# define NUM_RAYS 60
-# define RAY_LEN_DEFAULT 6		// This number multiple of tile_size
+# define FOV 115.0f				// Field of View in degrees, f for float
+# define NUM_RAYS 721
+# define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
 
 // Mini-Map Constants
-# define TILE_SIZE 15
-# define MAP_W 600
-# define MAP_H 210
-# define MAP_OFFSET_X 25
-# define MAP_OFFSET_Y 25
+# define TILE_SIZE 40
+# define MMP_W 600
+# define MMP_H 210
+# define MAP_OFFSET_X 40
+# define MAP_OFFSET_Y 40
 # define MAP_SCALE 1.0f			// Scale for the minimap
 
 /******************************************************************************/
@@ -140,6 +141,20 @@ typedef struct s_data t_data;
 typedef struct s_map t_map;
 typedef struct s_player t_player;
 typedef struct s_rays t_rays;
+typedef struct s_ivec t_ivec;
+typedef struct s_dvec t_dvec;
+
+typedef struct s_ivec
+{
+	int	x;
+	int	y;
+}	t_ivec;
+
+typedef struct s_dvec
+{
+	double	x;
+	double	y;
+}	t_dvec;
 
 typedef struct s_colour
 {
@@ -186,7 +201,7 @@ typedef struct s_data
 	int		pl_center_y;
 
 	// Ray casting elements
-	float	fov;			// Field of View in degrees, f for float
+	double	fov;			// Field of View in degrees, f for float
 	int		num_rays;		// No. of rays to cast within the FOV
 	char	ini_dir;		// initial player direction character (N, S, E, W), initialized to N
 	double	prev_dir;		// player direction in radians
@@ -203,6 +218,11 @@ typedef struct s_data
 	int	 	tile_size;		// size of each tile/block in the overview map
 	int		tiles_x;
 	int		tiles_y;
+	bool	fov_toggle;
+
+	// Debugging elements
+	int		debug_offset_x;	// offset for debugging view
+	int		debug_offset_y;	// offset for debugging view
 } t_data;
 
 typedef struct s_map
@@ -213,9 +233,14 @@ typedef struct s_map
 	int			image_inst_id;	// instance ID for 2D map image
 	int			fd;				// file descriptor for map file
 	char		**map_array;	// 2D array of map data (strings)
+	char		**img_array;	// 2D array of image data (strings)
 
 	t_player	*player;		// pointer to player struct for convenience
 	t_game		*game;
+
+	// test elements
+	t_img		*test;
+	int			test_inst_id;
 } t_map;
 
 typedef struct s_player
@@ -241,8 +266,9 @@ typedef struct s_rays
 	double		angle;			// absolute angle of the ray in radians
 	double		cosine;			// cosine of the angle
 	double		sine;			// sine of the angle
-	int			*start_x;		// x coordinate of the starting point of the ray
-	int			*start_y;		// y coordinate of the starting point of the ray
+	t_dvec		coeff;			// element for ray-casting (must be updated in run-time)
+	int			*center_x;		// x coordinate of the starting point of the ray
+	int			*center_y;		// y coordinate of the starting point of the ray
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
@@ -274,6 +300,11 @@ void		parse_line(t_game *game, char *line);
 int			validate_map_line(t_game *game, char *line);
 void		init_background(t_game *game);
 
+void		init_rays(t_rays **rays);
+
+void		create_image_array(t_map *map, t_data *data);
+
+
 // src/parsing
 
 void		check_map(t_game *game);
@@ -289,22 +320,25 @@ void		allocate_map_array(t_game *game, char *line);
 
 // src/drawing
 
-void		draw_map(t_game *game);
+void		start_drawing(t_game *game);
+
+void		place_block(t_img *img, int i, int j, int block_color);
+void		place_block2(t_img *img, int i, int j, int block_color, int bls);	// might be removed later
+void		place_lined_block(t_img *img, int x, int y, int block_color);
 
 void		place_player2D_2(t_game *game);
 
 void		draw_player_direction(t_player *pl, t_data *data);
-void		erase_previous_ray(t_player *pl, t_data *data);
-void		draw_forward_ray(t_player *pl, t_data *data);
-
-void		redraw_fov(t_player *pl, t_rays **rays);
-void		draw_ray(t_player * pl, t_rays *ray);
-void		update_ray_attr(t_rays *ray);
-void		erase_ray(t_player * pl, t_rays *ray);
+void		erase_prev_direction(t_player *pl, t_data *data);
+void		draw_cur_direction(t_player *pl, t_data *data);
 
 void		erase_previous_fov(t_player *pl, t_rays **rays);
-void		update_ray_attr_all(t_rays **rays);
+void		erase_ray(t_player * pl, t_rays *ray);
+
 void		draw_current_fov(t_player *pl, t_rays **rays);
+void		draw_ray(t_player * pl, t_rays *ray);
+
+void		udpate_rays(t_rays **rays, t_map *map, t_data *data);
 
 // src/rendering
 
@@ -312,11 +346,24 @@ void		init_graphics_rendering(void *param);
 void		render_3d_walls(t_game *game);
 uint32_t	get_pixel_from_texture(mlx_texture_t *texture, int x, int y);
 
+// src/coordinates
+
+bool		wall_in_the_way_hori(t_map *map, int new_cx, int new_cy);
+bool		wall_in_the_way_vert(t_map *map, int new_cx, int new_cy);
+
+void		to_map_xy(int *map_xy, int img_x, int img_y);
+void		to_img_xy(int *img_xy, int map_x, int map_y);
+
+// src/ray_casting
+
+void		cast_rays(t_map *map, t_rays **rays, t_data *data);
+
 // src/utils
 
 bool 		is_valid(char c);
 bool 		is_valid_block(char c);
 bool 		is_player(char c);
+int			ft_maxi(int x, int y);
 void		exit_early(t_game *game, char *msg, int ret);
 
 
@@ -329,8 +376,11 @@ void		exit_early(t_game *game, char *msg, int ret);
 void		parse_minimap(t_map *map);
 
 // src/test_printers
+
 void		test_print_data();
 void		test_print_rays(char c);
 void		map_array_printer(t_map *map, int flag);
+void		write_img_array(int xmax, int ymax);
+void		draw_test_image(void);
 
 #endif

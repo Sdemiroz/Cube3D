@@ -13,6 +13,7 @@
 #include "../../include/cub3d.h"
 
 void	map_array_printer(t_map *map, int flag);
+void	write_img_array(int xmax, int ymax);
 
 static void	printf_map(t_map *map);
 static void	printf_map_colorful(t_map *map);
@@ -30,9 +31,9 @@ void	map_array_printer(t_map *map, int flag)
 	if (flag & 4)
 		printf_map_colorful(map);	// print from parsed map
 	if (flag & 2)
-		printf_map(map);	// print from parsed map
+		printf_map(map);			// print from parsed map
 	if (flag & 1)
-		write_map_colorful(map);		// print from parsed map
+		write_map_colorful(map);	// print from parsed map
 }
 
 static void	printf_map(t_map *map)
@@ -101,4 +102,36 @@ static void	write_map_colorful(t_map *map)
 		write(1, "\n", 1); // New line after each row
 	}
 	write(1, "\033[0m", 4); // Reset color
+}
+
+void	write_img_array(int xmax, int ymax)
+{
+	t_map	*map;
+	t_data	*data;
+	char	**img;
+	int		i;
+	int		j;
+	char	c;
+
+	map = get_map();
+	data = get_data();
+	img = map->img_array;
+	if (xmax == 0)
+		xmax = data->mmp_w;
+	if (ymax == 0)
+		ymax = data->mmp_h;
+	j = -1;
+	while (++j < ymax)
+	{
+		i = -1;
+		while (++i < xmax)
+		{
+			c = img[j][i];
+			if (c != '0')
+				write(1, &c, 1);
+			else
+				write(1, " ", 1);
+		}
+		write(1, "\n", 1);
+	}
 }

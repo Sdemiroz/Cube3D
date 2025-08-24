@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   spawn.c                                            :+:      :+:    :+:   */
+/*   spawn_new.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/13 22:25:36 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/07 13:55:22 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,11 @@ static void	initialize_map_data(t_data *data);
 // 		game = ft_malloc(sizeof(t_game));
 // 		if (game)
 // 		{
-// 			game->data = NULL;
-// 			game->mlx = NULL;
-// 			game->img3D = NULL;
-// 			game->img3D_inst_id = -1;	// Initialize 3D image instance ID to -1
-// 			// game->gun3D = NULL;
-// 			// game->gun_inst_id = -1;
-
-// 			game->map = NULL;			// Initialize map pointer to NULL
-// 			game->player = NULL;		// Initialize player pointer to NULL
+// 			*game = (t_game){
+// 				.mlx = NULL,
+// 				.img3D_inst_id = -1,	// Initialize 3D image instance ID to -1
+// 				// .gun_inst_id = -1,
+// 			};
 // 		}
 // 	}
 // 	return (game);
@@ -84,10 +80,6 @@ static void	initialize_map_data(t_data *data)
 	data->tiles_x = 0;
 	data->tiles_y = 0;
 	data->fov_toggle = true;
-
-	// Debugging elements
-	data->debug_offset_x = 0;	// offset for debugging view
-	data->debug_offset_y = 0;	// offset for debugging view
 }
 
 t_map	*get_map(void)
@@ -99,18 +91,10 @@ t_map	*get_map(void)
 		map = ft_malloc(sizeof(t_map));
 		if (map)
 		{
-			map->data = NULL;
-			map->image = NULL;
-			map->image_inst_id = -1;
-			map->fd = -1;
-			map->map_array = NULL;
-			map->img_array = NULL;
-			map->game = NULL;
-			map->player = NULL;
-
-			// test elements
-			map->test = NULL;
-			map->test_inst_id = -1;
+			*map = (t_map){
+				.image_inst_id = -1,
+				.fd = -1,
+			};
 		}
 	}
 	return (map);
@@ -125,14 +109,10 @@ t_player	*get_player(void)
 		player = ft_malloc(sizeof(t_player));
 		if (player)
 		{
-			player->data = NULL;
-			player->blob2D = NULL;
-			player->blob_inst_id = -1;
-			player->view = NULL;
-			player->view_inst_id = -1;
-			player->game = NULL;
-			player->map = NULL;
-			player->rays = NULL;
+			*player = (t_player){
+				.blob_inst_id = -1,
+				.view_inst_id = -1,
+			};
 		}
 	}
 	return (player);

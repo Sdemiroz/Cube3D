@@ -12,3 +12,10 @@
 11000001010101011111011010N00011001aaaaa
 11110111011101010101111010000000001aaaaa
 11111111111111111111111111111111111aaaaa
+
+
+Solution/insight to positioning-anomaly problem
+- Render should be provided pl_posx,y (without center offsets) for image positioning
+which is the upper-left corner of the tile, which is currently the case
+- The movement updates should be made using pl_center_x,y coordinates which are 
+actually the center of the tile

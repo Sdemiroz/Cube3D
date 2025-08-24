@@ -9,3 +9,4 @@ lib/obj/
 *.a
 *.out
 cub3d
+Modules.txt
