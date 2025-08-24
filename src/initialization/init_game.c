@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:27:08 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/24 16:57:55 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,29 @@ static void	init_player(t_game *game)
 	init_rays(pl->rays);
 	pl->game = game;
 	pl->map = game->map;
+}
+
+void	init_background(t_game *game)
+{
+	int			x;
+	int			y;
+	uint32_t	ceiling;
+	uint32_t	floor;
+
+	y = 0;
+	ceiling = (game->ceiling_color.r << 24) | (game->ceiling_color.g << 16) | (game->ceiling_color.b << 8) | 0xFF;
+	floor = (game->floor_color.r << 24) | (game->floor_color.g << 16) | (game->floor_color.b << 8) | 0xFF;
+	while(y < game->data->wind_h)
+	{
+		x = 0;
+		while(x < game->data->wind_w)
+		{
+			if (y < game->data->wind_h / 2)
+				mlx_put_pixel(game->background, x, y, ceiling);
+			else
+				mlx_put_pixel(game->background, x, y, floor);
+			x++;
+		}
+		y++;
+	}
 }

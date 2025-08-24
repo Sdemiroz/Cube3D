@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:09:17 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:18:52 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 20
+# define PLAYER_DIA 8
 # define START_PX 500
 # define START_PY 500
 # define FOV 115.0f				// Field of View in degrees, f for float
@@ -103,11 +103,12 @@
 
 
 // Mini-Map Constants
-# define TILE_SIZE 40
+# define TILE_SIZE 15
 # define MMP_W 600
 # define MMP_H 210
-# define MAP_OFFSET_X 40
-# define MAP_OFFSET_Y 40
+# define MAP_OFFSET_X 25
+# define MAP_OFFSET_Y 25
+# define PL_DIR_LEN 8
 # define MAP_SCALE 1.0f			// Scale for the minimap
 
 /******************************************************************************/

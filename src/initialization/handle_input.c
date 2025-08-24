@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:47:59 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/24 16:58:28 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,5 +186,6 @@ void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 		free(texture_path);
 		free(line);
 	}
-	free(texture_path);
+	else
+		free(texture_path);
 }

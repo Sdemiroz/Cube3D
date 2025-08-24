@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:51:11 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/24 13:57:23 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:04:08 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	erase_prev_direction(t_player *pl, t_data *data)
 	center_x = data->pl_center_x;
 	center_y = data->pl_center_y;
 	distance = 0;
-	while (distance++ < 25)
+	while (distance++ < PL_DIR_LEN)
 	{
 		ix = center_x + (int)(distance * data->cosine);	// As for image coordinates, right is still plus positive and left is still negative
 		iy = center_y - (int)(distance * data->sine); // As for image coordinates, up is negative/decrement and down is positive/increment
@@ -74,7 +74,7 @@ void	draw_cur_direction(t_player *pl, t_data *data)
 	center_x = data->pl_center_x;
 	center_y = data->pl_center_y;
 	distance = 0;
-	while (distance++ < 25)
+	while (distance++ < PL_DIR_LEN)
 	{
 		ix = center_x + (int)(distance * data->cosine);	// As for image coordinates, right is still plus positive and left is still negative
 		iy = center_y - (int)(distance * data->sine); // As for image coordinates, up is negative/decrement and down is positive/increment

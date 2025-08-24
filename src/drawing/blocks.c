@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 16:44:50 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/15 17:18:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:05:03 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	place_lined_block(t_img *img, int x, int y, int block_color)
 	int		tile_size;
 	int		border;
 
-	border = 0;
+	// border = 0;
+	border = BLACK;
 	tile_size = get_data()->tile_size;
 	j = -1;
 	while (++j < tile_size)
