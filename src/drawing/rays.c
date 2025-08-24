@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:51:11 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/20 22:13:16 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/23 19:26:10 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	erase_ray(t_player * pl, t_rays *ray);
 void	draw_current_fov(t_player *pl, t_rays **rays);
 void	draw_ray(t_player * pl, t_rays *ray);
 
-void	update_ray_attr_all(t_rays **rays);
-void	update_ray_attr(t_rays *ray);
+void	udpate_rays(t_rays **rays, t_map *map, t_data *data);
+static void	update_ray_attr(t_rays *ray, t_data *data);
 
 
 /*
@@ -184,26 +184,24 @@ void	draw_ray(t_player * pl, t_rays *ray)
 	}
 }
 
-void	update_ray_attr_all(t_rays **rays)
+void	udpate_rays(t_rays **rays, t_map *map, t_data *data)
 {
 	t_rays	*ray;
-	t_data	*data;
 
 	int		i;
 	int		num_rays;
-	
-	data = get_data();
+
 	num_rays = data->num_rays;
 	i = -1;
 	while (++i < num_rays)
 	{
 		ray = rays[i];
-		update_ray_attr(ray);
+		update_ray_attr(ray, data);
 	}
-	cast_rays(get_map(), rays, data);
+	cast_rays(map, rays, data);
 }
 
-void	update_ray_attr(t_rays *ray)
+static void	update_ray_attr(t_rays *ray, t_data *data)
 {
 	double	pi2;
 
@@ -215,4 +213,13 @@ void	update_ray_attr(t_rays *ray)
 		ray->angle -= pi2; // Normalize to [0, 2*PI]
 	ray->cosine = cos(ray->angle);
 	ray->sine = sin(ray->angle);
+	if (fabs(ray->cosine) > 1e-6)												// if the cosine ratio is non-zero
+		ray->coeff.x = 1 / ray->cosine;
+	else
+		ray->coeff.x = data->mmp_w;													// setting to an arbitrary max value if cosine is zero
+	
+	if (fabs(ray->sine) > 1e-6)													// if the sine ratio is non-zero
+		ray->coeff.y = 1 / ray->sine;
+	else
+		ray->coeff.y = data->mmp_h;
 }

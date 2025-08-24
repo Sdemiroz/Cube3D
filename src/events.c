@@ -233,28 +233,24 @@ static void turn_player(t_game *game, t_key keydata)
 
 	data = game->data;
 	pl = game->player;
-	rotation = PI / 36;				// Rotation in radians equivalent to 5 degrees
-	fast = (keydata.modifier & MLX_SHIFT);			// Check if shift is pressed
+	rotation = PI / 36;							// Rotation in radians equivalent to 5 degrees
+	fast = (keydata.modifier & MLX_SHIFT);		// Check if shift is pressed
 	if (fast)
-		rotation *= 4;	 		// Increase rotation speed when shift is pressed
-
+		rotation *= 4;	 						// Increase rotation speed when shift is pressed
 	data->prev_dir = data->cur_dir;
 	if (keydata.key == MLX_KEY_LEFT)
 		data->cur_dir += rotation;
 	else if (keydata.key == MLX_KEY_RIGHT)
 		data->cur_dir -= rotation;
-
 	if (data->cur_dir < 0)
-		data->cur_dir += 2 * PI; 						// Normalize to [0, 2*PI]
+		data->cur_dir += 2 * PI; 				// Normalize to [0, 2*PI]
 	else if (data->cur_dir >= 2 * PI)
-		data->cur_dir -= 2 * PI;						// Normalize to [0, 2*PI]
-
+		data->cur_dir -= 2 * PI;				// Normalize to [0, 2*PI]
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
-	update_ray_attr_all(pl->rays);
+	udpate_rays(pl->rays, game->map, data);
 	draw_current_fov(pl, pl->rays);
 	draw_cur_direction(pl, data);
-	// draw_player_direction(game->player, data);
 }
 
 static void	toggle_fov(t_game *game)

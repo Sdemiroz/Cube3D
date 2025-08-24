@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/21 11:25:21 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/08/23 19:20:32 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ typedef struct s_rays
 	double		angle;			// absolute angle of the ray in radians
 	double		cosine;			// cosine of the angle
 	double		sine;			// sine of the angle
+	t_dvec		coeff;			// element for ray-casting (must be updated in run-time)
 	int			*center_x;		// x coordinate of the starting point of the ray
 	int			*center_y;		// y coordinate of the starting point of the ray
 	int			hit_x;			// x coordinate of the hit point
@@ -334,8 +335,7 @@ void		erase_ray(t_player * pl, t_rays *ray);
 void		draw_current_fov(t_player *pl, t_rays **rays);
 void		draw_ray(t_player * pl, t_rays *ray);
 
-void		update_ray_attr_all(t_rays **rays);
-void		update_ray_attr(t_rays *ray);
+void		udpate_rays(t_rays **rays, t_map *map, t_data *data);
 
 // src/rendering
 
@@ -358,6 +358,7 @@ void		cast_rays(t_map *map, t_rays **rays, t_data *data);
 bool 		is_valid(char c);
 bool 		is_valid_block(char c);
 bool 		is_player(char c);
+int			ft_maxi(int x, int y);
 void		exit_early(t_game *game, char *msg, int ret);
 
 
