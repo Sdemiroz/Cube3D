@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 17:18:52 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/04 17:48:00 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,23 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 8
+// # define PLAYER_DIA 8
+# define PLAYER_DIA 25
 # define START_PX 500
 # define START_PY 500
-# define FOV 115.0f				// Field of View in degrees, f for float
-# define NUM_RAYS 721
+# define FOV 60.0f				// Field of View in degrees, f for float
+# define NUM_RAYS 3
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
-
 // Mini-Map Constants
-# define TILE_SIZE 15
+// # define TILE_SIZE 15
+# define TILE_SIZE 40
 # define MMP_W 600
 # define MMP_H 210
 # define MAP_OFFSET_X 25
 # define MAP_OFFSET_Y 25
-# define PL_DIR_LEN 8
+// # define PL_DIR_LEN 8
+# define PL_DIR_LEN 20
 # define MAP_SCALE 1.0f			// Scale for the minimap
 
 /******************************************************************************/
@@ -273,6 +275,8 @@ typedef struct s_rays
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
+	char		hit_wall;		// N, S, E or W
+	t_txr		*tex;
 } t_rays;
 
 /******************************************************************************/
@@ -358,6 +362,7 @@ void		to_img_xy(int *img_xy, int map_x, int map_y);
 // src/ray_casting
 
 void		cast_rays(t_map *map, t_rays **rays, t_data *data);
+void 		initialize_ray_caster(t_rays *ray, t_data *data, t_ivec *i_ptr[], t_dvec *d_ptr[]);
 
 // src/utils
 

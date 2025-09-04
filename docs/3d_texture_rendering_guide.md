@@ -1,4 +1,4 @@
-# 3D Textured Wall Rendering System
+ # 3D Textured Wall Rendering System
 
 ## Overview
 This document explains the 3D textured wall rendering system implemented for the Cub3D raycasting project. The system is designed to work with static test data initially and can be easily adapted for real ray data when available.

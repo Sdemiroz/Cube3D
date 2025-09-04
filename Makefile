@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/25 19:21:39 by pamatya           #+#    #+#              #
-#    Updated: 2025/08/24 14:02:43 by pamatya          ###   ########.fr        #
+#    Updated: 2025/09/04 14:33:59 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,7 @@ SRCS	:=	main.c start.c events.c \
 			$(D)/renders.c $(D)/3d.c \
 			$(E)/utils_valids.c $(E)/error.c $(E)/string_utils.c \
 			$(F)/collisions.c $(F)/transform.c \
-			$(G)/ray_caster.c \
+			$(G)/ray_caster.c $(G)/ray_caster_utils.c \
 			$(Z1)/circles_improved.c \
 			$(Z2)/test_prints.c $(Z2)/print_map_utils.c $(Z2)/draw_test_image.c
 

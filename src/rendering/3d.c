@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3d.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/04 05:47:14 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/09/04 14:22:50 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	render_3d_walls(t_game *game)
 		screen_x++;
 	}
 }
+
 
 // static mlx_texture_t	*get_wall_texture(t_game *game, int ray_index)
 // {

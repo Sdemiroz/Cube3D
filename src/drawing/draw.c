@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/23 16:34:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/02 20:15:43 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	start_drawing(t_game *game)
 	map = game->map->map_array;
 
 	draw_minimap(game, map);
-	draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
+	// draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
 	
 	cast_rays(pl->map, pl->rays, data);
 	
@@ -60,6 +60,7 @@ static void	draw_minimap(t_game *game, char **map)
 				place_lined_block(game->map->image, i, j, STONE_GRAY);
 			else if (map[j][i] == '0' || is_valid(map[j][i]))
 				place_lined_block(game->map->image, i, j, DARK_GRAY);
+				// place_lined_block(game->map->image, i, j, 0);
 		}
 	}
 }
