@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/02 20:15:43 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/05 12:54:29 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		start_drawing(t_game *game);
 
 static void	draw_minimap(t_game *game, char **map);
-static void	draw_border(t_img *img, int	width, int height, int thickness);
+// static void	draw_border(t_img *img, int	width, int height, int thickness);
 // static void	draw_border2(t_img *img, int	width, int height, int color, int bls);
 
 
@@ -65,30 +65,30 @@ static void	draw_minimap(t_game *game, char **map)
 	}
 }
 
-static void	draw_border(t_img *img, int width, int height, int thickness)
-{
-	int i;
-	int	j;
-	int	block_x;
-	int	block_y;
+// static void	draw_border(t_img *img, int width, int height, int thickness)
+// {
+// 	int i;
+// 	int	j;
+// 	int	block_x;
+// 	int	block_y;
 
-	block_x = width / thickness;
-	block_y = height / thickness;
-	j = -1;
-	while (++j < block_y)
-	{
-		i = -1;
-		if (j == 0 || j == (block_y - 1))
-			while (++i < block_x)
-				place_block(img, i, j, LAVA_RED_DARK);
-		else
-		{
-			while (++i < block_x)
-				if (i == 0 || i == (block_x - 1))
-					place_block(img, i, j, LAVA_RED_DARK);
-		}
-	}
-}
+// 	block_x = width / thickness;
+// 	block_y = height / thickness;
+// 	j = -1;
+// 	while (++j < block_y)
+// 	{
+// 		i = -1;
+// 		if (j == 0 || j == (block_y - 1))
+// 			while (++i < block_x)
+// 				place_block(img, i, j, LAVA_RED_DARK);
+// 		else
+// 		{
+// 			while (++i < block_x)
+// 				if (i == 0 || i == (block_x - 1))
+// 					place_block(img, i, j, LAVA_RED_DARK);
+// 		}
+// 	}
+// }
 
 // static void	draw_border2(t_img *img, int width, int height, int color, int bls)
 // {

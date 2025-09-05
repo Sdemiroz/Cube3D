@@ -6,43 +6,67 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:29:06 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/04 14:32:50 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/05 13:20:47 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-// void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *pointers[]);
-void initialize_ray_caster(t_rays *ray, t_data *data, t_ivec *i_ptr[], t_dvec *d_ptr[]);
+void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
+		t_ivec *check);
 
-static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x, double *hop_x);
-static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y, double *hop_y);
-static void	initialize_check(t_dvec *hype, t_ivec *check);
+static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x,
+		double *hop_x);
+static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y,
+		double *hop_y);
+// static void	initialize_axis_check(t_dvec *hype, t_ivec *check);
 
-// void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *hype, t_dvec *hop)
-// void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *pointers[])
-void initialize_ray_caster(t_rays *ray, t_data *data, t_ivec *i_ptr[], t_dvec *d_ptr[])
+
+// void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
+// 		t_ivec *check)
+// {
+// 	t_dvec	*hop;
+// 	t_dvec	*hype;
+
+// 	hop = *d_ptr;
+// 	hype = *(d_ptr + 1);
+// 	initialize_xvars(ray, data, &(hype[0].x), &(hop->x));
+// 	initialize_yvars(ray, data, &(hype[0].y), &(hop->y));
+// 	initialize_axis_check(hype, check);
+// 	hype[1].x = fabs((double)data->tile_size * ray->coeff.x);	// hope[1] is the unit step length along hypotenuse per unit step along x and y
+// 	hype[1].y = fabs((double)data->tile_size * ray->coeff.y);
+// 	hype[2].x = 0;												// hype[2].x prev. distance[0]
+// 	hype[2].y = ft_maxi(data->mmp_w, data->mmp_h);				// hype[2].y prev. distance[1]
+// }
+
+void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
+		t_ivec *check)
 {
-	t_ivec	*hit;
-	t_ivec	*check;
 	t_dvec	*hop;
 	t_dvec	*hype;
 
-	hit = *i_ptr;
-	check = *(i_ptr + 1);
 	hop = *d_ptr;
 	hype = *(d_ptr + 1);
-
 	initialize_xvars(ray, data, &(hype[0].x), &(hop->x));
 	initialize_yvars(ray, data, &(hype[0].y), &(hop->y));
-	initialize_check(hype, check);
+	if (hype[0].x < hype[0].y)
+	{
+		check->x = 1;
+		check->y = 0;
+	}
+	else
+	{
+		check->x = 0;
+		check->y = 1;	
+	}
 	hype[1].x = fabs((double)data->tile_size * ray->coeff.x);	// hope[1] is the unit step length along hypotenuse per unit step along x and y
 	hype[1].y = fabs((double)data->tile_size * ray->coeff.y);
 	hype[2].x = 0;												// hype[2].x prev. distance[0]
 	hype[2].y = ft_maxi(data->mmp_w, data->mmp_h);				// hype[2].y prev. distance[1]
 }
 
-static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x, double *hop_x)
+static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x,
+		double *hop_x)
 {
 	double	start_x;
 	double	next_x;
@@ -70,7 +94,8 @@ static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x, double *
 	}
 }
 
-static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y, double *hop_y)
+static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y,
+		double *hop_y)
 {
 	double	start_y;
 	double	next_y;
@@ -98,16 +123,16 @@ static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y, double *
 	} 
 }
 
-static void	initialize_check(t_dvec *hype, t_ivec *check)
-{
-	if (hype[0].x < hype[0].y)
-	{
-		check->x = 1;
-		check->y = 0;
-	}
-	else
-	{
-		check->x = 0;
-		check->y = 1;	
-	}
-}
+// static void	initialize_axis_check(t_dvec *hype, t_ivec *check)
+// {
+// 	if (hype[0].x < hype[0].y)
+// 	{
+// 		check->x = 1;
+// 		check->y = 0;
+// 	}
+// 	else
+// 	{
+// 		check->x = 0;
+// 		check->y = 1;	
+// 	}
+// }

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/04 17:48:00 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/05 13:05:30 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,7 +362,7 @@ void		to_img_xy(int *img_xy, int map_x, int map_y);
 // src/ray_casting
 
 void		cast_rays(t_map *map, t_rays **rays, t_data *data);
-void 		initialize_ray_caster(t_rays *ray, t_data *data, t_ivec *i_ptr[], t_dvec *d_ptr[]);
+void 		initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[], t_ivec *check);
 
 // src/utils
 
