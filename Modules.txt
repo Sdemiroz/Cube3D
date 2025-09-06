@@ -6,7 +6,7 @@
 #    By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: Invalid date        by                   #+#    #+#              #
-#    Updated: 2025/08/08 15:16:53 by pamatya          ###   ########.fr        #
+#    Updated: 2025/09/06 12:10:42 by pamatya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,7 @@
 
 Samed:  ...
 
-Pranuj: Add collision detection so that player does not overlap with existing blocks (from header 3)
-        DDA algorithm for ray length calculation (from header 3)
+Pranuj: Header 3 -> points 1, 2 and 3
 
 ********************************************************************************
 
@@ -33,9 +32,9 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
    won't show for walking but does for running, by implementing fractional accumulation
  - Add the ability to hold more than one key at a time. eg. moving forward
    while turning
- - Maybe the out of bounds check for player blob movement should be separate for
+ ! Maybe the out of bounds check for player blob movement should be separate for
    x and y to allow movement in one just the one dimension if it is possible
- - Player blob movement within the map bounds has been added, but it is not precise.
+ ! Player blob movement within the map bounds has been added, but it is not precise.
    Particularly when player blob reaches near the wall, it overlaps the border in
    the bottom right and cannot go close enough in the opposite corner
  -
@@ -43,17 +42,17 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
 ********************************************************************************
 
 3. Project progress and game elements
- - Integrate and make runnable with the current parser instead of the mini-parser
- - Add rays within the field of view by using draw lines or similar
- - Add collision detection so that player does not overlap with existing blocks
- - Figuring out how to use textures and initializing them in the game struct
- - DDA algorithm for ray length calculation
- - Engine to transform ray length to object size in the 3d view
- - Engine to remove fish-eye effect while rendering 3d view
- - Impelemt scaling of minimap (probably using data->scale variable)
- - Minimap player movement is not scaled with map size: this results in very
-   fast movement when map is big and the elements are scaled down to fit the
-   availed area for the minimap, and vice versa.
+ ! Integrate and make runnable with the current parser instead of the mini-parser
+ ! Add rays within the field of view by using draw lines or similar
+ ! Add collision detection so that player does not overlap with existing blocks
+ ! DDA algorithm for ray length calculation
+ 1. Figuring out how to use textures and initializing them in the game struct
+ 2. Engine to transform ray length to object size in the 3d view
+ 3. Engine to remove fish-eye effect while rendering 3d view
+ 4. Impelemt scaling of minimap (probably using data->scale variable)
+ 5. Minimap player movement is not scaled with map size: this results in very
+    fast movement when map is big and the elements are scaled down to fit the
+    availed area for the minimap, and vice versa.
  - 
 
 ********************************************************************************
@@ -64,15 +63,16 @@ Pranuj: Add collision detection so that player does not overlap with existing bl
  ! Parser needs to add extra padding for tabs and other types of spaces if necessary
  ! The direction that the player is facing is not linked by the parser
  ! Color rgb's need to be checked (also if only uint8 is required)
- - There is an issue while parsing maps that contain tabs in the map-character-region.
-   Since, at the moment the tab is simply programmed to be replaced with 4 spaces,
-   issues arise when tab is combined with space, or even when tab is present in
-   such a way that the map characters are not offset exactly 4 spaces by the tab
-   (since it can represent any where between 1 to 4 spaces). This is distorting
-   the map layout - run with map8.cub for a demonstration of this problem.
-   --> Possible solution: use the index of the tab character itself and apply
-       modulo division to find out how many characters tab should represent. This
-       method is not perfect though for cases when a single line has multiple tabs.
+ 1  There is an issue while parsing maps that contain tabs in the map-character-region.
+    Since, at the moment the tab is simply programmed to be replaced with 4 spaces,
+    issues arise when tab is combined with space, or even when tab is present in
+    such a way that the map characters are not offset exactly 4 spaces by the tab
+    (since it can represent any where between 1 to 4 spaces). This is distorting
+    the map layout - run with map8.cub for a demonstration of this problem.
+    --> Possible solution: use the index of the tab character itself and apply
+        modulo division to find out how many characters tab should represent. This
+        method is not perfect though for cases when a single line has multiple tabs.
+ 2. Parsing should handle recently discovered edge cases with incorrect maps
 
 ********************************************************************************
 
