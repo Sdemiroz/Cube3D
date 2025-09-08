@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:21:30 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/19 05:19:22 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/09/08 02:48:22 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void		parse_game_data(t_game *game, char *map_name);
 
 static void	check_file_type(t_game *game, char *map_name);
 static void	read_and_parse_map(t_game *game);
-static void	parse_key_data(t_game *game, char *line);
+int			parse_key_data(t_game *game, char *line);
 static int	get_key_index(char *line);
 
 static int	get_key_index(char *line)
@@ -36,19 +36,16 @@ static int	get_key_index(char *line)
 	return (-1);
 }
 
-static void	parse_key_data(t_game *game, char *line)
+int		parse_key_data(t_game *game, char *line)
 {
 	static int	checker[KEY_COUNT];
 	int			key;
 
 	if (empty_line(line))
-		return ;
+		return(INITIAL_STATE);
 	key = get_key_index(line);
 	if (key == -1 || checker[key])
-	{
-		free(line);
-		exit_early(game, "Error: Invalid identifier", 1);
-	}
+		free_exit_early(game, "Error: Invalid identifier", 1, line);
 	checker[key] = 1;
 	if (key == NO_CHECK)
 		assign_textures(game, &(game->NO_texture), line, "NO");
@@ -62,6 +59,9 @@ static void	parse_key_data(t_game *game, char *line)
 		identify_rgb(game, line, &(game->floor_color));
 	else if (key == C_CHECK)
 		identify_rgb(game, line, &(game->ceiling_color));
+	if (check_key_data_completion(game))
+		return(WAITING_FOR_MAP);
+	return(INITIAL_STATE);
 }
 
 static void	read_and_parse_map(t_game *game)
@@ -76,11 +76,7 @@ static void	read_and_parse_map(t_game *game)
 	while (cur_line)
 	{
 		if (cur_state == INITIAL_STATE)
-		{
-			parse_key_data(game, cur_line);
-			if (check_key_data_completion(game))
-				cur_state = WAITING_FOR_MAP;
-		}
+			cur_state = parse_key_data(game, cur_line);
 		else if (cur_state == WAITING_FOR_MAP && empty_line(cur_line))
 			;
 		else
@@ -91,6 +87,8 @@ static void	read_and_parse_map(t_game *game)
 		free(cur_line);
 		cur_line = get_next_line(game->map->fd);
 	}
+	if (cur_state == WAITING_FOR_MAP)
+		exit_early(game, "Error, map missing", 1);
 }
 
 static void	check_file_type(t_game *game, char *map_name)

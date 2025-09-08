@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 17:18:52 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/08 02:44:20 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ void		pad_shorter_lines(t_game *game);
 char		**copy_map(char **original);
 bool		flood_fill(char **map, int x, int y);
 void		allocate_map_array(t_game *game, char *line);
+int			parse_key_data(t_game *game, char *line);
 
 // src/drawing
 
@@ -366,6 +367,8 @@ bool 		is_valid_block(char c);
 bool 		is_player(char c);
 int			ft_maxi(int x, int y);
 void		exit_early(t_game *game, char *msg, int ret);
+void		free_exit_early(t_game *game, char *msg, int ret, char *str);
+
 
 
 /******************************************************************************/
