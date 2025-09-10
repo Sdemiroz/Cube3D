@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 16:58:28 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/10 02:25:56 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ static int	parse_rgb(char *rgb_str, t_color *color);
 
 int	validate_map_line(t_game *game, char *line)
 {
-	int	i;
+	int			i;
+	static int	x;
 
-	if (empty_line(line))
+	if (!empty_line(line) && x > 0)
 	{
 		free(line);
 		exit_early(game, "Error: Empty line in map", 1);
 	}
+	if (empty_line(line))
+		x++;
 	i = 0;
 	while (line[i])
 	{
@@ -47,17 +50,15 @@ int	validate_map_line(t_game *game, char *line)
 
 void	parse_line(t_game *game, char *line)
 {
-	int		i;
-	char	*trimmed;
+	int			i;
+	char		*trimmed;
+
 
 	trimmed = ft_strtrim(line, "\n");
 	if (trimmed)
 		trimmed = expand_tabs(trimmed);
 	if (!trimmed)
-	{
-		free(line);
-		exit_early(game, "Error: trimming line", 1);
-	}
+		free_exit_early(game, "Error: trimming line", 1, line);
 	allocate_map_array(game, trimmed);
 	i = validate_map_line(game, trimmed);
 	game->map->map_array[game->data->tiles_y] = ft_strdup(trimmed);
@@ -82,12 +83,12 @@ static int	parse_rgb(char *rgb_str, t_color *color)
 
 	i = -1;
 	parts = ft_split(rgb_str, ',');
-	if (!parts)
+	if (!parts || !parts[2] || parts[3])
 		return (0);
 	while (++i < 3)
 	{
 		value = ft_atoi(parts[i]);
-		if (value < 0 || value > 255)
+		if (value <= 0 || value >= 255)
 		{
 			ft_free2d(parts);
 			return (0);
@@ -117,49 +118,12 @@ void	identify_rgb(t_game *game, char *line, t_color *color)
 		end++;
 	rgb_str = ft_calloc((end - start + 1), sizeof(char));
 	if (!rgb_str)
-	{
-		free(line);
-		exit_early(game, "Error allocating RGB string", 1);
-	}
+		free_exit_early(game, "Error allocating RGB string", 1, line);
 	ft_strlcpy(rgb_str, line + start, end - start + 1);
-
 	if (!parse_rgb(rgb_str, color))
-	{
-		free(line);
-		exit_early(game, "Error parsing RGB values", 1);
-	}
+		free_exit_early(game, "Error parsing RGB values", 1, line);
 	free(rgb_str);
 }
-
-// void	assign_textures(t_game *game, mlx_texture_t **img, char *line,
-// 		char *prefix)
-// {
-// 	int		start;
-// 	int		end;
-// 	char	*texture_path;
-
-// 	end = ft_strlen(prefix);
-// 	while (line[end] && ft_isspace(line[end]))
-// 		end++;
-// 	start = end;
-// 	while (line[end] && line[end] != '\n')
-// 		end++;
-// 	texture_path = ft_calloc(end - start + 1, sizeof(char));
-// 	if (!texture_path)
-// 	{
-// 		free(line);
-// 		exit_early(game, "Error, allocating texture path", 1);
-// 	}
-// 	ft_strlcpy(texture_path, line + start, end - start + 1);
-// 	// *img = mlx_load_png(texture_path);
-// 	// if (!(*img))
-// 	// {
-// 	// 	free(texture_path);
-// 	// 	free(line);
-// 	// 	exit_early(game, "Error loading texture", 1);
-// 	// }
-// 	free(texture_path);
-// }
 
 void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 {
@@ -175,16 +139,13 @@ void	assign_textures(t_game *game, t_txr **txr, char *line, char *prefix)
 		end++;
 	texture_path = ft_calloc(end - start + 1, sizeof(char));
 	if (!texture_path)
-	{
-		free(line);
-		exit_early(game, "Error, allocating texture path", 1);
-	}
+		free_exit_early(game, "Error, allocating texture path", 1, line);
 	ft_strlcpy(texture_path, line + start, end - start + 1);
 	*txr = mlx_load_png(texture_path);
 	if (!(*txr))
 	{
 		free(texture_path);
-		free(line);
+		free_exit_early(game, "texture path invalid", 1, line);
 	}
 	else
 		free(texture_path);

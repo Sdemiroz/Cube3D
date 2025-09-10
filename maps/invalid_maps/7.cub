@@ -1,8 +1,8 @@
 
-NO ./textures/theme_02/east.png
-SO ./textures/theme_02/north.png
-WE ./textures/theme_02/south.png        
-EA ./textures/theme_02/west.png
+NO ./images/dali3.png
+SO ./images/dali4.png
+WE ./images/irises.png
+EA ./images/pony.png
 F 111,111,111
 C 155,100,160
 
