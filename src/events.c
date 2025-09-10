@@ -114,8 +114,10 @@ static void	move_player(t_game *game, t_key keydata)
 
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
+	reset_3d_walls(game);
 	if (apply_movement(data, move_step, keydata))
 		cast_rays(pl->map, pl->rays, data);
+	draw_3d_walls(game);
 	draw_current_fov(pl, pl->rays);
 	draw_cur_direction(pl, data);
 }
@@ -165,46 +167,6 @@ static int	apply_movement(t_data *data, double move_step, t_key keydata)
 	center_x = posx + tile_size / 2;
 	center_y = posy + tile_size / 2;
 
-	// // Original block to allow movement only when movement in both x and y are possible
-	// if (posx > boundx[0] && posx < boundx[1] &&
-	// 		posy > boundy[0] && posy < boundy[1])
-	// {
-	// 	data->pl_posx = posx;
-	// 	data->pl_posy = posy;
-	// 	data->pl_center_x = posx + tile_size / 2;
-	// 	data->pl_center_y = posy + tile_size / 2;
-	// }
-	
-	// // Changed to allow movement in atleast one direction when possible
-	// if (posx > boundx[0] && posx < boundx[1])
-	// {
-	// 	data->pl_posx = posx;
-	// 	data->pl_center_x = posx + tile_size / 2;
-	// }
-	// if (posy > boundy[0] && posy < boundy[1])
-	// {
-	// 	data->pl_posy = posy;
-	// 	data->pl_center_y = posy + tile_size / 2;
-	// }
-
-	// With new collision detection function, with bounds check
-	// if (posx >= boundx[0] && posx < boundx[1]
-	// 			&& posy >= boundy[0] && posy < boundy[1])
-	// {
-	// 	if (!wall_in_the_way_hori(get_map(), center_x, center_y))
-	// 	{
-	// 		data->pl_posx = posx;
-	// 		data->pl_center_x = posx + tile_size / 2;
-	// 	}
-	// 	if (!wall_in_the_way_vert(get_map(), center_x, center_y))
-	// 	{
-	// 		data->pl_posy = posy;
-	// 		data->pl_center_y = posy + tile_size / 2;
-	// 	}
-	// 	ret = 1;
-	// 	printf("Return value set to 1, with new posx = %d\tand new posy = %d\n", posx, posy);
-	// }
-
 	// With new collision detection function, but without bounds check
 	if (!wall_in_the_way_hori(get_map(), center_x, center_y))
 	{
@@ -248,7 +210,9 @@ static void turn_player(t_game *game, t_key keydata)
 		data->cur_dir -= 2 * PI;				// Normalize to [0, 2*PI]
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
+	reset_3d_walls(game);
 	udpate_rays(pl->rays, game->map, data);
+	draw_3d_walls(game);
 	draw_current_fov(pl, pl->rays);
 	draw_cur_direction(pl, data);
 }

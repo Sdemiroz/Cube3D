@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/05 13:05:30 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/10 07:00:41 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define GRAY			0x808080FF
 # define LIGHT_GRAY		0xC0C0C0FF
 # define DARK_GRAY		0x404040FF
+// # define DARK_GRAY		0x40404080
 
 // Common Game Colors
 # define ORANGE			0xFF8000FF
@@ -61,6 +62,7 @@
 # define SKY_BLUE		0x87CEEBFF
 # define FOREST_GREEN	0x228B22FF
 # define STONE_GRAY		0x708090FF
+// # define STONE_GRAY		0x70809080
 # define SAND_YELLOW	0xF4A460FF
 
 // Common Floor/Ceiling Colors
@@ -94,32 +96,28 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-// # define PLAYER_DIA 8
-# define PLAYER_DIA 25
+# define PLAYER_DIA 8
+// # define PLAYER_DIA 25
 # define START_PX 500
 # define START_PY 500
-# define FOV 60.0f				// Field of View in degrees, f for float
-# define NUM_RAYS 3
+# define FOV 60				// Field of View in degrees, f for float
+# define NUM_RAYS 1599
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
 // Mini-Map Constants
-// # define TILE_SIZE 15
-# define TILE_SIZE 40
+# define TILE_SIZE 15
+// # define TILE_SIZE 50
 # define MMP_W 600
 # define MMP_H 210
 # define MAP_OFFSET_X 25
 # define MAP_OFFSET_Y 25
-// # define PL_DIR_LEN 8
-# define PL_DIR_LEN 20
+# define PL_DIR_LEN 8
+// # define PL_DIR_LEN 20
 # define MAP_SCALE 1.0f			// Scale for the minimap
 
 /******************************************************************************/
 /********     STRUCTS     *****************************************************/
 /******************************************************************************/
-
-typedef mlx_image_t		t_img;
-typedef mlx_texture_t	t_txr;
-typedef mlx_key_data_t	t_key;
 
 enum e_key_type
 {
@@ -139,11 +137,16 @@ enum	e_current_state
 	PARSING_MAP
 };
 
+typedef mlx_image_t		t_img;
+typedef mlx_texture_t	t_txr;
+typedef mlx_key_data_t	t_key;
+
 typedef struct s_game t_game;
 typedef struct s_data t_data;
 typedef struct s_map t_map;
 typedef struct s_player t_player;
 typedef struct s_rays t_rays;
+typedef struct s_colour t_colour;
 typedef struct s_ivec t_ivec;
 typedef struct s_dvec t_dvec;
 
@@ -275,6 +278,7 @@ typedef struct s_rays
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
+	double		wall_distance;	// ray length if the cur-direction aligns with ray angle, i.e. with the factor of cos(delta)
 	char		hit_wall;		// N, S, E or W
 	t_txr		*tex;
 } t_rays;
@@ -348,8 +352,9 @@ void		udpate_rays(t_rays **rays, t_map *map, t_data *data);
 // src/rendering
 
 void		init_graphics_rendering(void *param);
-void		render_3d_walls(t_game *game);
-uint32_t	get_pixel_from_texture(mlx_texture_t *texture, int x, int y);
+void		draw_3d_walls(t_game *game);
+void		reset_3d_walls(t_game *game);
+// uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y);
 
 // src/coordinates
 

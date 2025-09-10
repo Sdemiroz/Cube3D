@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/05 12:54:29 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/09 22:08:45 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,12 @@ void	start_drawing(t_game *game)
 	pl = game->player;
 	map = game->map->map_array;
 
-	draw_minimap(game, map);
-	// draw_border(game->img3D, data->wind_w, data->wind_h, data->tile_size);
-	
 	cast_rays(pl->map, pl->rays, data);
-	
-	// test image
-	// draw_test_image();
-	
+	reset_3d_walls(game);
+	draw_3d_walls(game);
+	draw_minimap(game, map);
 	draw_current_fov(pl, pl->rays);
-	
 	place_player2D_2(game);
-	// draw_border2(pl->blob2D, data->tile_size, data->tile_size, LAVA_RED_DARK, 1);
-	
 	draw_player_direction(game->player, data);
 }
 

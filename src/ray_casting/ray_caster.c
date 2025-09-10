@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 15:33:10 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/05 13:33:39 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/10 06:56:27 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		t_data *data);
 static void	update_distance(t_dvec *hype, t_ivec *check);
 static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop);
-// static bool	check_hit(t_data *data, char **img, t_ivec hit, t_dvec hop);
 static void	assign_wall_texture(t_game *game, t_rays *ray, t_dvec hop,
 		t_ivec check);
 
@@ -37,9 +36,10 @@ void	cast_rays(t_map *map, t_rays **rays, t_data *data)
 	i = -1;
 	while (++i < total_rays)
 		calculate_ray_length(game, rays[i], img, data);
-	printf("\n");
+	// printf("\n");
 }
 
+// // !! ray-length re-calculation with new hit.x,y might be a better estimation of the wall distance
 // static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 // 		t_data *data)
 // {
@@ -58,6 +58,7 @@ void	cast_rays(t_map *map, t_rays **rays, t_data *data)
 // 		{
 // 			ray->length = (int)(hype[2].x);
 
+//			// !! this method of ray-length recalculation with new hit.x,y might be a better estimation of the wall distance
 // 			// double start_x = data->pl_center_x;
 // 			// double start_y = data->pl_center_y;
 // 			// double dx = hit.x - start_x;
@@ -76,6 +77,10 @@ void	cast_rays(t_map *map, t_rays **rays, t_data *data)
 // 	printf("r%d: %c\t", ray->index, ray->hit_wall);
 // }
 
+// !! if the game struct was not needed to be passed to this fn, the start struct
+// could be passed instead to save double-dereferencing for each ray per player position
+// as the player position is the same for each ray for an instance of the image drawn
+// !! another optimization msg in the previous version above (on ray re-calculation)
 static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		t_data *data)
 {
@@ -96,13 +101,14 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 				hit.y < data->mmp_h) && (img[hit.y][hit.x] == '1'))
 		{
 				ray->length = (int)(hype[2].x);
+				ray->wall_distance = (int)(ray->length * cos(ray->delta));
 				ray->hit_x = hit.x;
 				ray->hit_y = hit.y;
 				assign_wall_texture(game, ray, hop, check);
 				break ;
 		}
 	}
-	printf("r%d: %c\t", ray->index, ray->hit_wall);
+	// printf("r%d: %c\t", ray->index, ray->hit_wall);
 }
 
 static void	update_distance(t_dvec *hype, t_ivec *check)
@@ -157,23 +163,6 @@ static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop)
 			hit->y++;
 	}
 }
-
-/*
-Function that check if a wall was hit
-  - First checks the hit.x,y pos
-  - If not found, it checks the two positions transversely adjascent to the
-	previously incremented position in extract_xy() fn
-*/
-// static bool	check_hit(t_data *data, char **img, t_ivec hit, t_dvec hop)
-// {
-// 	if (hit.x >= 0 && hit.x < data->mmp_w && hit.y >= 0 && hit.y < data->mmp_h)
-// 	{
-// 		// Original minimalistic approach before ray-leakage was solved
-// 		if (img[hit.y][hit.x] == '1')
-// 			return (true);
-// 	}
-// 	return (false);
-// }
 
 static void	assign_wall_texture(t_game *game, t_rays *ray, t_dvec hop, t_ivec check)
 {

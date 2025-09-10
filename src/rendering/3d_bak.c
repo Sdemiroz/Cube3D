@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3d.c                                               :+:      :+:    :+:   */
+/*   3d_bak.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/10 13:55:07 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/09 22:09:14 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 `get_pixel_from_texture(texture, x, y)`
 Extracts RGBA color from texture at given coordinates with bounds checking.
 */
-static uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y)
+uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y)
 {
 	int		index;
 	uint8_t	*pixels;
 
-	// if (x < 0 || y < 0 || x >= (int)texture->width || y >= (int)texture->height)
 	if (!texture || x < 0 || y < 0 || x >= (int)texture->width || y >= (int)texture->height)
 	{
 		printf("Invalid texture access: tex=%p, x=%d, y=%d, size=%ux%u\n",
@@ -55,8 +54,6 @@ static void	draw_column(t_game *game, int screen_x, int wall_height,
 
 	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w)
 		return;
-	// if (screen_x < 0 || screen_x >= game->data->wind_w)
-	// 	return;
 	wall_start_y = (game->data->wind_h - wall_height) / 2;
 	wall_end_y = wall_start_y + wall_height;
 	if (wall_start_y < 0) wall_start_y = 0;
@@ -86,94 +83,60 @@ void	draw_3d_walls(t_game *game)
 	int			screen_x;
 	int			wall_height;
 	float 		wall_hit_x;
-	
-	t_rays		**rays;
-	t_rays		*ray;
-	int			focal_length;
-	int			colm_h;
-	// int			wind_w;
-	int			num_rays;
+	t_txr 		*texture;
+
+	screen_x = 0;
 
 	if (!game || !game->img3D)
 		exit_early(game, "render_3d_walls: Invalid game or img3D", EXIT_FAILURE);
-	focal_length = 5;
-	rays = game->player->rays;
-	// wind_w = game->data->wind_w;
-	colm_h = focal_length * game->data->wind_h;
-	num_rays = game->data->num_rays;
-	screen_x = 0;
-	while (screen_x < num_rays)
+	while (screen_x < game->data->wind_w)
 	{
-		ray = rays[screen_x];
-		wall_height = (int)(colm_h / ray->wall_distance);
+		// Static test data
+		wall_height = 200 + (screen_x % 300) - 150;
 		wall_hit_x = (screen_x % 100) / 100.0f;
-		draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
+		if (screen_x < game->data->wind_w / 4)
+			texture = game->NO_texture;
+		else if (screen_x < game->data->wind_w / 2)
+			texture = game->SO_texture;
+		else if (screen_x < 3 * game->data->wind_w / 4)
+			texture = game->WE_texture;
+		else
+			texture = game->EA_texture;
+		draw_column(game, screen_x, wall_height, wall_hit_x, texture);
 		screen_x++;
 	}
 }
 
-static void	reset_column(t_game *game, int screen_x, int wall_height,
-		float wall_hit_x, t_txr *texture)
-{
-	int		y;
-	int		wall_start_y;
-	int		wall_end_y;
-	// int		tex_x;
-	int		tex_y;
-	double	step;
-	uint32_t	color;
 
-	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w)
-		return;
-	// if (screen_x < 0 || screen_x >= game->data->wind_w)
-	// 	return;
-	(void)wall_hit_x;
-	wall_start_y = (game->data->wind_h - wall_height) / 2;
-	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
-	// tex_x = (int)(wall_hit_x * texture->width) % texture->width;
-	step = (double)texture->height / wall_height;
-	y = wall_start_y;
-	while (y < wall_end_y)
-	{
-		tex_y = (int)((y - wall_start_y) * step);
-		if (tex_y >= (int)texture->height)
-			tex_y = texture->height - 1;
-		color = 0;
-		mlx_put_pixel(game->img3D, screen_x, y, color);
-		y++;
-	}
-}
+// static mlx_texture_t	*get_wall_texture(t_game *game, int ray_index)
+// {
+// 	// STATIC TEST DATA: Cycle through different wall types
+// 	// TODO: Replace with actual wall direction from ray data
+// 	int wall_type = ray_index % 4;
 
-void	reset_3d_walls(t_game *game)
-{
-	int			screen_x;
-	int			wall_height;
-	float 		wall_hit_x;
-	
-	t_rays		**rays;
-	t_rays		*ray;
-	int			focal_length;
-	int			colm_h;
-	// int			wind_w;
-	int			num_rays;
+// 	switch (wall_type)
+// 	{
+// 		case 0: return (game->NO_texture);  // North wall
+// 		case 1: return (game->SO_texture);  // South wall
+// 		case 2: return (game->WE_texture);  // West wall
+// 		case 3: return (game->EA_texture);  // East wall
+// 		default: return (game->NO_texture);
+// 	}
+// }
 
-	if (!game || !game->img3D)
-		exit_early(game, "render_3d_walls: Invalid game or img3D", EXIT_FAILURE);
+// static int	calculate_wall_height(t_game *game, int ray_index)
+// {
+// 	// STATIC TEST DATA: Create varying wall heights
+// 	// TODO: Replace with actual distance calculation: wall_height = screen_height / distance
+// 	int base_height = game->data->wind_h / 3;  // Base wall height
+// 	int variation = (ray_index % 200) - 100;   // Add some variation
 
-	rays = game->player->rays;
-	// wind_w = game->data->wind_w;
-	focal_length = 5;
-	colm_h = focal_length * game->data->wind_h;
-	num_rays = game->data->num_rays;
-	screen_x = 0;
-	while (screen_x < num_rays)
-	{
-		ray = rays[screen_x];
-		wall_height = (int)(colm_h / ray->wall_distance);
-		wall_hit_x = (screen_x % 100) / 100.0f;
-		reset_column(game, screen_x, wall_height, wall_hit_x, ray->tex);	// fill with transparent pixels to erase previously drawn pixels
-		screen_x++;
-	}
-}
+// 	return (base_height + variation);
+// }
+
+// static float	calculate_wall_hit_x(int ray_index)
+// {
+// 	// STATIC TEST DATA: Create texture scrolling effect
+// 	// TODO: Replace with actual hit position from ray data
+// 	return ((float)(ray_index % 64) / 64.0f);  // 0.0 to 1.0 across texture
+// }

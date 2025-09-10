@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:29:06 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/05 13:20:47 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/08 17:49:42 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,9 @@ static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x,
 		double *hop_x);
 static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y,
 		double *hop_y);
-// static void	initialize_axis_check(t_dvec *hype, t_ivec *check);
 
 
-// void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
-// 		t_ivec *check)
-// {
-// 	t_dvec	*hop;
-// 	t_dvec	*hype;
-
-// 	hop = *d_ptr;
-// 	hype = *(d_ptr + 1);
-// 	initialize_xvars(ray, data, &(hype[0].x), &(hop->x));
-// 	initialize_yvars(ray, data, &(hype[0].y), &(hop->y));
-// 	initialize_axis_check(hype, check);
-// 	hype[1].x = fabs((double)data->tile_size * ray->coeff.x);	// hope[1] is the unit step length along hypotenuse per unit step along x and y
-// 	hype[1].y = fabs((double)data->tile_size * ray->coeff.y);
-// 	hype[2].x = 0;												// hype[2].x prev. distance[0]
-// 	hype[2].y = ft_maxi(data->mmp_w, data->mmp_h);				// hype[2].y prev. distance[1]
-// }
-
+// !! Struct check could simply be used as an int variable with toggle between 1 and 0
 void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
 		t_ivec *check)
 {
