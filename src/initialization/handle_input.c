@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:19:54 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/08 04:00:17 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/09/10 02:25:56 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	validate_map_line(t_game *game, char *line)
 	int			i;
 	static int	x;
 
-	if (!empty_line(line) && x >= 0)
+	if (!empty_line(line) && x > 0)
 	{
 		free(line);
 		exit_early(game, "Error: Empty line in map", 1);
