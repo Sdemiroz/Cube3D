@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:37 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 16:57:55 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 20:38:14 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static void	init_game(t_game *game)
 	game->mlx = mlx_init(data->wind_w, data->wind_h, "Cub3D", true);
 	if (!game->mlx)
 		exit_early(game, "game_mlx: mlx_init", EXIT_FAILURE);
+	data->time = mlx_get_time();
+	data->acc_time = data->time;
 	game->background = mlx_new_image(game->mlx, data->wind_w, data->wind_h);
 	if (!game->background)
 		exit_early(game, "background_img: mlx_new_image", EXIT_FAILURE);

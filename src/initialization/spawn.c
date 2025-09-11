@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/13 22:25:36 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 20:35:04 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_map		*get_map(void);
 t_player	*get_player(void);
 t_rays		**get_rays(void);
 
-static void	initialize_map_data(t_data *data);
+static void	initialize_rest_data(t_data *data);
 
 
 // t_game	*get_game(void)
@@ -67,13 +67,13 @@ t_data	*get_data(void)
 			data->cur_dir = PI / 2;
 			data->cosine = cos(PI / 2);
 			data->sine = sin(PI / 2);
-			initialize_map_data(data);
+			initialize_rest_data(data);
 		}
 	}
 	return (data);
 }
 
-static void	initialize_map_data(t_data *data)
+static void	initialize_rest_data(t_data *data)
 {
 	data->mmp_w = 0;
 	data->mmp_h = 0;
@@ -85,6 +85,10 @@ static void	initialize_map_data(t_data *data)
 	data->tiles_y = 0;
 	data->fov_toggle = true;
 
+	data->fps = 0;
+	data->time = 0;
+	data->acc_time = 0;
+	
 	// Debugging elements
 	data->debug_offset_x = 0;	// offset for debugging view
 	data->debug_offset_y = 0;	// offset for debugging view

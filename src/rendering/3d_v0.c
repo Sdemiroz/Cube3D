@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3d.c                                               :+:      :+:    :+:   */
+/*   3d_v0.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 17:28:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 14:19:15 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ void	draw_3d_walls(t_game *game)
 		wall_height = (int)(colm_h / ray->wall_distance);
 		wall_hit_x = (screen_x % 100) / 100.0f;
 		draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
+		printf(" .%d-%.4f-%.4f. ", ray->index, ray->length, ray->wall_distance);
 		screen_x++;
 	}
+	printf("\n");
 }
 
 void	erase_3d_walls(t_game *game)
@@ -113,8 +115,10 @@ static void	draw_column(t_game *game, int screen_x, int wall_height,
 		return;
 	wall_start_y = (game->data->wind_h - wall_height) / 2;
 	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
+	if (wall_start_y < 0)
+		wall_start_y = 0;
+	if (wall_end_y >= game->data->wind_h)
+		wall_end_y = game->data->wind_h - 1;
 	tex_x = (int)(wall_hit_x * texture->width) % texture->width;
 	step = (double)texture->height / wall_height;
 	y = wall_start_y;
@@ -145,8 +149,10 @@ static void	erase_column(t_game *game, int screen_x, int wall_height,
 	(void)wall_hit_x;
 	wall_start_y = (game->data->wind_h - wall_height) / 2;
 	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
+	if (wall_start_y < 0)
+		wall_start_y = 0;
+	if (wall_end_y >= game->data->wind_h)
+		wall_end_y = game->data->wind_h - 1;
 	// tex_x = (int)(wall_hit_x * texture->width) % texture->width;
 	step = (double)texture->height / wall_height;
 	y = wall_start_y;

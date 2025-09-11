@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:01:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:09:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 19:39:39 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&game, sizeof(t_game));
 	init_game_elements(&game, argv[1]);
 	printf("Let the games begin!!!\n");
-	game_start(&game);
+	start_drawing(&game);
 	init_events((void *)&game);
 	mlx_loop((game).mlx);
 	mlx_terminate(game.mlx);

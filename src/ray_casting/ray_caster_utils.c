@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:29:06 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/08 17:49:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 21:35:44 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void initialize_ray_caster(t_rays *ray, t_data *data, t_dvec *d_ptr[],
 		check->x = 0;
 		check->y = 1;	
 	}
-	hype[1].x = fabs((double)data->tile_size * ray->coeff.x);	// hope[1] is the unit step length along hypotenuse per unit step along x and y
+	hype[1].x = fabs((double)data->tile_size * ray->coeff.x);	// hope[1] is the unit step length along hypotenuse, per unit step along x and y
 	hype[1].y = fabs((double)data->tile_size * ray->coeff.y);
 	hype[2].x = 0;												// hype[2].x prev. distance[0]
-	hype[2].y = ft_maxi(data->mmp_w, data->mmp_h);				// hype[2].y prev. distance[1]
+	hype[2].y = 2 * ft_maxi(data->mmp_w, data->mmp_h);			// hype[2].y prev. distance[1]
 }
 
 static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x,

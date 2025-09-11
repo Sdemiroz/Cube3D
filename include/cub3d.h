@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 12:53:26 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 21:51:18 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@
 # define TEST_IMG_RED	0xFF000020  // Semi-transparent red
 # define DEBUG_GREEN	0x00FF0080  // Semi-transparent green
 # define DEBUG_GREEN2	0x00FF0040  // Semi-transparent green
+// # define DEBUG_GREEN2	0x00FF00FF  // Semi-transparent green
 # define DEBUG_BLUE		0x0000FF80  // Semi-transparent blue
 
 // === Used Colors (Minimap) [Experimental set]
@@ -96,15 +97,18 @@
 # define READ_BUFFER 100
 
 // Window Dimensions
-# define WIDTH 1600
-# define HEIGHT 900
+// # define WIDTH 800
+// # define HEIGHT 600
+# define WIDTH 1800
+# define HEIGHT 1100
 
 // Player and Raycasting Constants
 // # define PLAYER_DIA 8
 # define START_PX 500
 # define START_PY 500
 # define FOV 60				// Field of View in degrees, f for float
-# define NUM_RAYS 1600
+// # define NUM_RAYS 1600
+# define NUM_RAYS 1800
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
 // Mini-Map Constants
@@ -117,12 +121,12 @@
 # define MAP_SCALE 1.0f			// Scale for the minimap
 
 // Experimental set
-// # define PLAYER_DIA 8
-// # define TILE_SIZE 15
-// # define PL_DIR_LEN 8
-# define PLAYER_DIA 25
-# define TILE_SIZE 50
-# define PL_DIR_LEN 20
+# define PLAYER_DIA 8
+# define TILE_SIZE 15
+# define PL_DIR_LEN 8
+// # define PLAYER_DIA 25
+// # define TILE_SIZE 50
+// # define PL_DIR_LEN 20
 
 /******************************************************************************/
 /********     STRUCTS     *****************************************************/
@@ -235,6 +239,11 @@ typedef struct s_data
 	int		tiles_y;
 	bool	fov_toggle;
 
+	// FPS related
+	int		fps;
+	double	time;
+	double	acc_time;
+
 	// Debugging elements
 	int		debug_offset_x;	// offset for debugging view
 	int		debug_offset_y;	// offset for debugging view
@@ -299,7 +308,7 @@ typedef struct s_rays
 // src
 
 int			main(int argc, char **argv);
-void		game_start(t_game *game);
+void		game_loop(void *param);
 void		init_events(void *param);
 
 // src/initialization
@@ -361,7 +370,7 @@ void		udpate_rays(t_rays **rays, t_map *map, t_data *data);
 
 // src/rendering
 
-void		init_graphics_rendering(void *param);
+void		render_graphics(t_game *game);
 void		draw_3d_walls(t_game *game);
 void		erase_3d_walls(t_game *game);
 // uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y);
