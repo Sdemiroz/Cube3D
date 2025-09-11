@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 15:33:10 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/10 06:56:27 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 12:49:10 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	cast_rays(t_map *map, t_rays **rays, t_data *data)
 	i = -1;
 	while (++i < total_rays)
 		calculate_ray_length(game, rays[i], img, data);
-	// printf("\n");
 }
 
 // // !! ray-length re-calculation with new hit.x,y might be a better estimation of the wall distance
@@ -100,8 +99,8 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		if ((hit.x >= 0 && hit.x < data->mmp_w && hit.y >= 0 &&
 				hit.y < data->mmp_h) && (img[hit.y][hit.x] == '1'))
 		{
-				ray->length = (int)(hype[2].x);
-				ray->wall_distance = (int)(ray->length * cos(ray->delta));
+				ray->length = (hype[2].x);
+				ray->wall_distance = ((hype[2].x) * cos(ray->delta));
 				ray->hit_x = hit.x;
 				ray->hit_y = hit.y;
 				assign_wall_texture(game, ray, hop, check);

@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/10 14:01:32 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/11 12:53:26 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 /******************************************************************************/
 
 // Colors
-# define BLACK			0x000000FF
 # define WHITE			0xFFFFFFFF
 # define RED			0xFF0000FF
 # define GREEN			0x00FF00FF
@@ -42,8 +41,6 @@
 // Gray Scale
 # define GRAY			0x808080FF
 # define LIGHT_GRAY		0xC0C0C0FF
-# define DARK_GRAY		0x404040FF
-// # define DARK_GRAY		0x40404080
 
 // Common Game Colors
 # define ORANGE			0xFF8000FF
@@ -61,8 +58,6 @@
 // Environment Colors
 # define SKY_BLUE		0x87CEEBFF
 # define FOREST_GREEN	0x228B22FF
-# define STONE_GRAY		0x708090FF
-// # define STONE_GRAY		0x70809080
 # define SAND_YELLOW	0xF4A460FF
 
 // Common Floor/Ceiling Colors
@@ -84,6 +79,15 @@
 # define DEBUG_GREEN2	0x00FF0040  // Semi-transparent green
 # define DEBUG_BLUE		0x0000FF80  // Semi-transparent blue
 
+// === Used Colors (Minimap) [Experimental set]
+// # define DARK_GRAY		0x404040FF
+// # define STONE_GRAY		0x708090FF
+// # define BLACK			0x000000FF
+// --- Used Colors (Transparent) (Minimap)
+# define DARK_GRAY		0x40404080
+# define STONE_GRAY		0x70809080
+# define BLACK			0x00000080
+
 /******************************************************************************/
 /******     CONSTANTS     *****************************************************/
 /******************************************************************************/
@@ -96,24 +100,29 @@
 # define HEIGHT 900
 
 // Player and Raycasting Constants
-# define PLAYER_DIA 8
-// # define PLAYER_DIA 25
+// # define PLAYER_DIA 8
 # define START_PX 500
 # define START_PY 500
 # define FOV 60				// Field of View in degrees, f for float
-# define NUM_RAYS 1599
+# define NUM_RAYS 1600
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
 // Mini-Map Constants
-# define TILE_SIZE 15
-// # define TILE_SIZE 50
+// # define TILE_SIZE 15
 # define MMP_W 600
 # define MMP_H 210
 # define MAP_OFFSET_X 25
 # define MAP_OFFSET_Y 25
-# define PL_DIR_LEN 8
-// # define PL_DIR_LEN 20
+// # define PL_DIR_LEN 8
 # define MAP_SCALE 1.0f			// Scale for the minimap
+
+// Experimental set
+// # define PLAYER_DIA 8
+// # define TILE_SIZE 15
+// # define PL_DIR_LEN 8
+# define PLAYER_DIA 25
+# define TILE_SIZE 50
+# define PL_DIR_LEN 20
 
 /******************************************************************************/
 /********     STRUCTS     *****************************************************/
@@ -354,7 +363,7 @@ void		udpate_rays(t_rays **rays, t_map *map, t_data *data);
 
 void		init_graphics_rendering(void *param);
 void		draw_3d_walls(t_game *game);
-void		reset_3d_walls(t_game *game);
+void		erase_3d_walls(t_game *game);
 // uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y);
 
 // src/coordinates

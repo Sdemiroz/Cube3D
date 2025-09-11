@@ -114,7 +114,7 @@ static void	move_player(t_game *game, t_key keydata)
 
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
-	reset_3d_walls(game);
+	erase_3d_walls(game);
 	if (apply_movement(data, move_step, keydata))
 		cast_rays(pl->map, pl->rays, data);
 	draw_3d_walls(game);
@@ -210,7 +210,7 @@ static void turn_player(t_game *game, t_key keydata)
 		data->cur_dir -= 2 * PI;				// Normalize to [0, 2*PI]
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
-	reset_3d_walls(game);
+	erase_3d_walls(game);
 	udpate_rays(pl->rays, game->map, data);
 	draw_3d_walls(game);
 	draw_current_fov(pl, pl->rays);

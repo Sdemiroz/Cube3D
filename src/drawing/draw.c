@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:04:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/09 22:08:45 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/10 18:41:35 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	start_drawing(t_game *game)
 	map = game->map->map_array;
 
 	cast_rays(pl->map, pl->rays, data);
-	reset_3d_walls(game);
+	erase_3d_walls(game);
 	draw_3d_walls(game);
 	draw_minimap(game, map);
 	draw_current_fov(pl, pl->rays);
