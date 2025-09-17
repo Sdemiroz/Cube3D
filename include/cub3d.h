@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 21:51:18 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/14 14:25:47 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@
 // # define PLAYER_DIA 8
 # define START_PX 500
 # define START_PY 500
-# define FOV 60				// Field of View in degrees, f for float
+# define FOV 60					// Field of View in degrees, f for float
 // # define NUM_RAYS 1600
 # define NUM_RAYS 1800
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
@@ -119,6 +119,13 @@
 # define MAP_OFFSET_Y 25
 // # define PL_DIR_LEN 8
 # define MAP_SCALE 1.0f			// Scale for the minimap
+
+# define WALK 1.0				// per frame
+# define WALKING_CAP 1.0		// per second
+# define RUN 5.0				// per frame
+# define RUNNING_CAP 4.0		// per second
+# define TURN 1.0				// radians per second
+
 
 // Experimental set
 # define PLAYER_DIA 8
@@ -214,10 +221,15 @@ typedef struct s_data
 	int	 	pl_dia;
 	int		pl_arr_x;
 	int		pl_arr_y;
-	int	 	pl_posx;
-	int	 	pl_posy;
-	int		pl_center_x;
-	int		pl_center_y;
+	
+	double	pl_posx;
+	double 	pl_posy;
+	double		pl_center_x;
+	double		pl_center_y;
+	// int	 	pl_posx;
+	// int	 	pl_posy;
+	// int		pl_center_x;
+	// int		pl_center_y;
 
 	// Ray casting elements
 	double	fov;			// Field of View in degrees, f for float
@@ -242,6 +254,7 @@ typedef struct s_data
 	// FPS related
 	int		fps;
 	double	time;
+	double	time_delta;
 	double	acc_time;
 
 	// Debugging elements
@@ -291,8 +304,12 @@ typedef struct s_rays
 	double		cosine;			// cosine of the angle
 	double		sine;			// sine of the angle
 	t_dvec		coeff;			// element for ray-casting (must be updated in run-time)
-	int			*center_x;		// x coordinate of the starting point of the ray
-	int			*center_y;		// y coordinate of the starting point of the ray
+	
+	// int			*center_x;		// x coordinate of the starting point of the ray
+	// int			*center_y;		// y coordinate of the starting point of the ray
+	double		*center_x;		// x coordinate of the starting point of the ray
+	double		*center_y;		// y coordinate of the starting point of the ray
+	
 	int			hit_x;			// x coordinate of the hit point
 	int			hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
@@ -394,6 +411,7 @@ bool 		is_valid(char c);
 bool 		is_valid_block(char c);
 bool 		is_player(char c);
 int			ft_maxi(int x, int y);
+int			ft_mind(double x, double y);
 void		exit_early(t_game *game, char *msg, int ret);
 void		free_exit_early(t_game *game, char *msg, int ret, char *str);
 

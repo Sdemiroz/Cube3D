@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 17:28:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/12 12:00:45 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	draw_3d_walls(t_game *game)
 	int			wall_height;
 	float 		wall_hit_x;
 	
+	t_data		*data;
+	int			tile_size;
 	t_rays		**rays;
 	t_rays		*ray;
 	int			focal_length;
@@ -42,17 +44,20 @@ void	draw_3d_walls(t_game *game)
 
 	if (!game || !game->img3D)
 		exit_early(game, "render_3d_walls: Invalid game or img3D", EXIT_FAILURE);
-	focal_length = 15;
+	focal_length = 20;
+	data = game->data;
+	tile_size = data->tile_size;
+	num_rays = data->num_rays;
 	rays = game->player->rays;
 	// wind_w = game->data->wind_w;
 	colm_h = focal_length * game->data->wind_h;
-	num_rays = game->data->num_rays;
 	screen_x = 0;
 	while (screen_x < num_rays)
 	{
 		ray = rays[screen_x];
 		wall_height = (int)(colm_h / ray->wall_distance);
-		wall_hit_x = (screen_x % 100) / 100.0f;
+		// wall_hit_x = (screen_x % 100) / 100.0f;
+		wall_hit_x = (ray->hit_x % tile_size) / ((float)tile_size);
 		draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
 		screen_x++;
 	}
@@ -64,6 +69,8 @@ void	erase_3d_walls(t_game *game)
 	int			wall_height;
 	float 		wall_hit_x;
 	
+	t_data		*data;
+	int			tile_size;
 	t_rays		**rays;
 	t_rays		*ray;
 	int			focal_length;
@@ -74,17 +81,20 @@ void	erase_3d_walls(t_game *game)
 	if (!game || !game->img3D)
 		exit_early(game, "render_3d_walls: Invalid game or img3D", EXIT_FAILURE);
 
+	focal_length = 20;
+	data = game->data;
+	tile_size = data->tile_size;
+	num_rays = data->num_rays;
 	rays = game->player->rays;
 	// wind_w = game->data->wind_w;
-	focal_length = 15;
 	colm_h = focal_length * game->data->wind_h;
-	num_rays = game->data->num_rays;
 	screen_x = 0;
 	while (screen_x < num_rays)
 	{
 		ray = rays[screen_x];
 		wall_height = (int)(colm_h / ray->wall_distance);
-		wall_hit_x = (screen_x % 100) / 100.0f;
+		// wall_hit_x = (screen_x % 100) / 100.0f;
+		wall_hit_x = (ray->hit_x % tile_size) / ((float)tile_size);
 		erase_column(game, screen_x, wall_height, wall_hit_x, ray->tex);	// fill with transparent pixels to erase previously drawn pixels
 		screen_x++;
 	}
@@ -113,8 +123,10 @@ static void	draw_column(t_game *game, int screen_x, int wall_height,
 		return;
 	wall_start_y = (game->data->wind_h - wall_height) / 2;
 	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
+	if (wall_start_y < 0)
+		wall_start_y = 0;
+	if (wall_end_y >= game->data->wind_h)
+		wall_end_y = game->data->wind_h - 1;
 	tex_x = (int)(wall_hit_x * texture->width) % texture->width;
 	step = (double)texture->height / wall_height;
 	y = wall_start_y;
@@ -145,8 +157,10 @@ static void	erase_column(t_game *game, int screen_x, int wall_height,
 	(void)wall_hit_x;
 	wall_start_y = (game->data->wind_h - wall_height) / 2;
 	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
+	if (wall_start_y < 0)
+		wall_start_y = 0;
+	if (wall_end_y >= game->data->wind_h)
+		wall_end_y = game->data->wind_h - 1;
 	// tex_x = (int)(wall_hit_x * texture->width) % texture->width;
 	step = (double)texture->height / wall_height;
 	y = wall_start_y;

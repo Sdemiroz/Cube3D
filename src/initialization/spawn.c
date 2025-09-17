@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 21:13:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/11 20:35:04 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/12 17:06:35 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ static void	initialize_rest_data(t_data *data)
 
 	data->fps = 0;
 	data->time = 0;
+	data->time_delta = 0;
 	data->acc_time = 0;
 	
 	// Debugging elements

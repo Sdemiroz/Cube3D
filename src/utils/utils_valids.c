@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 02:48:36 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/21 17:46:57 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/14 13:12:05 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ bool	is_valid(char c);
 bool	is_valid_block(char c);
 bool	is_player(char c);
 int		ft_maxi(int x, int y);
+int		ft_mind(double x, double y);
 
 bool is_valid(char c)
 {
@@ -35,6 +36,14 @@ bool is_player(char c)
 int	ft_maxi(int x, int y)
 {
 	if (x >= y)
+		return x;
+	else
+		return y;
+}
+
+int	ft_mind(double x, double y)
+{
+	if (x <= y)
 		return x;
 	else
 		return y;

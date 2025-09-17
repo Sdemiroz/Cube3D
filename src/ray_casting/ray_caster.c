@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 15:33:10 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/11 21:37:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/14 14:12:15 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 	t_ivec	hit;
 	t_ivec	start;
 
-	start.x = *ray->center_x;
-	start.y = *ray->center_y;
+	start.x = (int)(*ray->center_x);
+	start.y = (int)(*ray->center_y);
 	initialize_ray_caster(ray, data, (t_dvec *[]){&hop, hype}, &check);
 	while (hype[2].x <= hype[2].y)
 	{

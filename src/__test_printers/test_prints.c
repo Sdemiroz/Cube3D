@@ -6,7 +6,7 @@
 /*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 02:20:03 by pamatya           #+#    #+#             */
-/*   Updated: 2025/08/13 22:58:35 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/14 14:06:35 by pamatya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	test_print_data()
 	
 	printf("Player elements:\n");
 	printf("Player dia:		pl_dia		=	%d\n", data->pl_dia);
-	printf("Player x:		pl_posx		=	%d\n", data->pl_posx);
-	printf("Player dia:		pl_posy		=	%d\n", data->pl_posy);
+	printf("Player x:		pl_posx		=	%f\n", data->pl_posx);
+	printf("Player y:		pl_posy		=	%f\n", data->pl_posy);
 	printf("\n");
 	
 	printf("Ray casting elements:\n");
@@ -88,8 +88,8 @@ void	test_print_rays(char c)
 			printf("  Angle: %.3f\t", rays[i]->angle);
 			// printf("  Cosine: %.3f\t", rays[i]->cosine);
 			// printf("  Sine: %.3f\t", rays[i]->sine);
-			printf("  Center X: %d\t", *rays[i]->center_x);
-			printf("  Center Y: %d\t", *rays[i]->center_y);
+			printf("  Center X: %f\t", *rays[i]->center_x);
+			printf("  Center Y: %f\t", *rays[i]->center_y);
 			printf("  Hit X: %d\t", rays[i]->hit_x);
 			printf("  Hit Y: %d\t", rays[i]->hit_y);
 			printf("  Length: %.3f\n", rays[i]->length);
@@ -119,8 +119,8 @@ void	test_print_rays(char c)
 			printf("  Angle: \033[0;31m%.3f  \t\033[0m", rays[i]->angle * (180 / PI));
 			// printf("  Cosine: %.3f\t", rays[i]->cosine);
 			// printf("  Sine: %.3f\t", rays[i]->sine);
-			printf("  Center X: %d  ", *rays[i]->center_x);
-			printf("  Center Y: %d\t", *rays[i]->center_y);
+			printf("  Center X: %f  ", *rays[i]->center_x);
+			printf("  Center Y: %f\t", *rays[i]->center_y);
 			printf("  Hit X: %d  ", rays[i]->hit_x);
 			printf("  Hit Y: %d\t", rays[i]->hit_y);
 			printf("  Length: %.d\t", (int)rays[i]->length);
