@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 18:42:58 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 21:51:18 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/25 15:59:07 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define ORANGE			0xFF8000FF
 # define PURPLE			0x8000FFFF
 # define BROWN			0x8B4513FF
-# define PINK			0xFF69B4FF
+# define PINK			0xFF69# define TILE_SIZE 60
 
 // Different lava red shades
 # define LAVA_RED_BRIGHT	0xFF4500FF  // Orange-red lava (RGB: 255, 69, 0)
@@ -112,7 +112,7 @@
 # define RAY_LEN_DEFAULT 10		// This number multiple of tile_size
 
 // Mini-Map Constants
-// # define TILE_SIZE 15
+# define TILE_SIZE 15
 # define MMP_W 600
 # define MMP_H 210
 # define MAP_OFFSET_X 25
@@ -122,7 +122,6 @@
 
 // Experimental set
 # define PLAYER_DIA 8
-# define TILE_SIZE 15
 # define PL_DIR_LEN 8
 // # define PLAYER_DIA 25
 // # define TILE_SIZE 50
@@ -293,8 +292,8 @@ typedef struct s_rays
 	t_dvec		coeff;			// element for ray-casting (must be updated in run-time)
 	int			*center_x;		// x coordinate of the starting point of the ray
 	int			*center_y;		// y coordinate of the starting point of the ray
-	int			hit_x;			// x coordinate of the hit point
-	int			hit_y;			// y coordinate of the hit point
+	double		hit_x;			// x coordinate of the hit point
+	double		hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
 	double		wall_distance;	// ray length if the cur-direction aligns with ray angle, i.e. with the factor of cos(delta)
 	char		hit_wall;		// N, S, E or W

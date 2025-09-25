@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3d.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 17:28:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/25 15:59:10 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,21 @@ void	draw_3d_walls(t_game *game)
 	{
 		ray = rays[screen_x];
 		wall_height = (int)(colm_h / ray->wall_distance);
-		wall_hit_x = (screen_x % 100) / 100.0f;
+		
+		// High-precision texture mapping: keep normal tile repeat but add sub-pixel precision
+		if (ray->hit_wall == 'N' || ray->hit_wall == 'S')
+		{
+			// For North/South walls, use X coordinate with high precision
+			// Use floating-point modulo to get precise position within tile
+			wall_hit_x = fmod(ray->hit_x, (double)game->data->tile_size) / (double)game->data->tile_size;
+		}
+		else
+		{
+			// For East/West walls, use Y coordinate with high precision
+			// Use floating-point modulo to get precise position within tile
+			wall_hit_x = fmod(ray->hit_y, (double)game->data->tile_size) / (double)game->data->tile_size;
+		}
+		
 		draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
 		screen_x++;
 	}
@@ -84,7 +98,21 @@ void	erase_3d_walls(t_game *game)
 	{
 		ray = rays[screen_x];
 		wall_height = (int)(colm_h / ray->wall_distance);
-		wall_hit_x = (screen_x % 100) / 100.0f;
+		
+		// High-precision texture mapping: keep normal tile repeat but add sub-pixel precision
+		if (ray->hit_wall == 'N' || ray->hit_wall == 'S')
+		{
+			// For North/South walls, use X coordinate with high precision
+			// Use floating-point modulo to get precise position within tile
+			wall_hit_x = fmod(ray->hit_x, (double)game->data->tile_size) / (double)game->data->tile_size;
+		}
+		else
+		{
+			// For East/West walls, use Y coordinate with high precision
+			// Use floating-point modulo to get precise position within tile
+			wall_hit_x = fmod(ray->hit_y, (double)game->data->tile_size) / (double)game->data->tile_size;
+		}
+		
 		erase_column(game, screen_x, wall_height, wall_hit_x, ray->tex);	// fill with transparent pixels to erase previously drawn pixels
 		screen_x++;
 	}
@@ -115,7 +143,13 @@ static void	draw_column(t_game *game, int screen_x, int wall_height,
 	wall_end_y = wall_start_y + wall_height;
 	if (wall_start_y < 0) wall_start_y = 0;
 	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
-	tex_x = (int)(wall_hit_x * texture->width) % texture->width;
+	
+	// High-precision texture sampling - avoid integer truncation
+	double tex_x_precise = wall_hit_x * texture->width;
+	tex_x = (int)tex_x_precise;
+	if (tex_x >= (int)texture->width) tex_x = texture->width - 1;
+	if (tex_x < 0) tex_x = 0;
+	
 	step = (double)texture->height / wall_height;
 	y = wall_start_y;
 	while (y < wall_end_y)

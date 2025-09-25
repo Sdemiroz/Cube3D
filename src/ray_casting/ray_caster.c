@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_caster.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 15:33:10 by pamatya           #+#    #+#             */
-/*   Updated: 2025/09/11 21:37:42 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/25 15:59:08 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,9 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		{
 				ray->length = (hype[2].x);
 				ray->wall_distance = ((hype[2].x) * cos(ray->delta));
-				ray->hit_x = hit.x;
-				ray->hit_y = hit.y;
+				// Store precise floating-point hit coordinates
+				ray->hit_x = start.x + hype[2].x * ray->cosine;
+				ray->hit_y = start.y - hype[2].x * ray->sine;
 				assign_wall_texture(game, ray, hop, check);
 				break ;
 		}
