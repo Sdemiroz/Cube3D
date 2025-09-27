@@ -17,7 +17,8 @@ void	cast_rays(t_map *map, t_rays **rays, t_data *data);
 static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		t_data *data);
 static void	update_distance(t_dvec *hype, t_ivec *check);
-static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop);
+static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop,
+		t_dvec start);
 static void	assign_wall_texture(t_game *game, t_rays *ray, t_dvec hop,
 		t_ivec check);
 
@@ -87,15 +88,15 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 	t_dvec	hype[3];								// hype[0] is ray-length along hypotenuse to length along x and y, and hope[1] is the unit step length along hypotenuse per unit step along x and y, hype[2] is to replace double distance[2] with hype[2].x as distance[0] and hype[2].y as distance[1]
 	t_ivec	check;
 	t_ivec	hit;
-	t_ivec	start;
+	t_dvec	start;
 
-	start.x = *ray->center_x;
-	start.y = *ray->center_y;
+	start.x = *ray->center_x_d;
+	start.y = *ray->center_y_d;
 	initialize_ray_caster(ray, data, (t_dvec *[]){&hop, hype}, &check);
 	while (hype[2].x <= hype[2].y)
 	{
 		update_distance(hype, &check);
-		extract_xy(ray, hype[2].x, (t_ivec *[]){&hit, &check, &start}, hop);
+		extract_xy(ray, hype[2].x, (t_ivec *[]){&hit, &check}, hop, start);
 		if ((hit.x >= 0 && hit.x < data->mmp_w && hit.y >= 0 &&
 				hit.y < data->mmp_h) && (img[hit.y][hit.x] == '1'))
 		{
@@ -135,19 +136,20 @@ pixel in the direction of the ray. The incrementing is done to avoid the problem
 of checking at the boundary of the current tile, and instead checking the first
 pixel in the next tile in the direction of the ray
 */
-static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop)
+static void extract_xy(t_rays *ray, double distance, t_ivec *ptr[], t_dvec hop,
+		t_dvec start)
 {
 	t_ivec	*hit;
 	t_ivec	*check;
-	t_ivec	*start;
+	double	hx;
+	double	hy;
 
 	hit = *ptr;
 	check = *(ptr + 1);
-	start = *(ptr + 2);
-	// hit->x = ((*ray->center_x) + distance * ray->cosine);
-	// hit->y = ((*ray->center_y) - distance * ray->sine);
-	hit->x = (start->x + distance * ray->cosine);
-	hit->y = (start->y - distance * ray->sine);
+	hx = start.x + distance * ray->cosine;
+	hy = start.y - distance * ray->sine;
+	hit->x = (int)hx;
+	hit->y = (int)hy;
 	if (check->x)
 	{
 		if (hop.x < 0)

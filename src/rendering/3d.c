@@ -6,7 +6,7 @@
 /*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/25 15:59:10 by sdemiroz         ###   ########.fr       */
+/*   Updated: 2025/09/27 02:44:56 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,36 +130,50 @@ static void	draw_column(t_game *game, int screen_x, int wall_height,
 		float wall_hit_x, t_txr *texture)
 {
 	int		y;
-	int		wall_start_y;
-	int		wall_end_y;
+	int		draw_start;
+	int		draw_end;
 	int		tex_x;
 	int		tex_y;
-	double	step;
+	double	tex_step;
+	double	tex_pos;
 	uint32_t	color;
+	double	wall_start;
+	double	wall_end;
+	int		window_h;
 
-	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w)
+	window_h = game->data->wind_h;
+	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w
+		|| wall_height <= 0)
 		return;
-	wall_start_y = (game->data->wind_h - wall_height) / 2;
-	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
-	
+	wall_start = ((double)window_h - (double)wall_height) / 2.0;
+	wall_end = wall_start + wall_height;
+	draw_start = (int)floor(wall_start);
+	draw_end = (int)ceil(wall_end) - 1;
+	if (draw_start < 0)
+		draw_start = 0;
+	if (draw_end >= window_h)
+		draw_end = window_h - 1;
+	if (draw_end < draw_start)
+		return;
+
 	// High-precision texture sampling - avoid integer truncation
 	double tex_x_precise = wall_hit_x * texture->width;
 	tex_x = (int)tex_x_precise;
 	if (tex_x >= (int)texture->width) tex_x = texture->width - 1;
 	if (tex_x < 0) tex_x = 0;
-	
-	step = (double)texture->height / wall_height;
-	y = wall_start_y;
-	while (y < wall_end_y)
+
+	tex_step = (double)texture->height / (double)wall_height;
+	tex_pos = ((double)draw_start - wall_start) * tex_step;
+	y = draw_start;
+	while (y <= draw_end)
 	{
-		tex_y = (int)((y - wall_start_y) * step);
+		tex_y = (int)tex_pos;
 		if (tex_y >= (int)texture->height)
 			tex_y = texture->height - 1;
 		color = get_pixel_from_texture(texture, tex_x, tex_y);
 		mlx_put_pixel(game->img3D, screen_x, y, color);
 		y++;
+		tex_pos += tex_step;
 	}
 }
 
@@ -167,28 +181,31 @@ static void	erase_column(t_game *game, int screen_x, int wall_height,
 		float wall_hit_x, t_txr *texture)
 {
 	int		y;
-	int		wall_start_y;
-	int		wall_end_y;
-	// int		tex_x;
-	int		tex_y;
-	double	step;
+	int		draw_start;
+	int		draw_end;
 	uint32_t	color;
+	double	wall_start;
+	double	wall_end;
+	int		window_h;
 
-	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w)
+	window_h = game->data->wind_h;
+	if (!texture || screen_x < 0 || screen_x >= game->data->wind_w
+		|| wall_height <= 0)
 		return;
 	(void)wall_hit_x;
-	wall_start_y = (game->data->wind_h - wall_height) / 2;
-	wall_end_y = wall_start_y + wall_height;
-	if (wall_start_y < 0) wall_start_y = 0;
-	if (wall_end_y >= game->data->wind_h) wall_end_y = game->data->wind_h - 1;
-	// tex_x = (int)(wall_hit_x * texture->width) % texture->width;
-	step = (double)texture->height / wall_height;
-	y = wall_start_y;
-	while (y < wall_end_y)
+	wall_start = ((double)window_h - (double)wall_height) / 2.0;
+	wall_end = wall_start + wall_height;
+	draw_start = (int)floor(wall_start);
+	draw_end = (int)ceil(wall_end) - 1;
+	if (draw_start < 0)
+		draw_start = 0;
+	if (draw_end >= window_h)
+		draw_end = window_h - 1;
+	if (draw_end < draw_start)
+		return;
+	y = draw_start;
+	while (y <= draw_end)
 	{
-		tex_y = (int)((y - wall_start_y) * step);
-		if (tex_y >= (int)texture->height)
-			tex_y = texture->height - 1;
 		color = 0;
 		mlx_put_pixel(game->img3D, screen_x, y, color);
 		y++;
@@ -206,8 +223,8 @@ static uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y)
 
 	if (!texture || x < 0 || y < 0 || x >= (int)texture->width || y >= (int)texture->height)
 	{
-		printf("Invalid texture access: tex=%p, x=%d, y=%d, size=%ux%u\n",
-			texture, x, y, texture ? texture->width : 0, texture ? texture->height : 0);
+		// printf("Invalid texture access: tex=%p, x=%d, y=%d, size=%ux%u\n",
+		// 	texture, x, y, texture ? texture->width : 0, texture ? texture->height : 0);
 		return (0xFF00FFFF);  // Pink color for invalid/missing texture
 	}
 	pixels = texture->pixels;

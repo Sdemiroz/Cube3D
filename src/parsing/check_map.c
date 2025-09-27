@@ -89,6 +89,12 @@ void	check_map(t_game *game)
 			"Error: map must contain exactly 1 player start position\n", 1);
 	game->data->pl_posx = game->data->pl_arr_x * game->data->tile_size;
 	game->data->pl_posy = game->data->pl_arr_y * game->data->tile_size;
+	game->data->pl_center_x = game->data->pl_posx + game->data->tile_size / 2;
+	game->data->pl_center_y = game->data->pl_posy + game->data->tile_size / 2;
+	game->data->pl_posx_d = game->data->pl_posx;
+	game->data->pl_posy_d = game->data->pl_posy;
+	game->data->pl_center_x_d = game->data->pl_center_x;
+	game->data->pl_center_y_d = game->data->pl_center_y;
 	dup_map = copy_map(game->map->map_array);
 	if (!dup_map)
 		exit_early(game, "Error: failed to duplicate map\n", 1);

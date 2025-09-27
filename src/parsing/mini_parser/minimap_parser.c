@@ -62,6 +62,12 @@ static void	write_to_map_array(t_map *map, char ***geo, char *nxtline)
 					printf("test\n");
 					map->data->pl_posx = j * map->data->tile_size;
 					map->data->pl_posy = i * map->data->tile_size;
+					map->data->pl_center_x = map->data->pl_posx + map->data->tile_size / 2;
+					map->data->pl_center_y = map->data->pl_posy + map->data->tile_size / 2;
+					map->data->pl_posx_d = map->data->pl_posx;
+					map->data->pl_posy_d = map->data->pl_posy;
+					map->data->pl_center_x_d = map->data->pl_center_x;
+					map->data->pl_center_y_d = map->data->pl_center_y;
 					// assign_direction(map, nxtline[j]);
 				}
 			}

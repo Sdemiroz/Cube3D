@@ -101,6 +101,10 @@ static void update_game_data_after_parsing(t_data *data)
 	data->mmp_h = data->tiles_y * data->tile_size;
 	data->pl_center_x = data->pl_posx + data->tile_size / 2;
 	data->pl_center_y = data->pl_posy + data->tile_size / 2;
+	data->pl_posx_d = data->pl_posx;
+	data->pl_posy_d = data->pl_posy;
+	data->pl_center_x_d = data->pl_center_x;
+	data->pl_center_y_d = data->pl_center_y;
 }
 
 static void	init_player(t_game *game)

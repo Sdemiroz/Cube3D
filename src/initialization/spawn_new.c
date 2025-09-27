@@ -56,6 +56,10 @@ t_data	*get_data(void)
 			data->pl_posy = START_PY;
 			data->pl_center_x = START_PX + TILE_SIZE / 2;
 			data->pl_center_y = START_PY + TILE_SIZE / 2;
+			data->pl_posx_d = data->pl_posx;
+			data->pl_posy_d = data->pl_posy;
+			data->pl_center_x_d = data->pl_center_x;
+			data->pl_center_y_d = data->pl_center_y;
 			data->fov = FOV;
 			data->num_rays = NUM_RAYS;
 			data->ini_dir = 'N';

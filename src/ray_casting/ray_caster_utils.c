@@ -55,7 +55,7 @@ static void	initialize_xvars(t_rays *ray, t_data *data, double *hype_x,
 	double	next_x;
 	double	tile_size;
 
-	start_x = (double)(data->pl_center_x);
+	start_x = data->pl_center_x_d;
 	tile_size = (double)data->tile_size;
 	if (ray->cosine > 1e-6)											// facing right
 	{
@@ -84,7 +84,7 @@ static void	initialize_yvars(t_rays *ray, t_data *data, double *hype_y,
 	double	next_y;
 	double	tile_size;
 
-	start_y = (double)(data->pl_center_y);
+	start_y = data->pl_center_y_d;
 	tile_size = (double)data->tile_size;
 	if (ray->sine > 1e-6)											// facing up
 	{

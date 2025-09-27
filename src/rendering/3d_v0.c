@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3d_v0.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pamatya <pamatya@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: sdemiroz <sdemiroz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 03:20:14 by sdemiroz          #+#    #+#             */
-/*   Updated: 2025/09/11 14:19:15 by pamatya          ###   ########.fr       */
+/*   Updated: 2025/09/27 02:44:50 by sdemiroz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,8 @@ static uint32_t	get_pixel_from_texture(t_txr *texture, int x, int y)
 
 	if (!texture || x < 0 || y < 0 || x >= (int)texture->width || y >= (int)texture->height)
 	{
-		printf("Invalid texture access: tex=%p, x=%d, y=%d, size=%ux%u\n",
-			texture, x, y, texture ? texture->width : 0, texture ? texture->height : 0);
+		// printf("Invalid texture access: tex=%p, x=%d, y=%d, size=%ux%u\n",
+		// 	texture, x, y, texture ? texture->width : 0, texture ? texture->height : 0);
 		return (0xFF00FFFF);  // Pink color for invalid/missing texture
 	}
 	pixels = texture->pixels;

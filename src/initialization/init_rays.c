@@ -40,6 +40,8 @@ void	init_rays(t_rays **rays)
 		ray->length = ft_maxi(data->mmp_w, data->mmp_h) - 2 * data->tile_size;	// Preliminary initialising value
 		ray->center_x = &data->pl_center_x;
 		ray->center_y = &data->pl_center_y;
+		ray->center_x_d = &data->pl_center_x_d;
+		ray->center_y_d = &data->pl_center_y_d;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
 	}

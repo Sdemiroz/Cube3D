@@ -123,64 +123,90 @@ static void	move_player(t_game *game, t_key keydata)
 
 static int	apply_movement(t_data *data, double move_step, t_key keydata)
 {
-	int	posx;
-	int	posy;
-	int	boundx[2];
-	int	boundy[2];
-	int	center_x;
-	int	center_y;
-	int	tile_size;
-	int	ret;
+	double	base_posx;
+	double	base_posy;
+	double	move_x;
+	double	move_y;
+	double	final_posx;
+	double	final_posy;
+	int		step_half;
+	int		ret;
+	t_map	*map;
 
+	base_posx = data->pl_posx_d;
+	base_posy = data->pl_posy_d;
+	move_x = 0.0;
+	move_y = 0.0;
+	step_half = data->tile_size / 2;
 	ret = 0;
-	
-	posx = data->pl_posx;
-	posy = data->pl_posy;
-	tile_size = data->tile_size;
-
-	boundx[0] = tile_size;
-	boundx[1] = data->mmp_w - tile_size;
-	boundy[0] = tile_size;
-	boundy[1] = data->mmp_h - tile_size;
+	map = NULL;
 
 	if (keydata.key == MLX_KEY_W)
 	{
-		posx += (int)rint(data->cosine * move_step);
-		posy -= (int)rint(data->sine * move_step);
+		move_x += data->cosine * move_step;
+		move_y -= data->sine * move_step;
 	}
 	else if (keydata.key == MLX_KEY_S)
 	{
-		posx -= (int)rint(data->cosine * move_step);
-		posy += (int)rint(data->sine * move_step);
+		move_x -= data->cosine * move_step;
+		move_y += data->sine * move_step;
 	}
 	else if (keydata.key == MLX_KEY_A)
 	{
-		posx += (int)rint(cos(data->cur_dir + PI / 2) * move_step);
-		posy -= (int)rint(sin(data->cur_dir + PI / 2) * move_step);
+		move_x += cos(data->cur_dir + PI / 2) * move_step;
+		move_y -= sin(data->cur_dir + PI / 2) * move_step;
 	}
 	else if (keydata.key == MLX_KEY_D)
 	{
-		posx += (int)rint(cos(data->cur_dir + 3 * PI / 2) * move_step);
-		posy -= (int)rint(sin(data->cur_dir + 3 * PI / 2) * move_step);
-	}
-	center_x = posx + tile_size / 2;
-	center_y = posy + tile_size / 2;
-
-	// With new collision detection function, but without bounds check
-	if (!wall_in_the_way_hori(get_map(), center_x, center_y))
-	{
-		data->pl_posx = posx;
-		data->pl_center_x = posx + tile_size / 2;
-		ret = 1;
-	}
-	if (!wall_in_the_way_vert(get_map(), center_x, center_y))
-	{
-		data->pl_posy = posy;
-		data->pl_center_y = posy + tile_size / 2;
-		ret = 1;
+		move_x += cos(data->cur_dir + 3 * PI / 2) * move_step;
+		move_y -= sin(data->cur_dir + 3 * PI / 2) * move_step;
 	}
 
-	// test_print_bounds(boundx, boundy);
+	final_posx = base_posx;
+	final_posy = base_posy;
+	if (move_x != 0.0 || move_y != 0.0)
+		map = get_map();
+	if (move_x != 0.0)
+	{
+		double	candidate_x;
+		double	center_x;
+		double	center_y;
+
+		candidate_x = base_posx + move_x;
+		center_x = candidate_x + step_half;
+		center_y = base_posy + step_half;
+		if (!wall_collision_circle(map, center_x, center_y))
+			final_posx = candidate_x;
+	}
+	if (move_y != 0.0)
+	{
+		double	candidate_y;
+		double	center_x;
+		double	center_y;
+
+		candidate_y = base_posy + move_y;
+		center_x = final_posx + step_half;
+		center_y = candidate_y + step_half;
+		if (!wall_collision_circle(map, center_x, center_y))
+			final_posy = candidate_y;
+	}
+
+	if (final_posx != data->pl_posx_d)
+	{
+		data->pl_posx_d = final_posx;
+		data->pl_center_x_d = final_posx + step_half;
+		data->pl_posx = (int)lround(final_posx);
+		data->pl_center_x = data->pl_posx + step_half;
+		ret = 1;
+	}
+	if (final_posy != data->pl_posy_d)
+	{
+		data->pl_posy_d = final_posy;
+		data->pl_center_y_d = final_posy + step_half;
+		data->pl_posy = (int)lround(final_posy);
+		data->pl_center_y = data->pl_posy + step_half;
+		ret = 1;
+	}
 
 	return (ret);
 }

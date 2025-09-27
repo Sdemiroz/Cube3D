@@ -217,6 +217,10 @@ typedef struct s_data
 	int	 	pl_posy;
 	int		pl_center_x;
 	int		pl_center_y;
+	double		pl_posx_d;
+	double		pl_posy_d;
+	double		pl_center_x_d;
+	double		pl_center_y_d;
 
 	// Ray casting elements
 	double	fov;			// Field of View in degrees, f for float
@@ -292,6 +296,8 @@ typedef struct s_rays
 	t_dvec		coeff;			// element for ray-casting (must be updated in run-time)
 	int			*center_x;		// x coordinate of the starting point of the ray
 	int			*center_y;		// y coordinate of the starting point of the ray
+	double		*center_x_d;
+	double		*center_y_d;
 	double		hit_x;			// x coordinate of the hit point
 	double		hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
@@ -378,6 +384,7 @@ void		erase_3d_walls(t_game *game);
 
 bool		wall_in_the_way_hori(t_map *map, int new_cx, int new_cy);
 bool		wall_in_the_way_vert(t_map *map, int new_cx, int new_cy);
+bool		wall_collision_circle(t_map *map, double center_x, double center_y);
 
 void		to_map_xy(int *map_xy, int img_x, int img_y);
 void		to_img_xy(int *img_xy, int map_x, int map_y);

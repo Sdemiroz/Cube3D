@@ -66,32 +66,75 @@ bool	wall_in_the_way_vert(t_map *map, int new_cx, int new_cy)
 	return (false);
 }
 
-// bool	wall_in_the_way(t_game *game, int new_x, int new_y)
-// {
-// 	int		radius;
-// 	int		i;
-// 	int		j;
+static bool	is_wall_pixel(char **img, int width, int height, double x, double y)
+{
+	int	base_x;
+	int	base_y;
+	int	dx;
+	int	dy;
 
-// 	radius = game->data->pl_dia / 2;
-// 	i = -radius;
-// 	// Check for wall collisions in the new position
-// 	while (i < radius)
-// 	{
-// 		j = -radius;
-// 		while  (j <= radius)
-// 		{
-// 			if (is_wall(game->map->img_array[new_y + j][new_x + i]))
-// 				return (true);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (false);
-// }
+	base_x = (int)floor(x);
+	base_y = (int)floor(y);
+	dy = -1;
+	while (++dy <= 1)
+	{
+		int	py;
 
-// static bool	is_wall(char c)
-// {
-// 	if (c == '1')
-// 		return (true);
-// 	return (false);
-// }
+		py = base_y + dy;
+		if (py < 0 || py >= height)
+			return (true);
+		dx = -1;
+		while (++dx <= 1)
+		{
+			int	px;
+
+			px = base_x + dx;
+			if (px < 0 || px >= width)
+				return (true);
+			if (img[py][px] == '1')
+				return (true);
+		}
+	}
+	return (false);
+}
+
+bool	wall_collision_circle(t_map *map, double center_x, double center_y)
+{
+	t_data	*data;
+	char	**img;
+	int		radius;
+	int		width;
+	int		height;
+	int		i;
+	const double	offsets[][2] = {
+		{0.0, 0.0},
+		{1.0, 0.0}, {-1.0, 0.0}, {0.0, 1.0}, {0.0, -1.0},
+		{1.0, 1.0}, {1.0, -1.0}, {-1.0, 1.0}, {-1.0, -1.0},
+		{1.0, 0.5}, {1.0, -0.5}, {-1.0, 0.5}, {-1.0, -0.5},
+		{0.5, 1.0}, {-0.5, 1.0}, {0.5, -1.0}, {-0.5, -1.0}
+	};
+	int		check_count;
+
+	data = map->data;
+	img = map->img_array;
+	radius = data->pl_dia / 2;
+	width = data->mmp_w;
+	height = data->mmp_h;
+	if (center_x - radius < 0 || center_y - radius < 0
+		|| center_x + radius >= width || center_y + radius >= height)
+		return (true);
+	check_count = sizeof(offsets) / sizeof(offsets[0]);
+	i = -1;
+	while (++i < check_count)
+	{
+		double	sample_x;
+		double	sample_y;
+
+		sample_x = center_x + offsets[i][0] * radius;
+		sample_y = center_y + offsets[i][1] * radius;
+		if (is_wall_pixel(img, width, height, sample_x, sample_y))
+			return (true);
+	}
+
+	return (false);
+}
