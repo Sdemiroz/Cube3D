@@ -44,6 +44,8 @@ void	init_rays(t_rays **rays)
 		ray->center_y_d = &data->pl_center_y_d;
 		ray->hit_x = -1;
 		ray->hit_y = -1;
+		ray->inv_wall_distance = 0.0;
+		ray->tex_u = 0.0;
 	}
 }
 

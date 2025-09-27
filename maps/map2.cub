@@ -1,7 +1,7 @@
-NO ./images/rooftops.png
-SO ./images/starrynight.png
-WE ./images/vangogh.png
-EA ./images/pony.png
+NO ./images/north.png
+SO ./images/south.png
+WE ./images/west.png
+EA ./images/east.png
 
 F 139,69,19
 C 135,206,235

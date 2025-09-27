@@ -89,9 +89,15 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 	t_ivec	check;
 	t_ivec	hit;
 	t_dvec	start;
+	double	inv_tile_size;
 
 	start.x = *ray->center_x_d;
 	start.y = *ray->center_y_d;
+	ray->inv_wall_distance = 0.0;
+	ray->tex_u = 0.0;
+	inv_tile_size = data->inv_tile_size;
+	if (inv_tile_size <= 0.0 && data->tile_size > 0)
+		inv_tile_size = 1.0 / (double)data->tile_size;
 	initialize_ray_caster(ray, data, (t_dvec *[]){&hop, hype}, &check);
 	while (hype[2].x <= hype[2].y)
 	{
@@ -102,13 +108,29 @@ static void	calculate_ray_length(t_game *game, t_rays *ray, char **img,
 		{
 				ray->length = (hype[2].x);
 				ray->wall_distance = ((hype[2].x) * cos(ray->delta));
+				if (ray->wall_distance > 1e-6)
+					ray->inv_wall_distance = 1.0 / ray->wall_distance;
 				// Store precise floating-point hit coordinates
 				ray->hit_x = start.x + hype[2].x * ray->cosine;
 				ray->hit_y = start.y - hype[2].x * ray->sine;
 				assign_wall_texture(game, ray, hop, check);
+				if (ray->hit_wall == 'N' || ray->hit_wall == 'S')
+				{
+					double	tile_pos;
+					tile_pos = ray->hit_x * inv_tile_size;
+					ray->tex_u = tile_pos - floor(tile_pos);
+				}
+				else
+				{
+					double	tile_pos;
+					tile_pos = ray->hit_y * inv_tile_size;
+					ray->tex_u = tile_pos - floor(tile_pos);
+				}
+				if (ray->tex_u < 0.0)
+					ray->tex_u += 1.0;
 				break ;
+			}
 		}
-	}
 	// printf("r%d: %c\t", ray->index, ray->hit_wall);
 }
 

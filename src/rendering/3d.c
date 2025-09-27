@@ -50,24 +50,19 @@ void	draw_3d_walls(t_game *game)
 	screen_x = 0;
 	while (screen_x < num_rays)
 	{
-		ray = rays[screen_x];
-		wall_height = (int)(colm_h / ray->wall_distance);
-		
-		// High-precision texture mapping: keep normal tile repeat but add sub-pixel precision
-		if (ray->hit_wall == 'N' || ray->hit_wall == 'S')
-		{
-			// For North/South walls, use X coordinate with high precision
-			// Use floating-point modulo to get precise position within tile
-			wall_hit_x = fmod(ray->hit_x, (double)game->data->tile_size) / (double)game->data->tile_size;
-		}
-		else
-		{
-			// For East/West walls, use Y coordinate with high precision
-			// Use floating-point modulo to get precise position within tile
-			wall_hit_x = fmod(ray->hit_y, (double)game->data->tile_size) / (double)game->data->tile_size;
-		}
-		
-		draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
+	ray = rays[screen_x];
+	if (ray->inv_wall_distance <= 0.0)
+	{
+		screen_x++;
+		continue ;
+	}
+	wall_height = (int)(colm_h * ray->inv_wall_distance);
+	wall_hit_x = ray->tex_u;
+	if (wall_hit_x < 0.0)
+		wall_hit_x = 0.0;
+	else if (wall_hit_x > 1.0)
+		wall_hit_x = 1.0;
+	draw_column(game, screen_x, wall_height, wall_hit_x, ray->tex);
 		screen_x++;
 	}
 }
@@ -96,24 +91,19 @@ void	erase_3d_walls(t_game *game)
 	screen_x = 0;
 	while (screen_x < num_rays)
 	{
-		ray = rays[screen_x];
-		wall_height = (int)(colm_h / ray->wall_distance);
-		
-		// High-precision texture mapping: keep normal tile repeat but add sub-pixel precision
-		if (ray->hit_wall == 'N' || ray->hit_wall == 'S')
-		{
-			// For North/South walls, use X coordinate with high precision
-			// Use floating-point modulo to get precise position within tile
-			wall_hit_x = fmod(ray->hit_x, (double)game->data->tile_size) / (double)game->data->tile_size;
-		}
-		else
-		{
-			// For East/West walls, use Y coordinate with high precision
-			// Use floating-point modulo to get precise position within tile
-			wall_hit_x = fmod(ray->hit_y, (double)game->data->tile_size) / (double)game->data->tile_size;
-		}
-		
-		erase_column(game, screen_x, wall_height, wall_hit_x, ray->tex);	// fill with transparent pixels to erase previously drawn pixels
+	ray = rays[screen_x];
+	if (ray->inv_wall_distance <= 0.0)
+	{
+		screen_x++;
+		continue ;
+	}
+	wall_height = (int)(colm_h * ray->inv_wall_distance);
+	wall_hit_x = ray->tex_u;
+	if (wall_hit_x < 0.0)
+		wall_hit_x = 0.0;
+	else if (wall_hit_x > 1.0)
+		wall_hit_x = 1.0;
+	erase_column(game, screen_x, wall_height, wall_hit_x, ray->tex);	// fill with transparent pixels to erase previously drawn pixels
 		screen_x++;
 	}
 }

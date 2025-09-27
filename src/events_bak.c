@@ -19,7 +19,7 @@ static void	upon_press(t_key keydata, void *param);
 static void	upon_close(void *param);
 
 static void	move_player(t_game *game, t_key keydata);
-static int	apply_movement(t_data *data, double move_step, t_key keydata);
+static int	apply_movement(t_data *data, t_map *map, double move_step, t_key keydata);
 static void turn_player(t_game *game, t_key keydata);
 
 static void	toggle_fov(t_game *game);
@@ -114,14 +114,14 @@ static void	move_player(t_game *game, t_key keydata)
 	erase_prev_direction(pl, data);
 	erase_previous_fov(pl, pl->rays);
 	erase_3d_walls(game);
-	if (apply_movement(data, move_step, keydata))
+	if (apply_movement(data, pl->map, move_step, keydata))
 		cast_rays(pl->map, pl->rays, data);
 	draw_3d_walls(game);
 	draw_current_fov(pl, pl->rays);
 	draw_cur_direction(pl, data);
 }
 
-static int	apply_movement(t_data *data, double move_step, t_key keydata)
+static int	apply_movement(t_data *data, t_map *map, double move_step, t_key keydata)
 {
 	double	base_posx;
 	double	base_posy;
@@ -131,15 +131,12 @@ static int	apply_movement(t_data *data, double move_step, t_key keydata)
 	double	final_posy;
 	int		step_half;
 	int		ret;
-	t_map	*map;
-
 	base_posx = data->pl_posx_d;
 	base_posy = data->pl_posy_d;
 	move_x = 0.0;
 	move_y = 0.0;
 	step_half = data->tile_size / 2;
 	ret = 0;
-	map = NULL;
 
 	if (keydata.key == MLX_KEY_W)
 	{
@@ -153,19 +150,21 @@ static int	apply_movement(t_data *data, double move_step, t_key keydata)
 	}
 	else if (keydata.key == MLX_KEY_A)
 	{
-		move_x += cos(data->cur_dir + PI / 2) * move_step;
-		move_y -= sin(data->cur_dir + PI / 2) * move_step;
+		move_x -= data->sine * move_step;
+		move_y -= data->cosine * move_step;
 	}
 	else if (keydata.key == MLX_KEY_D)
 	{
-		move_x += cos(data->cur_dir + 3 * PI / 2) * move_step;
-		move_y -= sin(data->cur_dir + 3 * PI / 2) * move_step;
+		move_x += data->sine * move_step;
+		move_y += data->cosine * move_step;
 	}
 
 	final_posx = base_posx;
 	final_posy = base_posy;
-	if (move_x != 0.0 || move_y != 0.0)
-		map = get_map();
+	if (move_x == 0.0 && move_y == 0.0)
+		return (0);
+	if (!map || map->img_array == NULL)
+		return (0);
 	if (move_x != 0.0)
 	{
 		double	candidate_x;

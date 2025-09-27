@@ -123,7 +123,7 @@ static bool	apply_movement(t_game *game, t_data *data, double move_step)
 	move_y = 0.0;
 	step_half = data->tile_size / 2;
 	moved = false;
-	map = NULL;
+	map = game->map;
 
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
 	{
@@ -137,19 +137,21 @@ static bool	apply_movement(t_game *game, t_data *data, double move_step)
 	}
 	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
 	{
-		move_x += cos(data->cur_dir + PI / 2) * move_step;
-		move_y -= sin(data->cur_dir + PI / 2) * move_step;
+		move_x -= data->sine * move_step;
+		move_y -= data->cosine * move_step;
 	}
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
 	{
-		move_x += cos(data->cur_dir + 3 * PI / 2) * move_step;
-		move_y -= sin(data->cur_dir + 3 * PI / 2) * move_step;
+		move_x += data->sine * move_step;
+		move_y += data->cosine * move_step;
 	}
 
 	final_posx = base_posx;
 	final_posy = base_posy;
-	if (move_x != 0.0 || move_y != 0.0)
-		map = get_map();
+	if (move_x == 0.0 && move_y == 0.0)
+		return (false);
+	if (!map || map->img_array == NULL)
+		return (false);
 	if (move_x != 0.0)
 	{
 		double	candidate_x;

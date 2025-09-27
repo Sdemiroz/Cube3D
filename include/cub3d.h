@@ -221,6 +221,7 @@ typedef struct s_data
 	double		pl_posy_d;
 	double		pl_center_x_d;
 	double		pl_center_y_d;
+	double		inv_tile_size;
 
 	// Ray casting elements
 	double	fov;			// Field of View in degrees, f for float
@@ -302,8 +303,10 @@ typedef struct s_rays
 	double		hit_y;			// y coordinate of the hit point
 	double		length;			// length of the distance traveled by the ray
 	double		wall_distance;	// ray length if the cur-direction aligns with ray angle, i.e. with the factor of cos(delta)
+	double		inv_wall_distance;
 	char		hit_wall;		// N, S, E or W
 	t_txr		*tex;
+	double		tex_u;
 } t_rays;
 
 /******************************************************************************/

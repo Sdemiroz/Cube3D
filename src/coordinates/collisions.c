@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
+#include <stddef.h>
 
 bool	wall_in_the_way_hori(t_map *map, int new_cx, int new_cy);
 bool	wall_in_the_way_vert(t_map *map, int new_cx, int new_cy);
@@ -66,74 +67,53 @@ bool	wall_in_the_way_vert(t_map *map, int new_cx, int new_cy)
 	return (false);
 }
 
-static bool	is_wall_pixel(char **img, int width, int height, double x, double y)
-{
-	int	base_x;
-	int	base_y;
-	int	dx;
-	int	dy;
-
-	base_x = (int)floor(x);
-	base_y = (int)floor(y);
-	dy = -1;
-	while (++dy <= 1)
-	{
-		int	py;
-
-		py = base_y + dy;
-		if (py < 0 || py >= height)
-			return (true);
-		dx = -1;
-		while (++dx <= 1)
-		{
-			int	px;
-
-			px = base_x + dx;
-			if (px < 0 || px >= width)
-				return (true);
-			if (img[py][px] == '1')
-				return (true);
-		}
-	}
-	return (false);
-}
+static const double	g_circle_offsets[][2] = {
+	{0.0, 0.0},
+	{1.0, 0.0}, {-1.0, 0.0}, {0.0, 1.0}, {0.0, -1.0},
+	{1.0, 1.0}, {1.0, -1.0}, {-1.0, 1.0}, {-1.0, -1.0},
+	{1.0, 0.5}, {1.0, -0.5}, {-1.0, 0.5}, {-1.0, -0.5},
+	{0.5, 1.0}, {-0.5, 1.0}, {0.5, -1.0}, {-0.5, -1.0}
+};
+static const size_t	g_circle_offset_count = sizeof(g_circle_offsets) / sizeof(g_circle_offsets[0]);
 
 bool	wall_collision_circle(t_map *map, double center_x, double center_y)
 {
 	t_data	*data;
 	char	**img;
-	int		radius;
+	double	radius;
 	int		width;
 	int		height;
-	int		i;
-	const double	offsets[][2] = {
-		{0.0, 0.0},
-		{1.0, 0.0}, {-1.0, 0.0}, {0.0, 1.0}, {0.0, -1.0},
-		{1.0, 1.0}, {1.0, -1.0}, {-1.0, 1.0}, {-1.0, -1.0},
-		{1.0, 0.5}, {1.0, -0.5}, {-1.0, 0.5}, {-1.0, -0.5},
-		{0.5, 1.0}, {-0.5, 1.0}, {0.5, -1.0}, {-0.5, -1.0}
-	};
-	int		check_count;
+	size_t	idx;
 
+	if (!map || !map->data || !map->img_array)
+		return (true);
 	data = map->data;
 	img = map->img_array;
-	radius = data->pl_dia / 2;
+	radius = (double)data->pl_dia * 0.5;
+	if (radius <= 0.0)
+		return (false);
 	width = data->mmp_w;
 	height = data->mmp_h;
-	if (center_x - radius < 0 || center_y - radius < 0
-		|| center_x + radius >= width || center_y + radius >= height)
+	if (center_x - radius < 0.0 || center_y - radius < 0.0
+		|| center_x + radius >= (double)width || center_y + radius >= (double)height)
 		return (true);
-	check_count = sizeof(offsets) / sizeof(offsets[0]);
-	i = -1;
-	while (++i < check_count)
+	idx = 0;
+	while (idx < g_circle_offset_count)
 	{
 		double	sample_x;
 		double	sample_y;
+		int		px;
+		int		py;
 
-		sample_x = center_x + offsets[i][0] * radius;
-		sample_y = center_y + offsets[i][1] * radius;
-		if (is_wall_pixel(img, width, height, sample_x, sample_y))
+		sample_x = center_x + g_circle_offsets[idx][0] * radius;
+		sample_y = center_y + g_circle_offsets[idx][1] * radius;
+		px = (int)floor(sample_x);
+		py = (int)floor(sample_y);
+		if (px < 0 || px >= width || py < 0 || py >= height)
 			return (true);
+		if (img[py][px] == '1')
+			return (true);
+		idx++;
 	}
 
 	return (false);

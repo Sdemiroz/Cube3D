@@ -60,6 +60,7 @@ t_data	*get_data(void)
 			data->pl_posy_d = data->pl_posy;
 			data->pl_center_x_d = data->pl_center_x;
 			data->pl_center_y_d = data->pl_center_y;
+			data->inv_tile_size = 1.0 / (double)TILE_SIZE;
 			data->fov = FOV;
 			data->num_rays = NUM_RAYS;
 			data->ini_dir = 'N';
@@ -81,6 +82,8 @@ static void	initialize_map_data(t_data *data)
 	data->mmp_offy = MAP_OFFSET_Y;
 	data->mmp_scale = MAP_SCALE;
 	data->tile_size = TILE_SIZE;
+	if (TILE_SIZE > 0)
+		data->inv_tile_size = 1.0 / (double)TILE_SIZE;
 	data->tiles_x = 0;
 	data->tiles_y = 0;
 	data->fov_toggle = true;
